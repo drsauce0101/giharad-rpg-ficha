@@ -14,12 +14,12 @@ class Personagem (SQLModel, table = True):
 
     # Atributos (Aqui os numeros são os LADOS do dado, só pra constar)
 
-    forca = int = Field(default=4)
-    destreza = int = Field(default=4)
-    constituicao = int = Field(default=4)
-    inteligencia = int = Field(default=4)
-    sabedoria = int = Field(default=4)
-    carisma = int = Field(default=4)
+    forca: int = Field(default=4)
+    destreza: int = Field(default=4)
+    constituicao: int = Field(default=4)
+    inteligencia: int = Field(default=4)
+    sabedoria: int = Field(default=4)
+    carisma: int = Field(default=4)
 
     # Recursos Vitais (Vida, Ação, Hafa, Grima etc)
 
