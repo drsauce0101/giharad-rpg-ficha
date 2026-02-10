@@ -1,7 +1,7 @@
 from typing import Optional
 from sqlmodel import Field, SQLModel
 
-class Personagem (SQLModel, table = true):
+class Personagem (SQLModel, table = True):
     id: Optional [int] = Field (default=None, primary_key=True)
 
     # Caracteristicas Basicas
@@ -28,16 +28,16 @@ class Personagem (SQLModel, table = true):
     pv_atual: int = Field (default=0)
 
     # Ações (PA)
-    pv_max: int = Field (default=0)
-    pv_atual: int = Field (default=0)
+    pa_max: int = Field (default=0)
+    pa_atual: int = Field (default=0)
 
     # Hafa (PH)
-    pv_max: int = Field (default=0)
-    pv_atual: int = Field (default=0)
+    ph_max: int = Field (default=0)
+    ph_atual: int = Field (default=0)
 
     # Grima (PG)
-    pv_max: int = Field (default=0)
-    pv_atual: int = Field (default=0)
+    pg_max: int = Field (default=0)
+    pg_atual: int = Field (default=0)
 
     ## Nota mental: criar tabela pras competências depois porque agora to com preguiça
 
