@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Personagem</title>
+    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <h1>✏️ Editar {{ ficha.nome }}</h1>
+    
+    <form action="/atualizar_cadastro/{{ ficha.id }}" method="post">
+        
+        <div class="grid-row grid-2">
+            <div><label>Nome</label><input type="text" name="nome" value="{{ ficha.nome }}" required></div>
+            <div><label>Jogador</label><input type="text" name="jogador" value="{{ ficha.jogador }}" required></div>
+        </div>
+
+        <div class="grid-row grid-3" style="margin-top: 15px;">
+            <div><label>Raça</label><input type="text" name="raca" value="{{ ficha.raca }}" required></div>
+            <div><label>Classe</label><input type="text" name="classe" value="{{ ficha.classe }}" required></div>
+            <div><label>Nível</label><input type="number" name="nivel" value="{{ ficha.nivel }}"></div>
+        </div>
+
+        <h3 class="section-title">Atributos</h3>
+        <div class="grid-row grid-3">
+            <div>
+                <label>Força</label>
+                <select name="forca">
+                    <option value="4" {% if ficha.forca == 4 %}selected{% endif %}>d4</option>
+                    <option value="6" {% if ficha.forca == 6 %}selected{% endif %}>d6</option>
+                    <option value="8" {% if ficha.forca == 8 %}selected{% endif %}>d8</option>
+                    <option value="10" {% if ficha.forca == 10 %}selected{% endif %}>d10</option>
+                    <option value="12" {% if ficha.forca == 12 %}selected{% endif %}>d12</option>
+                    <option value="20" {% if ficha.forca == 20 %}selected{% endif %}>d20</option>
+                </select>
+            </div>
+            
+            <div>
+                <label>Destreza</label>
+                <select name="destreza">
+                    <option value="4" {% if ficha.destreza == 4 %}selected{% endif %}>d4</option>
+                    <option value="6" {% if ficha.destreza == 6 %}selected{% endif %}>d6</option>
+                    <option value="8" {% if ficha.destreza == 8 %}selected{% endif %}>d8</option>
+                    <option value="10" {% if ficha.destreza == 10 %}selected{% endif %}>d10</option>
+                    <option value="12" {% if ficha.destreza == 12 %}selected{% endif %}>d12</option>
+                    <option value="20" {% if ficha.destreza == 20 %}selected{% endif %}>d20</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Constituição</label>
+                <select name="constituicao">
+                    <option value="4" {% if ficha.constituicao == 4 %}selected{% endif %}>d4</option>
+                    <option value="6" {% if ficha.constituicao == 6 %}selected{% endif %}>d6</option>
+                    <option value="8" {% if ficha.constituicao == 8 %}selected{% endif %}>d8</option>
+                    <option value="10" {% if ficha.constituicao == 10 %}selected{% endif %}>d10</option>
+                    <option value="12" {% if ficha.constituicao == 12 %}selected{% endif %}>d12</option>
+                    <option value="20" {% if ficha.constituicao == 20 %}selected{% endif %}>d20</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Inteligência</label>
+                <select name="inteligencia">
+                    <option value="4" {% if ficha.inteligencia == 4 %}selected{% endif %}>d4</option>
+                    <option value="6" {% if ficha.inteligencia == 6 %}selected{% endif %}>d6</option>
+                    <option value="8" {% if ficha.inteligencia == 8 %}selected{% endif %}>d8</option>
+                    <option value="10" {% if ficha.inteligencia == 10 %}selected{% endif %}>d10</option>
+                    <option value="12" {% if ficha.inteligencia == 12 %}selected{% endif %}>d12</option>
+                    <option value="20" {% if ficha.inteligencia == 20 %}selected{% endif %}>d20</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Sabedoria</label>
+                <select name="sabedoria">
+                    <option value="4" {% if ficha.sabedoria == 4 %}selected{% endif %}>d4</option>
+                    <option value="6" {% if ficha.sabedoria == 6 %}selected{% endif %}>d6</option>
+                    <option value="8" {% if ficha.sabedoria == 8 %}selected{% endif %}>d8</option>
+                    <option value="10" {% if ficha.sabedoria == 10 %}selected{% endif %}>d10</option>
+                    <option value="12" {% if ficha.sabedoria == 12 %}selected{% endif %}>d12</option>
+                    <option value="20" {% if ficha.sabedoria == 20 %}selected{% endif %}>d20</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Carisma</label>
+                <select name="carisma">
+                    <option value="4" {% if ficha.carisma == 4 %}selected{% endif %}>d4</option>
+                    <option value="6" {% if ficha.carisma == 6 %}selected{% endif %}>d6</option>
+                    <option value="8" {% if ficha.carisma == 8 %}selected{% endif %}>d8</option>
+                    <option value="10" {% if ficha.carisma == 10 %}selected{% endif %}>d10</option>
+                    <option value="12" {% if ficha.carisma == 12 %}selected{% endif %}>d12</option>
+                    <option value="20" {% if ficha.carisma == 20 %}selected{% endif %}>d20</option>
+                </select>
+            </div>
+        </div>
+
+        <h3 class="section-title">Status (Atual / Máximo)</h3>
+        <div class="grid-row grid-4">
+            <div><label>PV Atual</label><input type="number" name="pv_atual" value="{{ ficha.pv_atual }}"></div>
+            <div><label>PH Atual</label><input type="number" name="ph_atual" value="{{ ficha.ph_atual }}"></div>
+            <div><label>PA Atual</label><input type="number" name="pa_atual" value="{{ ficha.pa_atual }}"></div>
+            <div><label>PG Atual</label><input type="number" name="pg_atual" value="{{ ficha.pg_atual }}"></div>
+        </div>
+        <div class="grid-row grid-4">
+            <div><label>PV Máx</label><input type="number" name="pv_max" value="{{ ficha.pv_max }}"></div>
+            <div><label>PH Máx</label><input type="number" name="ph_max" value="{{ ficha.ph_max }}"></div>
+            <div><label>PA Máx</label><input type="number" name="pa_max" value="{{ ficha.pa_max }}"></div>
+            <div><label>PG Máx</label><input type="number" name="pg_max" value="{{ ficha.pg_max }}"></div>
+        </div>
+
+        <button type="submit">SALVAR ALTERAÇÕES</button>
+    </form>
+    <a href="/">Cancelar</a>
+</div>
+
+</body>
+</html>

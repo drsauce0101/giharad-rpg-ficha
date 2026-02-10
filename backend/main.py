@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse # <--- Importante p
 from sqlmodel import Session, select
 from .database import engine, get_session
 from .models import SQLModel, Personagem
+from fastapi.staticfiles import StaticFiles 
 
 # Lifespan do Servidor (roda automaticamente quando starta)
 @asynccontextmanager
@@ -17,9 +18,11 @@ async def lifespan(app: FastAPI):
 # API
 app = FastAPI(lifespan=lifespan)
 
-# Configuração Visual (diz pro FastAPI procurar os HTMLs dentro da pasta frontend/templates)
+# --- CONFIGURAÇÃO DE ARQUIVOS ---
 BASE_DIR = Path(__file__).resolve().parent.parent 
 TEMPLATES_DIR = BASE_DIR / "frontend" / "templates"
+STATIC_DIR = BASE_DIR / "frontend" / "static"
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 # --- ROTAS ---
@@ -124,4 +127,72 @@ def deletar_personagem(char_id: int, session: Session = Depends(get_session)):
         session.commit()
     
     # Redireciono pra home pra ver a lista atualizada
+    return RedirectResponse("/", status_code=303)
+
+# --- ROTAS DE EDIÇÃO ---
+
+# GET - Abre o formulário preenchido
+@app.get("/editar/{char_id}", response_class=HTMLResponse)
+def pagina_editar(request: Request, char_id: int, session: Session = Depends(get_session)):
+    personagem = session.get(Personagem, char_id)
+    if not personagem:
+        return RedirectResponse("/")
+    
+    return templates.TemplateResponse(
+        request=request, 
+        name="editar.html", 
+        context={"ficha": personagem} # Mando a ficha pro HTML preencher os campos
+    )
+
+# POST - Salva as alterações
+@app.post("/atualizar_cadastro/{char_id}")
+def atualizar_personagem(
+    char_id: int,
+    session: Session = Depends(get_session),
+    nome: str = Form(...),
+    jogador: str = Form(...),
+    raca: str = Form(...),
+    classe: str = Form(...),
+    nivel: int = Form(...),
+    forca: int = Form(...),
+    destreza: int = Form(...),
+    constituicao: int = Form(...),
+    inteligencia: int = Form(...),
+    sabedoria: int = Form(...),
+    carisma: int = Form(...),
+    pv_max: int = Form(...),
+    pv_atual: int = Form(...), # Agora podemos editar a vida atual também!
+    pa_max: int = Form(...),
+    pa_atual: int = Form(...),
+    ph_max: int = Form(...),
+    ph_atual: int = Form(...),
+    pg_max: int = Form(...),
+    pg_atual: int = Form(...)
+):
+    personagem = session.get(Personagem, char_id)
+    if personagem:
+        # Atualiza campo por campo
+        personagem.nome = nome
+        personagem.jogador = jogador
+        personagem.raca = raca
+        personagem.classe = classe
+        personagem.nivel = nivel
+        personagem.forca = forca
+        personagem.destreza = destreza
+        personagem.constituicao = constituicao
+        personagem.inteligencia = inteligencia
+        personagem.sabedoria = sabedoria
+        personagem.carisma = carisma
+        personagem.pv_max = pv_max
+        personagem.pv_atual = pv_atual
+        personagem.pa_max = pa_max
+        personagem.pa_atual = pa_atual
+        personagem.ph_max = ph_max
+        personagem.ph_atual = ph_atual
+        personagem.pg_max = pg_max
+        personagem.pg_atual = pg_atual
+
+        session.add(personagem)
+        session.commit()
+    
     return RedirectResponse("/", status_code=303)

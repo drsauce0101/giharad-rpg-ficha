@@ -5,64 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giharad RPG</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #1a1a1a; color: #e0e0e0; padding: 20px; }
-        
-        /* Cabeçalho e botão de novo cadastro */
-        .header { display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto 30px auto; }
-        h1 { color: #ff9800; margin: 0; }
-        .btn-novo { background: #ff9800; color: #000; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; transition: 0.2s; }
-        .btn-novo:hover { background: #e68900; }
-
-        /* Estilização do Card da ficha */
-        .card { 
-            background: #2d2d2d; 
-            max-width: 800px; margin: 0 auto 20px auto; 
-            padding: 20px; border-radius: 12px; 
-            border-left: 5px solid #ff9800; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        /* Botão de deletar (Lixeira) */
-        .btn-delete {
-            position: absolute; top: 20px; right: 20px;
-            background: transparent; border: none; color: #666; cursor: pointer;
-        }
-        .btn-delete:hover { color: #ff5252; }
-
-        h2 { margin-top: 0; color: #fff; display: flex; gap: 10px; align-items: center; }
-        .tag { background: #444; padding: 4px 10px; border-radius: 12px; font-size: 0.6em; color: #aaa; vertical-align: middle; }
-        .subtitle { color: #888; font-style: italic; margin-bottom: 15px; display: block; font-size: 0.9em; }
-
-        /* Grid dos Atributos (6 colunas) */
-        .stats-grid { 
-            display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; 
-            background: #222; padding: 10px; border-radius: 8px; margin-bottom: 15px;
-        }
-        .stat-box { text-align: center; }
-        .stat-label { font-size: 0.7em; color: #aaa; display: block; text-transform: uppercase; }
-        .stat-value { font-size: 1.1em; font-weight: bold; color: #ff9800; }
-
-        /* Grid das Barras Vitais (2x2) */
-        .bars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .bar-box { 
-            background: #333; padding: 5px 10px; border-radius: 4px; 
-            font-size: 0.9em; display: flex; justify-content: space-between; 
-        }
-        
-        /* Cores específicas pra cada barra */
-        .pv { border-left: 3px solid #ff5252; color: #ffbaba; }
-        .ph { border-left: 3px solid #448aff; color: #bad1ff; }
-        .pa { border-left: 3px solid #ffd740; color: #ffecb3; }
-        .pg { border-left: 3px solid #b388ff; color: #e7d9ff; }
-
-        /* Responsividade pra celular */
-        @media (max-width: 600px) {
-            .stats-grid { grid-template-columns: repeat(3, 1fr); row-gap: 15px; }
-            .bars-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
 </head>
 <body>
     
@@ -73,6 +16,9 @@
 
     {% for ficha in personagens %}
         <div class="card">
+            <a href="/editar/{{ ficha.id }}" class="btn-edit" title="Editar Ficha">
+                <span class="material-icons">edit</span>
+            </a>
             <form action="/deletar/{{ ficha.id }}" method="post" onsubmit="return confirm('Certeza que quer deletar o {{ ficha.nome }}?');">
                 <button type="submit" class="btn-delete" title="Excluir Ficha">
                     <span class="material-icons">delete</span>
