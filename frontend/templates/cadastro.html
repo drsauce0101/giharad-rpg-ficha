@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Personagem</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: #1a1a1a; 
+            color: #e0e0e0; 
+            padding: 20px; 
+            margin: 0;
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 700px; /* Um pouco mais largo pra caber tudo */
+            background: #2d2d2d; 
+            padding: 30px; 
+            border-radius: 12px; 
+            border-top: 5px solid #ff9800; 
+            margin: 40px auto; /* Centraliza na tela */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        h1 { color: #ff9800; text-align: center; margin-bottom: 30px; }
+        
+        label { display: block; margin-top: 10px; color: #aaa; font-size: 0.85em; font-weight: bold; }
+        input, select { 
+            width: 100%; 
+            padding: 10px; 
+            margin-top: 5px; 
+            background: #444; 
+            border: 1px solid #555; 
+            color: #fff; 
+            border-radius: 4px; 
+            box-sizing: border-box;
+        }
+        input:focus, select:focus { border-color: #ff9800; outline: none; background: #505050; }
+
+        /* SEPARADORES */
+        .section-title {
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #ff9800;
+            font-size: 1.1em;
+        }
+
+        /* GRIDS DE LAYOUT */
+        .grid-row { display: grid; gap: 15px; }
+        .grid-2 { grid-template-columns: 1fr 1fr; }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); } /* 3 Colunas iguais */
+        .grid-4 { grid-template-columns: repeat(4, 1fr); } /* 4 Colunas iguais */
+
+        /* Botão */
+        button { 
+            width: 100%; margin-top: 30px; padding: 15px; 
+            background: #ff9800; color: #000; font-weight: bold; 
+            border: none; border-radius: 6px; cursor: pointer; 
+            font-size: 1.1em; transition: 0.2s; 
+        }
+        button:hover { background: #e68900; transform: translateY(-2px); }
+        
+        a { display: block; text-align: center; margin-top: 15px; color: #888; text-decoration: none; }
+        a:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>⚔️ Novo Personagem</h1>
+    
+    <form action="/enviar_cadastro" method="post">
+        
+        <div class="grid-row grid-2">
+            <div><label>Nome do Personagem</label><input type="text" name="nome" required placeholder="Ex: Gandalf"></div>
+            <div><label>Nome do Jogador</label><input type="text" name="jogador" required placeholder="Seu apelido"></div>
+        </div>
+
+        <div class="grid-row grid-3" style="margin-top: 15px;">
+            <div><label>Raça</label><input type="text" name="raca" required></div>
+            <div><label>Classe</label><input type="text" name="classe" required></div>
+            <div><label>Nível</label><input type="number" name="nivel" value="1"></div>
+        </div>
+
+        <h3 class="section-title">Atributos (Dados)</h3>
+        <div class="grid-row grid-3">
+            <div>
+                <label>Força</label>
+                <select name="forca"><option value="4">d4</option><option value="6">d6</option><option value="8">d8</option><option value="10">d10</option><option value="12">d12</option><option value="20">d20</option></select>
+            </div>
+            <div>
+                <label>Destreza</label>
+                <select name="destreza"><option value="4">d4</option><option value="6">d6</option><option value="8">d8</option><option value="10">d10</option><option value="12">d12</option><option value="20">d20</option></select>
+            </div>
+            <div>
+                <label>Constituição</label>
+                <select name="constituicao"><option value="4">d4</option><option value="6">d6</option><option value="8">d8</option><option value="10">d10</option><option value="12">d12</option><option value="20">d20</option></select>
+            </div>
+            <div>
+                <label>Inteligência</label>
+                <select name="inteligencia"><option value="4">d4</option><option value="6">d6</option><option value="8">d8</option><option value="10">d10</option><option value="12">d12</option><option value="20">d20</option></select>
+            </div>
+            <div>
+                <label>Sabedoria</label>
+                <select name="sabedoria"><option value="4">d4</option><option value="6">d6</option><option value="8">d8</option><option value="10">d10</option><option value="12">d12</option><option value="20">d20</option></select>
+            </div>
+            <div>
+                <label>Carisma</label>
+                <select name="carisma"><option value="4">d4</option><option value="6">d6</option><option value="8">d8</option><option value="10">d10</option><option value="12">d12</option><option value="20">d20</option></select>
+            </div>
+        </div>
+
+        <h3 class="section-title">Status Iniciais (Máximos)</h3>
+        <div class="grid-row grid-4">
+            <div><label>❤️ Vida (PV)</label><input type="number" name="pv_max" value="0"></div>
+            <div><label>✨ Hafa (PH)</label><input type="number" name="ph_max" value="0"></div>
+            <div><label>⚡ Ação (PA)</label><input type="number" name="pa_max" value="0"></div>
+            <div><label>💀 Grima (PG)</label><input type="number" name="pg_max" value="0"></div>
+        </div>
+
+        <button type="submit">CRIAR FICHA</button>
+    </form>
+    <a href="/">← Voltar para a lista</a>
+</div>
+
+</body>
+</html>
