@@ -2,54 +2,83 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giharad RPG</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; color: #e0e0e0; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #1a1a1a; color: #e0e0e0; padding: 20px; }
         
-        /* Estilo do Cartão */
+        /* Cabeçalho e botão de novo cadastro */
+        .header { display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto 30px auto; }
+        h1 { color: #ff9800; margin: 0; }
+        .btn-novo { background: #ff9800; color: #000; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; transition: 0.2s; }
+        .btn-novo:hover { background: #e68900; }
+
+        /* Estilização do Card da ficha */
         .card { 
             background: #2d2d2d; 
-            padding: 20px; 
-            margin-bottom: 20px; 
-            border-radius: 12px; 
-            border-left: 5px solid #ff9800; /* Borda laranja estilosa */
+            max-width: 800px; margin: 0 auto 20px auto; 
+            padding: 20px; border-radius: 12px; 
+            border-left: 5px solid #ff9800; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            position: relative;
         }
 
-        h1 { color: #ff9800; text-align: center; margin-bottom: 30px; }
-        h2 { margin-top: 0; color: #fff; display: flex; justify-content: space-between; align-items: center; }
-        
-        .tag { background: #444; padding: 4px 10px; border-radius: 12px; font-size: 0.6em; color: #aaa; }
-        .subtitle { color: #888; font-style: italic; margin-bottom: 15px; display: block; }
+        /* Botão de deletar (Lixeira) */
+        .btn-delete {
+            position: absolute; top: 20px; right: 20px;
+            background: transparent; border: none; color: #666; cursor: pointer;
+        }
+        .btn-delete:hover { color: #ff5252; }
 
-        /* Grid de Atributos */
+        h2 { margin-top: 0; color: #fff; display: flex; gap: 10px; align-items: center; }
+        .tag { background: #444; padding: 4px 10px; border-radius: 12px; font-size: 0.6em; color: #aaa; vertical-align: middle; }
+        .subtitle { color: #888; font-style: italic; margin-bottom: 15px; display: block; font-size: 0.9em; }
+
+        /* Grid dos Atributos (6 colunas) */
         .stats-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); /* 3 colunas */
-            gap: 10px; 
-            background: #222;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; 
+            background: #222; padding: 10px; border-radius: 8px; margin-bottom: 15px;
         }
         .stat-box { text-align: center; }
-        .stat-label { font-size: 0.8em; color: #aaa; display: block; }
-        .stat-value { font-size: 1.2em; font-weight: bold; color: #ff9800; }
+        .stat-label { font-size: 0.7em; color: #aaa; display: block; text-transform: uppercase; }
+        .stat-value { font-size: 1.1em; font-weight: bold; color: #ff9800; }
 
-        /* Barras de Pontos */
-        .bars { display: flex; gap: 15px; margin-top: 10px; }
-        .bar-box { flex: 1; text-align: center; background: #333; padding: 5px; border-radius: 4px; }
-        .pv { color: #ff5252; } /* Vermelho Vida */
-        .pa { color: #4aff44; } /* Verde Ações */
-        .ph { color: #fffc44; } /* Amarelo Hafa */
-        .pg { color: #9544ff; } /* Roxo Grima */
+        /* Grid das Barras Vitais (2x2) */
+        .bars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .bar-box { 
+            background: #333; padding: 5px 10px; border-radius: 4px; 
+            font-size: 0.9em; display: flex; justify-content: space-between; 
+        }
+        
+        /* Cores específicas pra cada barra */
+        .pv { border-left: 3px solid #ff5252; color: #ffbaba; }
+        .ph { border-left: 3px solid #448aff; color: #bad1ff; }
+        .pa { border-left: 3px solid #ffd740; color: #ffecb3; }
+        .pg { border-left: 3px solid #b388ff; color: #e7d9ff; }
+
+        /* Responsividade pra celular */
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: repeat(3, 1fr); row-gap: 15px; }
+            .bars-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <h1>📜 Fichas de Giharad</h1>
+    
+    <div class="header">
+        <h1>📜 Fichas de Giharad</h1>
+        <a href="/novo" class="btn-novo">+ Nova Ficha</a>
+    </div>
 
     {% for ficha in personagens %}
         <div class="card">
+            <form action="/deletar/{{ ficha.id }}" method="post" onsubmit="return confirm('Certeza que quer deletar o {{ ficha.nome }}?');">
+                <button type="submit" class="btn-delete" title="Excluir Ficha">
+                    <span class="material-icons">delete</span>
+                </button>
+            </form>
+
             <h2>
                 {{ ficha.nome }} 
                 <span class="tag">Nível {{ ficha.nivel }}</span>
@@ -57,23 +86,23 @@
             <span class="subtitle">{{ ficha.raca }} | {{ ficha.classe }} | Jogador: {{ ficha.jogador }}</span>
 
             <div class="stats-grid">
-                <div class="stat-box"><span class="stat-label">FORÇA</span><span class="stat-value">d{{ ficha.forca }}</span></div>
-                <div class="stat-box"><span class="stat-label">DESTREZA</span><span class="stat-value">d{{ ficha.destreza }}</span></div>
-                <div class="stat-box"><span class="stat-label">CONSTITUIÇÃO</span><span class="stat-value">d{{ ficha.constituicao }}</span></div>
-                <div class="stat-box"><span class="stat-label">INTELIGÊNCIA</span><span class="stat-value">d{{ ficha.inteligencia }}</span></div>
-                <div class="stat-box"><span class="stat-label">SABEDORIA</span><span class="stat-value">d{{ ficha.sabedoria }}</span></div>
-                <div class="stat-box"><span class="stat-label">CARISMA</span><span class="stat-value">d{{ ficha.carisma }}</span></div>
+                <div class="stat-box"><span class="stat-label">FOR</span><span class="stat-value">d{{ ficha.forca }}</span></div>
+                <div class="stat-box"><span class="stat-label">DES</span><span class="stat-value">d{{ ficha.destreza }}</span></div>
+                <div class="stat-box"><span class="stat-label">CON</span><span class="stat-value">d{{ ficha.constituicao }}</span></div>
+                <div class="stat-box"><span class="stat-label">INT</span><span class="stat-value">d{{ ficha.inteligencia }}</span></div>
+                <div class="stat-box"><span class="stat-label">SAB</span><span class="stat-value">d{{ ficha.sabedoria }}</span></div>
+                <div class="stat-box"><span class="stat-label">CAR</span><span class="stat-value">d{{ ficha.carisma }}</span></div>
             </div>
 
-            <div class="bars">
-                <div class="bar-box pv"> Pontos de Vida (PV): {{ ficha.pv_atual }} / {{ ficha.pv_max }}</div>
-                <div class="bar-box pa"> Pontos de Ação (PA): {{ ficha.pa_atual }} / {{ ficha.pa_max }}</div>
-                <div class="bar-box ph"> Pontos de Hafa (PH): {{ ficha.ph_atual }} / {{ ficha.ph_max }}</div>
-                <div class="bar-box pg"> Pontos de Grima (PG): {{ ficha.pg_atual }} / {{ ficha.pg_max }}</div>
+            <div class="bars-grid">
+                <div class="bar-box pv"><span>❤️ Vida (PV)</span> <strong>{{ ficha.pv_atual }}/{{ ficha.pv_max }}</strong></div>
+                <div class="bar-box ph"><span>✨ Hafa (PH)</span> <strong>{{ ficha.ph_atual }}/{{ ficha.ph_max }}</strong></div>
+                <div class="bar-box pa"><span>⚡ Ação (PA)</span> <strong>{{ ficha.pa_atual }}/{{ ficha.pa_max }}</strong></div>
+                <div class="bar-box pg"><span>💀 Grima (PG)</span> <strong>{{ ficha.pg_atual }}/{{ ficha.pg_max }}</strong></div>
             </div>
         </div>
     {% else %}
-        <p style="text-align:center">Nenhum aventureiro encontrado...</p>
+        <p style="text-align:center; color: #666;">Nenhum char encontrado... Bora criar um!</p>
     {% endfor %}
 
 </body>
