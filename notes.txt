@@ -1,0 +1,3 @@
+Comandos Rápidos:
+
+startar o fast API -> fastapi dev backend/main.py

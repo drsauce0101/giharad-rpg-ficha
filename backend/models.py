@@ -1,43 +1,55 @@
-from typing import Optional
-from sqlmodel import Field, SQLModel
-from sqlalchemy import JSON, Column
+from typing import Optional, Dict, List
+from sqlmodel import Field, SQLModel, JSON
 
+# -- MODELOS DE DADOS --
 class Personagem(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     
-    # --- CABEÇALHO COMPLETO ---
+    # Identificação
     nome: str
     jogador: str
     raca: str
     classe: str
-    nivel: int = Field(default=1)
+    nivel: int = 1
     
-    # Identidade
-    antecedente: str = Field(default="")
-    guardiao: str = Field(default="")
-    ascensao: str = Field(default="")
+    # Lore
+    antecedente: Optional[str] = None
+    guardiao: Optional[str] = None
+    ascensao: Optional[str] = None
+    
+    # Atributos (d4, d6, etc...)
+    forca: int
+    destreza: int
+    constituicao: int
+    inteligencia: int
+    sabedoria: int
+    carisma: int
 
-    # --- ATRIBUTOS ---
-    forca: int = Field(default=4)
-    destreza: int = Field(default=4)
-    constituicao: int = Field(default=4)
-    inteligencia: int = Field(default=4)
-    sabedoria: int = Field(default=4)
-    carisma: int = Field(default=4)
+    # Status de Combate
+    defesa: int
+    experiencia: int
 
-    # --- COMBATE E PROGRESSO ---
-    defesa: int = Field(default=10)
-    experiencia: int = Field(default=0)
+    # Barras de Status (Máximos e Atuais)
+    pv_max: int
+    pv_atual: int
+    pa_max: int
+    pa_atual: int
+    ph_max: int
+    ph_atual: int
+    pg_max: int
+    pg_atual: int
 
-    # --- COMPETÊNCIAS (PERÍCIAS) ---
-    competencias: dict = Field(default={}, sa_column=Column(JSON))
-
-    # --- BARRAS VITAIS ---
-    pv_max: int = Field(default=10)
-    pv_atual: int = Field(default=10)
-    ph_max: int = Field(default=0)
-    ph_atual: int = Field(default=0)
-    pg_max: int = Field(default=0)
-    pg_atual: int = Field(default=0)
-    pa_max: int = Field(default=0)
-    pa_atual: int = Field(default=0)
+    # -- LISTAS ESPECIAIS --
+    competencias: Dict[str, int] = Field(default={}, sa_type=JSON)
+    
+    # Lista de Ataques: 
+    ataques: List[Dict[str, str]] = Field(default=[], sa_type=JSON)
+    
+    # Lista de Habilidades: 
+    habilidades: List[Dict[str, str]] = Field(default=[], sa_type=JSON)
+    
+    # Lista de Itens: 
+    inventario: List[Dict[str, str]] = Field(default=[], sa_type=JSON)
+    
+    # Texto Livre
+    notas: Optional[str] = Field(default="", sa_column_kwargs={"nullable": True})

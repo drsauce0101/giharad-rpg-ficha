@@ -32,6 +32,49 @@ STATIC_DIR = BASE_DIR / "frontend" / "static"
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
+# --- FUNÇÕES AUXILIARES ---
+
+# Processa as listas de Ataques, Habilidades e Inventário do form
+def processar_listas(form_data):
+    # Processar Ataques (5 slots) com NOVAS COLUNAS
+    lista_ataques = []
+    for i in range(5):
+        nome = form_data.get(f"ataque_nome_{i}")
+        if nome: 
+            lista_ataques.append({
+                "nome": nome,
+                "atributo": form_data.get(f"ataque_attr_{i}") or "-",
+                "acerto": form_data.get(f"ataque_acerto_{i}") or "+0",
+                "dano": form_data.get(f"ataque_dano_{i}") or "-",
+                "explosivo": form_data.get(f"ataque_explosivo_{i}") or "-", 
+                "margem": form_data.get(f"ataque_margem_{i}") or "20",       
+                "alcance": form_data.get(f"ataque_alcance_{i}") or "-"       
+            })
+
+    # Processar Habilidades (5 slots)
+    lista_habilidades = []
+    for i in range(5):
+        nome = form_data.get(f"hab_nome_{i}")
+        if nome:
+            lista_habilidades.append({
+                "nome": nome,
+                "custo": form_data.get(f"hab_custo_{i}") or "-",
+                "efeito": form_data.get(f"hab_efeito_{i}") or "-"
+            })
+
+    # Processar Inventário (10 slots) com ESPAÇOS
+    lista_inventario = []
+    for i in range(10):
+        nome = form_data.get(f"item_nome_{i}")
+        if nome:
+            lista_inventario.append({
+                "nome": nome,
+                "qtd": form_data.get(f"item_qtd_{i}") or "1",
+                "espacos": form_data.get(f"item_slot_{i}") or "0" 
+            })
+            
+    return lista_ataques, lista_habilidades, lista_inventario
+
 # --- ROTAS ---
 
 # ROTA HOME (Menu de Seleção)
@@ -89,7 +132,7 @@ def pagina_cadastro(request: Request):
 async def processar_formulario(request: Request, session: Session = Depends(get_session)):
     form_data = await request.form()
     
-    # Processa as Competências (agora numérico)
+    # Processa as Competências
     competencias_selecionadas = {}
     for skill in LISTA_COMPETENCIAS:
         valor_str = form_data.get(skill)
@@ -98,6 +141,9 @@ async def processar_formulario(request: Request, session: Session = Depends(get_
             competencias_selecionadas[skill] = int(valor_str)
         else:
             competencias_selecionadas[skill] = 0
+
+    # Processar as novas listas dinâmicas
+    ataques, habilidades, inventario = processar_listas(form_data)
 
     novo_char = Personagem(
         nome=form_data.get("nome"),
@@ -121,6 +167,11 @@ async def processar_formulario(request: Request, session: Session = Depends(get_
         experiencia=int(form_data.get("experiencia")),
 
         competencias=competencias_selecionadas,
+        
+        ataques=ataques,
+        habilidades=habilidades,
+        inventario=inventario,
+        notas=form_data.get("notas"),
 
         pv_max=int(form_data.get("pv_max")),
         pv_atual=int(form_data.get("pv_max")),
@@ -212,6 +263,13 @@ async def atualizar_personagem(
             competencias_selecionadas[skill] = 0
     
     personagem.competencias = competencias_selecionadas
+
+    # Atualiza as novas listas e notas
+    ataques, habilidades, inventario = processar_listas(form_data)
+    personagem.ataques = ataques
+    personagem.habilidades = habilidades
+    personagem.inventario = inventario
+    personagem.notas = form_data.get("notas")
 
     session.add(personagem)
     session.commit()

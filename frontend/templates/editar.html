@@ -126,7 +126,7 @@
         </div>
 
         <h3 class="section-title">Competências (Bônus)</h3>
-        <div class="grid-row" style="grid-template-columns: repeat(3, 1fr); gap: 10px; background: #222; padding: 15px; border-radius: 8px;">
+        <div class="grid-row" style="grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
             {% for skill in lista_skills %}
             <div style="display: flex; justify-content: space-between; align-items: center; background: #333; padding: 5px 10px; border-radius: 4px; border: 1px solid #444;">
                 <label for="{{ skill }}" style="margin: 0; cursor: pointer; color: #ddd; font-size: 0.9em; font-weight: normal;">{{ skill }}</label>
@@ -135,6 +135,80 @@
                        style="width: 60px; padding: 5px; text-align: center; margin: 0; background: #222; border: 1px solid #555; color: white;">
             </div>
             {% endfor %}
+        </div>
+
+        <hr style="border-color: #444; margin: 30px 0;">
+        
+        <div class="grid-row" style="grid-template-columns: 1fr; gap: 20px;">
+            
+            <div>
+                <h3 class="section-title">⚔️ Ataques</h3>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
+                     <div class="grid-row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr; gap: 5px; margin-bottom: 10px; color: #aaa; font-size: 0.8em; text-align: center;">
+                        <div style="text-align: left;">Nome</div>
+                        <div>Atributo</div>
+                        <div>Acerto</div>
+                        <div>Dano</div>
+                        <div>Explosão</div>
+                        <div>Margem</div>
+                        <div>Alcance</div>
+                    </div>
+
+                    {% for i in range(5) %}
+                    {% set atk = ficha.ataques[i] if ficha.ataques and i < ficha.ataques|length else {} %}
+                    <div class="grid-row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr; gap: 5px; margin-bottom: 10px;">
+                        <input type="text" name="ataque_nome_{{i}}" value="{{ atk.nome or '' }}" placeholder="Arma">
+                        <input type="text" name="ataque_attr_{{i}}" value="{{ atk.atributo or '' }}" placeholder="ATR" style="text-align: center;">
+                        <input type="text" name="ataque_acerto_{{i}}" value="{{ atk.acerto or '' }}" placeholder="Acerto" style="text-align: center;">
+                        <input type="text" name="ataque_dano_{{i}}" value="{{ atk.dano or '' }}" placeholder="Dano" style="text-align: center;">
+                        <input type="text" name="ataque_explosivo_{{i}}" value="{{ atk.explosivo or '' }}" placeholder="Expl" style="text-align: center;">
+                        <input type="text" name="ataque_margem_{{i}}" value="{{ atk.margem or '' }}" placeholder="Margem" style="text-align: center;">
+                        <input type="text" name="ataque_alcance_{{i}}" value="{{ atk.alcance or '' }}" placeholder="Alc" style="text-align: center;">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div>
+                <h3 class="section-title">🔮 Habilidades</h3>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
+                    {% for i in range(5) %}
+                    {% set hab = ficha.habilidades[i] if ficha.habilidades and i < ficha.habilidades|length else {} %}
+                    <div class="grid-row" style="grid-template-columns: 1fr 1fr 2fr; gap: 10px; margin-bottom: 10px;">
+                        <input type="text" name="hab_nome_{{i}}" value="{{ hab.nome or '' }}" placeholder="Nome da Habilidade">
+                        <input type="text" name="hab_custo_{{i}}" value="{{ hab.custo or '' }}" placeholder="Custo">
+                        <input type="text" name="hab_efeito_{{i}}" value="{{ hab.efeito or '' }}" placeholder="Efeito...">
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="grid-row grid-2">
+                <div>
+                    <h3 class="section-title">🎒 Inventário</h3>
+                    <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+                        <div class="grid-row" style="grid-template-columns: 3fr 1fr 1fr; gap: 5px; margin-bottom: 5px; color: #aaa; font-size: 0.8em; text-align: center;">
+                            <div style="text-align: left; padding-left: 5px;">Item</div>
+                            <div>Qtd</div>
+                            <div>Espaços</div>
+                        </div>
+
+                        {% for i in range(10) %}
+                        {% set item = ficha.inventario[i] if ficha.inventario and i < ficha.inventario|length else {} %}
+                        <div class="grid-row" style="grid-template-columns: 3fr 1fr 1fr; gap: 5px; margin-bottom: 5px;">
+                            <input type="text" name="item_nome_{{i}}" value="{{ item.nome or '' }}" placeholder="Nome do Item">
+                            <input type="number" name="item_qtd_{{i}}" value="{{ item.qtd or 1 }}" style="text-align: center;">
+                            <input type="number" name="item_slot_{{i}}" value="{{ item.espacos or 0 }}" style="text-align: center; color: #ffd740;">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="section-title">📜 Notas & História</h3>
+                    <textarea name="notas" rows="12" style="width: 100%; background: #222; border: 1px solid #555; color: #fff; border-radius: 4px; padding: 10px; font-family: inherit;">{{ ficha.notas or "" }}</textarea>
+                </div>
+            </div>
         </div>
 
         <button type="submit">SALVAR ALTERAÇÕES</button>
