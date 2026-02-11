@@ -2,20 +2,28 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI, Depends, Request, Form
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, RedirectResponse # <--- Importante pra funcionar o Delete
+from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlmodel import Session, select
 from .database import engine, get_session
 from .models import SQLModel, Personagem
 from fastapi.staticfiles import StaticFiles 
 
-# Lifespan do Servidor (roda automaticamente quando starta)
+# --- LISTA MESTRA DE COMPETÊNCIAS ---
+# Essa lista vai para o HTML gerar os checkboxes
+LISTA_COMPETENCIAS = [
+    "Acrobacia", "Adestramento", "Atletismo", "Atuação", "Cavalgar", 
+    "Conhecimento", "Cura", "Diplomacia", "Enganação", "Fortitude", 
+    "Furtividade", "Tática", "Intimidação", "Intuição", "Investigação", 
+    "Jogatina", "Ladinagem", "Feitiçaria", "Nobreza", "Percepção", 
+    "Pilotagem", "Reflexos", "Religião", "Sobrevivência", "Vontade"
+]
+
+# Lifespan do Servidor
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Builda as tabelas
     SQLModel.metadata.create_all(engine)
     yield
 
-# API
 app = FastAPI(lifespan=lifespan)
 
 # --- CONFIGURAÇÃO DE ARQUIVOS ---
@@ -27,29 +35,26 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 # --- ROTAS ---
 
-# ROTA HOME: Retorna HTML com as fichas
+# ROTA HOME
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request, session: Session = Depends(get_session)):
-    # Busca todos os personagens no banco
     statement = select(Personagem)
     resultados = session.exec(statement).all()
-    
-    # Renderiza o HTML passando a lista de personagens
     return templates.TemplateResponse(
         request=request, 
         name="index.html", 
         context={"personagens": resultados}
     )
 
-# ROTA POST: Criação do personagem (API/Swagger)
+# ROTA POST (API)
 @app.post("/personagem/", response_model=Personagem)
 def criar_personagem(personagem: Personagem, session: Session = Depends(get_session)):
-    session.add(personagem)      # Prepara o salvamento
-    session.commit()             # Salva no banco de verdade
-    session.refresh(personagem)  # Atualiza o objeto e pega o ID gerado
+    session.add(personagem)
+    session.commit()
+    session.refresh(personagem)
     return personagem
 
-# ROTA GET (API): Lista tudo em JSON (para futuros debugs)
+# ROTA API LISTAR
 @app.get("/api/personagem/", response_model=list[Personagem])
 def listar_personagens_api(session: Session = Depends(get_session)):
     statement = select(Personagem)
@@ -61,77 +66,79 @@ def listar_personagens_api(session: Session = Depends(get_session)):
 # GET - Página de Cadastro
 @app.get("/novo", response_class=HTMLResponse)
 def pagina_cadastro(request: Request):
-    return templates.TemplateResponse(request=request, name="cadastro.html")
-
-# POST - Processar Cadastro
-@app.post("/enviar_cadastro")
-def processar_formulario(
-    session: Session = Depends(get_session),
-    nome: str = Form(...),
-    jogador: str = Form(...),
-    raca: str = Form(...),
-    classe: str = Form(...),
-    nivel: int = Form(1),
-    forca: int = Form(4),
-    destreza: int = Form(4),
-    constituicao: int = Form(4),
-    inteligencia: int = Form(4),
-    sabedoria: int = Form(4),
-    carisma: int = Form(4),
-    pv_max: int = Form(10),
-    pa_max: int = Form(0),
-    ph_max: int = Form(0),
-    pg_max: int = Form(0)
-):
-    # Cria o objeto Python
-    novo_char = Personagem(
-        nome=nome,
-        jogador=jogador,
-        raca=raca,
-        classe=classe,
-        nivel=nivel,
-        forca=forca,
-        destreza=destreza,
-        constituicao=constituicao,
-        inteligencia=inteligencia,
-        sabedoria=sabedoria,
-        carisma=carisma,
-        
-        # Status
-        pv_max=pv_max,
-        pv_atual=pv_max,
-        pa_max=pa_max,
-        pa_atual=pa_max,
-        ph_max=ph_max,
-        ph_atual=ph_max,
-        pg_max=pg_max,
-        pg_atual=pg_max
+    # Passamos a lista de skills para o HTML gerar os checkboxes
+    return templates.TemplateResponse(
+        request=request, 
+        name="cadastro.html", 
+        context={"lista_skills": LISTA_COMPETENCIAS}
     )
 
-    # Salva no Banco
+# POST - Processar Cadastro (Versão Atualizada com JSON)
+@app.post("/enviar_cadastro")
+async def processar_formulario(request: Request, session: Session = Depends(get_session)):
+    # 1. Pega todos os dados do formulário bruto
+    form_data = await request.form()
+    
+    # 2. Processa as Competências (Checkbox)
+    competencias_selecionadas = {}
+    for skill in LISTA_COMPETENCIAS:
+        # Se o nome da skill estiver nos dados do form, é True
+        if skill in form_data:
+            competencias_selecionadas[skill] = True
+        else:
+            competencias_selecionadas[skill] = False
+
+    # 3. Cria o objeto Personagem (convertendo textos para int onde precisa)
+    novo_char = Personagem(
+        nome=form_data.get("nome"),
+        jogador=form_data.get("jogador"),
+        raca=form_data.get("raca"),
+        classe=form_data.get("classe"),
+        nivel=int(form_data.get("nivel")),
+        
+        antecedente=form_data.get("antecedente"),
+        guardiao=form_data.get("guardiao"),
+        ascensao=form_data.get("ascensao"),
+
+        forca=int(form_data.get("forca")),
+        destreza=int(form_data.get("destreza")),
+        constituicao=int(form_data.get("constituicao")),
+        inteligencia=int(form_data.get("inteligencia")),
+        sabedoria=int(form_data.get("sabedoria")),
+        carisma=int(form_data.get("carisma")),
+
+        defesa=int(form_data.get("defesa")),
+        experiencia=int(form_data.get("experiencia")),
+
+        # Salva o dicionário JSON
+        competencias=competencias_selecionadas,
+
+        pv_max=int(form_data.get("pv_max")),
+        pv_atual=int(form_data.get("pv_max")), # Começa cheio
+        pa_max=int(form_data.get("pa_max")),
+        pa_atual=int(form_data.get("pa_max")),
+        ph_max=int(form_data.get("ph_max")),
+        ph_atual=int(form_data.get("ph_max")),
+        pg_max=int(form_data.get("pg_max")),
+        pg_atual=int(form_data.get("pg_max")),
+    )
+
     session.add(novo_char)
     session.commit()
-
-    # REDIRECT: Manda o navegador voltar para a Home
     return RedirectResponse("/", status_code=303)
 
 # --- ROTA DE EXCLUIR ---
 @app.post("/deletar/{char_id}")
 def deletar_personagem(char_id: int, session: Session = Depends(get_session)):
-    # Busco o personagem no banco pelo ID
     personagem = session.get(Personagem, char_id)
-    
     if personagem:
-        # Removo o item e confirmo a transação
         session.delete(personagem)
         session.commit()
-    
-    # Redireciono pra home pra ver a lista atualizada
     return RedirectResponse("/", status_code=303)
 
 # --- ROTAS DE EDIÇÃO ---
 
-# GET - Abre o formulário preenchido
+# GET - Página de Edição
 @app.get("/editar/{char_id}", response_class=HTMLResponse)
 def pagina_editar(request: Request, char_id: int, session: Session = Depends(get_session)):
     personagem = session.get(Personagem, char_id)
@@ -141,58 +148,65 @@ def pagina_editar(request: Request, char_id: int, session: Session = Depends(get
     return templates.TemplateResponse(
         request=request, 
         name="editar.html", 
-        context={"ficha": personagem} # Mando a ficha pro HTML preencher os campos
+        # Passamos a ficha E a lista de skills para marcar os checkboxes
+        context={"ficha": personagem, "lista_skills": LISTA_COMPETENCIAS} 
     )
 
-# POST - Salva as alterações
+# POST - Salvar Edição (Versão Atualizada com JSON)
 @app.post("/atualizar_cadastro/{char_id}")
-def atualizar_personagem(
-    char_id: int,
-    session: Session = Depends(get_session),
-    nome: str = Form(...),
-    jogador: str = Form(...),
-    raca: str = Form(...),
-    classe: str = Form(...),
-    nivel: int = Form(...),
-    forca: int = Form(...),
-    destreza: int = Form(...),
-    constituicao: int = Form(...),
-    inteligencia: int = Form(...),
-    sabedoria: int = Form(...),
-    carisma: int = Form(...),
-    pv_max: int = Form(...),
-    pv_atual: int = Form(...), # Agora podemos editar a vida atual também!
-    pa_max: int = Form(...),
-    pa_atual: int = Form(...),
-    ph_max: int = Form(...),
-    ph_atual: int = Form(...),
-    pg_max: int = Form(...),
-    pg_atual: int = Form(...)
+async def atualizar_personagem(
+    request: Request, 
+    char_id: int, 
+    session: Session = Depends(get_session)
 ):
     personagem = session.get(Personagem, char_id)
-    if personagem:
-        # Atualiza campo por campo
-        personagem.nome = nome
-        personagem.jogador = jogador
-        personagem.raca = raca
-        personagem.classe = classe
-        personagem.nivel = nivel
-        personagem.forca = forca
-        personagem.destreza = destreza
-        personagem.constituicao = constituicao
-        personagem.inteligencia = inteligencia
-        personagem.sabedoria = sabedoria
-        personagem.carisma = carisma
-        personagem.pv_max = pv_max
-        personagem.pv_atual = pv_atual
-        personagem.pa_max = pa_max
-        personagem.pa_atual = pa_atual
-        personagem.ph_max = ph_max
-        personagem.ph_atual = ph_atual
-        personagem.pg_max = pg_max
-        personagem.pg_atual = pg_atual
+    if not personagem:
+        return RedirectResponse("/")
+    
+    # 1. Pega os dados do form
+    form_data = await request.form()
 
-        session.add(personagem)
-        session.commit()
+    # 2. Atualiza campos simples
+    personagem.nome = form_data.get("nome")
+    personagem.jogador = form_data.get("jogador")
+    personagem.raca = form_data.get("raca")
+    personagem.classe = form_data.get("classe")
+    personagem.nivel = int(form_data.get("nivel"))
+    
+    personagem.antecedente = form_data.get("antecedente")
+    personagem.guardiao = form_data.get("guardiao")
+    personagem.ascensao = form_data.get("ascensao")
+
+    personagem.forca = int(form_data.get("forca"))
+    personagem.destreza = int(form_data.get("destreza"))
+    personagem.constituicao = int(form_data.get("constituicao"))
+    personagem.inteligencia = int(form_data.get("inteligencia"))
+    personagem.sabedoria = int(form_data.get("sabedoria"))
+    personagem.carisma = int(form_data.get("carisma"))
+
+    personagem.defesa = int(form_data.get("defesa"))
+    personagem.experiencia = int(form_data.get("experiencia"))
+
+    personagem.pv_max = int(form_data.get("pv_max"))
+    personagem.pv_atual = int(form_data.get("pv_atual"))
+    personagem.ph_max = int(form_data.get("ph_max"))
+    personagem.ph_atual = int(form_data.get("ph_atual"))
+    personagem.pa_max = int(form_data.get("pa_max"))
+    personagem.pa_atual = int(form_data.get("pa_atual"))
+    personagem.pg_max = int(form_data.get("pg_max"))
+    personagem.pg_atual = int(form_data.get("pg_atual"))
+
+    # 3. Atualiza Competências (JSON)
+    competencias_selecionadas = {}
+    for skill in LISTA_COMPETENCIAS:
+        if skill in form_data:
+            competencias_selecionadas[skill] = True
+        else:
+            competencias_selecionadas[skill] = False
+    
+    personagem.competencias = competencias_selecionadas
+
+    session.add(personagem)
+    session.commit()
     
     return RedirectResponse("/", status_code=303)

@@ -24,6 +24,12 @@
             <div><label>Nível</label><input type="number" name="nivel" value="{{ ficha.nivel }}"></div>
         </div>
 
+        <div class="grid-row grid-3" style="margin-top: 15px;">
+            <div><label>Antecedente</label><input type="text" name="antecedente" value="{{ ficha.antecedente }}"></div>
+            <div><label>Guardião</label><input type="text" name="guardiao" value="{{ ficha.guardiao }}"></div>
+            <div><label>Ascensão</label><input type="text" name="ascensao" value="{{ ficha.ascensao }}"></div>
+        </div>
+
         <h3 class="section-title">Atributos</h3>
         <div class="grid-row grid-3">
             <div>
@@ -111,6 +117,24 @@
             <div><label>PH Máx</label><input type="number" name="ph_max" value="{{ ficha.ph_max }}"></div>
             <div><label>PA Máx</label><input type="number" name="pa_max" value="{{ ficha.pa_max }}"></div>
             <div><label>PG Máx</label><input type="number" name="pg_max" value="{{ ficha.pg_max }}"></div>
+        </div>
+
+        <h3 class="section-title">Combate e Progresso</h3>
+        <div class="grid-row grid-2">
+             <div><label>🛡️ Defesa</label><input type="number" name="defesa" value="{{ ficha.defesa }}"></div>
+             <div><label>💎 Experiência (XP)</label><input type="number" name="experiencia" value="{{ ficha.experiencia }}"></div>
+        </div>
+
+        <h3 class="section-title">Competências</h3>
+        <div class="grid-row" style="grid-template-columns: repeat(3, 1fr); gap: 10px; background: #222; padding: 15px; border-radius: 8px;">
+            {% for skill in lista_skills %}
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" name="{{ skill }}" id="{{ skill }}" 
+                       {% if ficha.competencias and ficha.competencias.get(skill) %}checked{% endif %}
+                       style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
+                <label for="{{ skill }}" style="margin: 0; cursor: pointer; color: #ddd;">{{ skill }}</label>
+            </div>
+            {% endfor %}
         </div>
 
         <button type="submit">SALVAR ALTERAÇÕES</button>

@@ -24,6 +24,12 @@
             <div><label>Nível</label><input type="number" name="nivel" value="1"></div>
         </div>
 
+        <div class="grid-row grid-3" style="margin-top: 15px;">
+            <div><label>Antecedente</label><input type="text" name="antecedente" placeholder="Ex: Criminoso"></div>
+            <div><label>Guardião</label><input type="text" name="guardiao" placeholder="Ex: Deusa Lua"></div>
+            <div><label>Ascensão</label><input type="text" name="ascensao" placeholder="Ex: Arquimago"></div>
+        </div>
+
         <h3 class="section-title">Atributos (Dados)</h3>
         <div class="grid-row grid-3">
             <div>
@@ -54,10 +60,25 @@
 
         <h3 class="section-title">Status Iniciais (Máximos)</h3>
         <div class="grid-row grid-4">
-            <div><label>❤️ Vida (PV)</label><input type="number" name="pv_max" value="0"></div>
+            <div><label>❤️ Vida (PV)</label><input type="number" name="pv_max" value="10"></div>
             <div><label>✨ Hafa (PH)</label><input type="number" name="ph_max" value="0"></div>
             <div><label>⚡ Ação (PA)</label><input type="number" name="pa_max" value="0"></div>
             <div><label>💀 Grima (PG)</label><input type="number" name="pg_max" value="0"></div>
+        </div>
+
+        <div class="grid-row grid-2" style="margin-top: 15px;">
+            <div><label>🛡️ Defesa</label><input type="number" name="defesa" value="10"></div>
+            <div><label>💎 Experiência (XP)</label><input type="number" name="experiencia" value="0"></div>
+        </div>
+
+        <h3 class="section-title">Competências</h3>
+        <div class="grid-row" style="grid-template-columns: repeat(3, 1fr); gap: 10px; background: #222; padding: 15px; border-radius: 8px;">
+            {% for skill in lista_skills %}
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="checkbox" name="{{ skill }}" id="{{ skill }}" style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
+                <label for="{{ skill }}" style="margin: 0; cursor: pointer; color: #ddd;">{{ skill }}</label>
+            </div>
+            {% endfor %}
         </div>
 
         <button type="submit">CRIAR FICHA</button>
