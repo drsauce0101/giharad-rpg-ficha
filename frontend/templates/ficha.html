@@ -60,22 +60,23 @@
 
     <hr style="border-color: #444; margin: 30px 0;">
 
-    <h3 class="section-title">Competências Treinadas</h3>
-    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    <h3 class="section-title">Competências</h3>
+    <div class="grid-row" style="grid-template-columns: repeat(4, 1fr); gap: 10px;">
         {% if ficha.competencias %}
-            {% for skill, treinado in ficha.competencias.items() %}
-                {% if treinado %}
-                    <div style="background: #ff9800; color: #000; padding: 8px 15px; border-radius: 20px; font-weight: bold;">
-                        {{ skill }}
-                    </div>
-                {% endif %}
+            {% for skill, valor in ficha.competencias.items() %}
+                <div style="background: #2a2a2a; border: 1px solid #444; color: #ddd; padding: 8px 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.85em;">{{ skill }}</span>
+                    <strong style="color: {% if valor > 0 %}#4caf50{% elif valor < 0 %}#ff5252{% else %}#666{% endif %}; font-size: 1.1em;">
+                        {% if valor > 0 %}+{{ valor }}{% else %}{{ valor }}{% endif %}
+                    </strong>
+                </div>
             {% endfor %}
         {% else %}
-            <p style="color: #666;">Nenhuma competência registrada.</p>
+            <p style="color: #666; grid-column: span 4;">Nenhuma competência registrada.</p>
         {% endif %}
     </div>
 
-    </div>
+</div>
 
 </body>
 </html>

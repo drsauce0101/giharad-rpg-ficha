@@ -124,7 +124,7 @@ button:hover { background: #e68900; transform: translateY(-2px); box-shadow: 0 5
 .btn-edit { position: absolute; top: 20px; right: 60px; color: #666; }
 .btn-edit:hover { color: #2196F3; }
 
-/* --- ELEMENTOS DE TEXTO --- */
+/* --- ELEMENTOS DE TEXTO E BARRAS --- */
 .header { display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto 30px auto; }
 .tag { background: #444; padding: 4px 10px; border-radius: 12px; font-size: 0.6em; color: #aaa; vertical-align: middle; }
 .subtitle { color: #888; font-style: italic; margin-bottom: 15px; display: block; font-size: 0.9em; }
@@ -145,7 +145,7 @@ button:hover { background: #e68900; transform: translateY(-2px); box-shadow: 0 5
 .pa { border-left: 3px solid #ffd740; color: #ffecb3; }
 .pg { border-left: 3px solid #b388ff; color: #e7d9ff; }
 
-/* Classes necessárias para a animação das barras no index */
+/* --- BARRAS DE PROGRESSO (INDEX) --- */
 .progress-track {
     background: #333; 
     height: 6px; 

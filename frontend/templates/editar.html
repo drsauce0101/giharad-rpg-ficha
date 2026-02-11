@@ -125,14 +125,14 @@
              <div><label>💎 Experiência (XP)</label><input type="number" name="experiencia" value="{{ ficha.experiencia }}"></div>
         </div>
 
-        <h3 class="section-title">Competências</h3>
+        <h3 class="section-title">Competências (Bônus)</h3>
         <div class="grid-row" style="grid-template-columns: repeat(3, 1fr); gap: 10px; background: #222; padding: 15px; border-radius: 8px;">
             {% for skill in lista_skills %}
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <input type="checkbox" name="{{ skill }}" id="{{ skill }}" 
-                       {% if ficha.competencias and ficha.competencias.get(skill) %}checked{% endif %}
-                       style="width: 20px; height: 20px; margin: 0; cursor: pointer;">
-                <label for="{{ skill }}" style="margin: 0; cursor: pointer; color: #ddd;">{{ skill }}</label>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #333; padding: 5px 10px; border-radius: 4px; border: 1px solid #444;">
+                <label for="{{ skill }}" style="margin: 0; cursor: pointer; color: #ddd; font-size: 0.9em; font-weight: normal;">{{ skill }}</label>
+                <input type="number" name="{{ skill }}" id="{{ skill }}" 
+                       value="{{ ficha.competencias.get(skill, 0) }}" 
+                       style="width: 60px; padding: 5px; text-align: center; margin: 0; background: #222; border: 1px solid #555; color: white;">
             </div>
             {% endfor %}
         </div>

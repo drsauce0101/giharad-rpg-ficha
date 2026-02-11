@@ -89,12 +89,15 @@ def pagina_cadastro(request: Request):
 async def processar_formulario(request: Request, session: Session = Depends(get_session)):
     form_data = await request.form()
     
+    # Processa as Competências (agora numérico)
     competencias_selecionadas = {}
     for skill in LISTA_COMPETENCIAS:
-        if skill in form_data:
-            competencias_selecionadas[skill] = True
+        valor_str = form_data.get(skill)
+        # Se tem valor converte pra int, senao salva 0
+        if valor_str:
+            competencias_selecionadas[skill] = int(valor_str)
         else:
-            competencias_selecionadas[skill] = False
+            competencias_selecionadas[skill] = 0
 
     novo_char = Personagem(
         nome=form_data.get("nome"),
@@ -199,12 +202,14 @@ async def atualizar_personagem(
     personagem.pg_max = int(form_data.get("pg_max"))
     personagem.pg_atual = int(form_data.get("pg_atual"))
 
+    # Lógica de atualização das skills numericas
     competencias_selecionadas = {}
     for skill in LISTA_COMPETENCIAS:
-        if skill in form_data:
-            competencias_selecionadas[skill] = True
+        valor_str = form_data.get(skill)
+        if valor_str:
+            competencias_selecionadas[skill] = int(valor_str)
         else:
-            competencias_selecionadas[skill] = False
+            competencias_selecionadas[skill] = 0
     
     personagem.competencias = competencias_selecionadas
 
