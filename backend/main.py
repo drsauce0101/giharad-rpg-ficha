@@ -9,7 +9,6 @@ from .models import SQLModel, Personagem
 from fastapi.staticfiles import StaticFiles 
 
 # --- LISTA MESTRA DE COMPETÊNCIAS ---
-# Essa lista vai para o HTML gerar os checkboxes
 LISTA_COMPETENCIAS = [
     "Acrobacia", "Adestramento", "Atletismo", "Atuação", "Cavalgar", 
     "Conhecimento", "Cura", "Diplomacia", "Enganação", "Fortitude", 
@@ -35,7 +34,7 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 # --- ROTAS ---
 
-# ROTA HOME
+# ROTA HOME (Menu de Seleção)
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request, session: Session = Depends(get_session)):
     statement = select(Personagem)
@@ -44,6 +43,19 @@ def home(request: Request, session: Session = Depends(get_session)):
         request=request, 
         name="index.html", 
         context={"personagens": resultados}
+    )
+
+# ROTA VISUALIZAR FICHA 
+@app.get("/ficha/{char_id}", response_class=HTMLResponse)
+def visualizar_ficha(request: Request, char_id: int, session: Session = Depends(get_session)):
+    personagem = session.get(Personagem, char_id)
+    if not personagem:
+        return RedirectResponse("/")
+    
+    return templates.TemplateResponse(
+        request=request, 
+        name="ficha.html", 
+        context={"ficha": personagem}
     )
 
 # ROTA POST (API)
@@ -66,29 +78,24 @@ def listar_personagens_api(session: Session = Depends(get_session)):
 # GET - Página de Cadastro
 @app.get("/novo", response_class=HTMLResponse)
 def pagina_cadastro(request: Request):
-    # Passamos a lista de skills para o HTML gerar os checkboxes
     return templates.TemplateResponse(
         request=request, 
         name="cadastro.html", 
         context={"lista_skills": LISTA_COMPETENCIAS}
     )
 
-# POST - Processar Cadastro (Versão Atualizada com JSON)
+# POST - Processar Cadastro
 @app.post("/enviar_cadastro")
 async def processar_formulario(request: Request, session: Session = Depends(get_session)):
-    # 1. Pega todos os dados do formulário bruto
     form_data = await request.form()
     
-    # 2. Processa as Competências (Checkbox)
     competencias_selecionadas = {}
     for skill in LISTA_COMPETENCIAS:
-        # Se o nome da skill estiver nos dados do form, é True
         if skill in form_data:
             competencias_selecionadas[skill] = True
         else:
             competencias_selecionadas[skill] = False
 
-    # 3. Cria o objeto Personagem (convertendo textos para int onde precisa)
     novo_char = Personagem(
         nome=form_data.get("nome"),
         jogador=form_data.get("jogador"),
@@ -110,11 +117,10 @@ async def processar_formulario(request: Request, session: Session = Depends(get_
         defesa=int(form_data.get("defesa")),
         experiencia=int(form_data.get("experiencia")),
 
-        # Salva o dicionário JSON
         competencias=competencias_selecionadas,
 
         pv_max=int(form_data.get("pv_max")),
-        pv_atual=int(form_data.get("pv_max")), # Começa cheio
+        pv_atual=int(form_data.get("pv_max")),
         pa_max=int(form_data.get("pa_max")),
         pa_atual=int(form_data.get("pa_max")),
         ph_max=int(form_data.get("ph_max")),
@@ -148,11 +154,10 @@ def pagina_editar(request: Request, char_id: int, session: Session = Depends(get
     return templates.TemplateResponse(
         request=request, 
         name="editar.html", 
-        # Passamos a ficha E a lista de skills para marcar os checkboxes
         context={"ficha": personagem, "lista_skills": LISTA_COMPETENCIAS} 
     )
 
-# POST - Salvar Edição (Versão Atualizada com JSON)
+# POST - Salvar Edição
 @app.post("/atualizar_cadastro/{char_id}")
 async def atualizar_personagem(
     request: Request, 
@@ -163,10 +168,8 @@ async def atualizar_personagem(
     if not personagem:
         return RedirectResponse("/")
     
-    # 1. Pega os dados do form
     form_data = await request.form()
 
-    # 2. Atualiza campos simples
     personagem.nome = form_data.get("nome")
     personagem.jogador = form_data.get("jogador")
     personagem.raca = form_data.get("raca")
@@ -196,7 +199,6 @@ async def atualizar_personagem(
     personagem.pg_max = int(form_data.get("pg_max"))
     personagem.pg_atual = int(form_data.get("pg_atual"))
 
-    # 3. Atualiza Competências (JSON)
     competencias_selecionadas = {}
     for skill in LISTA_COMPETENCIAS:
         if skill in form_data:

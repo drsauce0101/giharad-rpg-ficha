@@ -3,86 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giharad RPG</title>
+    <title>Giharad RPG - Seleção</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='css/style.css') }}?v=2" rel="stylesheet">
 </head>
 <body>
     
     <div class="header">
-        <h1>📜 Fichas de Giharad</h1>
-        <a href="/novo" class="btn-novo">+ Nova Ficha</a>
+        <h1>📜 Seleção de Personagem</h1>
+        <a href="/novo" class="btn-novo">+ Criar Novo</a>
     </div>
 
-    {% for ficha in personagens %}
-        <div class="card">
-            <a href="/editar/{{ ficha.id }}" class="btn-edit" title="Editar Ficha">
-                <span class="material-icons">edit</span>
+    <div class="grid-row grid-3" style="max-width: 1000px; margin: 0 auto;">
+        
+        {% for ficha in personagens %}
+            <a href="/ficha/{{ ficha.id }}" style="display: block; text-decoration: none;">
+                <div class="card">
+                    
+                    <form action="/deletar/{{ ficha.id }}" method="post" onsubmit="return confirm('Deletar {{ ficha.nome }}?');" style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+                        <button type="submit" class="btn-delete" title="Excluir">
+                            <span class="material-icons" style="font-size: 1.2em;">close</span>
+                        </button>
+                    </form>
+
+                    <h2 style="font-size: 1.4em; margin-bottom: 5px;">{{ ficha.nome }}</h2>
+                    <span class="tag" style="background: #ff9800; color: #000;">Nível {{ ficha.nivel }}</span>
+                    <p style="color: #aaa; margin: 10px 0;">{{ ficha.raca }} - {{ ficha.classe }}</p>
+                    
+                    <div class="progress-track">
+                        <div class="progress-fill fill-pv" style="width: {{ (ficha.pv_atual / ficha.pv_max * 100)|int if ficha.pv_max > 0 else 0 }}%;"></div>
+                    </div>
+                    <span style="font-size: 0.7em; color: #666; float: right; margin-top: 2px;">PV: {{ ficha.pv_atual }}/{{ ficha.pv_max }}</span>
+
+                    <div class="progress-track">
+                        <div class="progress-fill fill-pa" style="width: {{ (ficha.pa_atual / ficha.pa_max * 100)|int if ficha.pa_max > 0 else 0 }}%;"></div>
+                    </div>
+                    <span style="font-size: 0.7em; color: #666; float: right; margin-top: 2px;">PA: {{ ficha.pa_atual }}/{{ ficha.pa_max }}</span>
+
+                    <div class="progress-track">
+                        <div class="progress-fill fill-ph" style="width: {{ (ficha.ph_atual / ficha.ph_max * 100)|int if ficha.ph_max > 0 else 0 }}%;"></div>
+                    </div>
+                    <span style="font-size: 0.7em; color: #666; float: right; margin-top: 2px;">PH: {{ ficha.ph_atual }}/{{ ficha.ph_max }}</span>
+
+                    <div class="progress-track">
+                        <div class="progress-fill fill-pg" style="width: {{ (ficha.pg_atual / ficha.pg_max * 100)|int if ficha.pg_max > 0 else 0 }}%;"></div>
+                    </div>
+                    <span style="font-size: 0.7em; color: #666; float: right; margin-top: 2px;">PG: {{ ficha.pg_atual }}/{{ ficha.pg_max }}</span>
+
+                </div>
             </a>
-            <form action="/deletar/{{ ficha.id }}" method="post" onsubmit="return confirm('Certeza que quer deletar o {{ ficha.nome }}?');">
-                <button type="submit" class="btn-delete" title="Excluir Ficha">
-                    <span class="material-icons">delete</span>
-                </button>
-            </form>
+        {% else %}
+            <p style="text-align:center; color: #666; grid-column: span 3;">Nenhum personagem encontrado... Crie um personagem!</p>
+        {% endfor %}
 
-            <h2>
-                {{ ficha.nome }} 
-                <span class="tag">Nível {{ ficha.nivel }}</span>
-            </h2>
-            <span class="subtitle">{{ ficha.raca }} | {{ ficha.classe }} | Jogador: {{ ficha.jogador }}</span>
-
-            <p style="color: #888; font-size: 0.85em; margin: 5px 0 15px 0; border-bottom: 1px solid #444; padding-bottom: 10px;">
-                <strong>Ant:</strong> {{ ficha.antecedente }} | 
-                <strong>Guardião:</strong> {{ ficha.guardiao }} | 
-                <strong>Ascensão:</strong> {{ ficha.ascensao }}
-            </p>
-
-            <div class="grid-row grid-2" style="margin-bottom: 10px;">
-                <div class="bar-box" style="justify-content: center; background: #222; border: 1px solid #444;">
-                    🛡️ Defesa: <strong style="color: #fff; margin-left: 5px;">{{ ficha.defesa }}</strong>
-                </div>
-                <div class="bar-box" style="justify-content: center; background: #222; border: 1px solid #444;">
-                    💎 XP: <strong style="color: #00e5ff; margin-left: 5px;">{{ ficha.experiencia }}</strong>
-                </div>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-box"><span class="stat-label">FOR</span><span class="stat-value">d{{ ficha.forca }}</span></div>
-                <div class="stat-box"><span class="stat-label">DES</span><span class="stat-value">d{{ ficha.destreza }}</span></div>
-                <div class="stat-box"><span class="stat-label">CON</span><span class="stat-value">d{{ ficha.constituicao }}</span></div>
-                <div class="stat-box"><span class="stat-label">INT</span><span class="stat-value">d{{ ficha.inteligencia }}</span></div>
-                <div class="stat-box"><span class="stat-label">SAB</span><span class="stat-value">d{{ ficha.sabedoria }}</span></div>
-                <div class="stat-box"><span class="stat-label">CAR</span><span class="stat-value">d{{ ficha.carisma }}</span></div>
-            </div>
-
-            <div class="bars-grid">
-                <div class="bar-box pv"><span>❤️ Vida (PV)</span> <strong>{{ ficha.pv_atual }}/{{ ficha.pv_max }}</strong></div>
-                <div class="bar-box ph"><span>✨ Hafa (PH)</span> <strong>{{ ficha.ph_atual }}/{{ ficha.ph_max }}</strong></div>
-                <div class="bar-box pa"><span>⚡ Ação (PA)</span> <strong>{{ ficha.pa_atual }}/{{ ficha.pa_max }}</strong></div>
-                <div class="bar-box pg"><span>💀 Grima (PG)</span> <strong>{{ ficha.pg_atual }}/{{ ficha.pg_max }}</strong></div>
-            </div>
-
-            <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #444;">
-                <span style="font-size: 0.8em; color: #888; text-transform: uppercase; margin-bottom: 5px; display: block;">Competências:</span>
-                <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                    {% if ficha.competencias %}
-                        {% for skill, treinado in ficha.competencias.items() %}
-                            {% if treinado %}
-                                <span style="background: #333; border: 1px solid #555; color: #ddd; padding: 3px 8px; border-radius: 12px; font-size: 0.75em;">
-                                    {{ skill }}
-                                </span>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <span style="color: #555; font-size: 0.8em;">Nenhuma registrada</span>
-                    {% endif %}
-                </div>
-            </div>
-
-        </div>
-    {% else %}
-        <p style="text-align:center; color: #666;">Nenhum personagem encontrado...</p>
-    {% endfor %}
+    </div>
 
 </body>
 </html>
