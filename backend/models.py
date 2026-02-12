@@ -1,4 +1,4 @@
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Any
 from sqlmodel import Field, SQLModel, JSON
 
 # -- MODELOS DE DADOS --
@@ -40,16 +40,35 @@ class Personagem(SQLModel, table=True):
     pg_atual: int
 
     # -- LISTAS ESPECIAIS --
+    # OBS: sa_type=JSON diz ao banco para tratar isso como um objeto JSON
     competencias: Dict[str, int] = Field(default={}, sa_type=JSON)
     
-    # Lista de Ataques: 
+    # Lista de Ataques: [{nome, dano, acerto...}]
     ataques: List[Dict[str, str]] = Field(default=[], sa_type=JSON)
     
-    # Lista de Habilidades: 
+    # Lista de Habilidades: [{nome, custo, efeito...}]
     habilidades: List[Dict[str, str]] = Field(default=[], sa_type=JSON)
     
-    # Lista de Itens: 
+    # Lista de Itens: [{nome, qtd, slots...}]
     inventario: List[Dict[str, str]] = Field(default=[], sa_type=JSON)
     
     # Texto Livre
     notas: Optional[str] = Field(default="", sa_column_kwargs={"nullable": True})
+
+    # -- SISTEMA DE MAGIA (NOVO) --
+    tradicao: Optional[str] = Field(default="")
+    escolas: Optional[str] = Field(default="")
+    
+    atributo_chave: str = Field(default="Inteligência")
+    cd_magia: int = Field(default=10)
+    
+    # Espaços de Magia (Slots Máximos)
+    slots_nv1: int = Field(default=0)
+    slots_nv2: int = Field(default=0)
+    slots_nv3: int = Field(default=0)
+    slots_nv4: int = Field(default=0)
+    slots_nv5: int = Field(default=0)
+    slots_nv6: int = Field(default=0)
+    
+    # Grimório: Lista de Magias [{nome, circulo, alcance, efeito}]
+    magias: List[Dict[str, str]] = Field(default=[], sa_type=JSON)

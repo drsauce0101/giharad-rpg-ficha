@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Personagem</title>
-    <link href="{{ url_for('static', path='css/style.css') }}?v=4" rel="stylesheet">
+    <link href="{{ url_for('static', path='css/style.css') }}?v=8" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
-    <h1>Editar {{ ficha.nome }}</h1>
+    <h1> Editar {{ ficha.nome }}</h1>
     
     <form action="/atualizar_cadastro/{{ ficha.id }}" method="post">
         
@@ -121,8 +121,8 @@
 
         <h3 class="section-title">Combate e Progresso</h3>
         <div class="grid-row grid-2">
-             <div><label>🛡️ Defesa</label><input type="number" name="defesa" value="{{ ficha.defesa }}"></div>
-             <div><label>💎 Experiência (XP)</label><input type="number" name="experiencia" value="{{ ficha.experiencia }}"></div>
+             <div><label> Defesa</label><input type="number" name="defesa" value="{{ ficha.defesa }}"></div>
+             <div><label> Experiência (XP)</label><input type="number" name="experiencia" value="{{ ficha.experiencia }}"></div>
         </div>
 
         <h3 class="section-title">Competências (Bônus)</h3>
@@ -142,7 +142,7 @@
         <div class="grid-row" style="grid-template-columns: 1fr; gap: 20px;">
             
             <div>
-                <h3 class="section-title">Ataques</h3>
+                <h3 class="section-title"> Ataques</h3>
                 <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
                      <div class="grid-row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 0.5fr; gap: 5px; margin-bottom: 10px; color: #aaa; font-size: 0.8em; text-align: center;">
                         <div style="text-align: left;">Nome</div>
@@ -174,7 +174,7 @@
             </div>
 
             <div>
-                <h3 class="section-title">Habilidades</h3>
+                <h3 class="section-title"> Habilidades</h3>
                 <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
                     <div id="lista-habilidades">
                         {% for hab in ficha.habilidades %}
@@ -190,11 +190,70 @@
                 </div>
             </div>
 
+            <div>
+                <h3 class="section-title" style="color: #b388ff; border-bottom-color: #b388ff;"> Grimório & Magia</h3>
+                
+                <div class="grid-row grid-2">
+                    <div>
+                        <label>Tradição Hermética</label>
+                        <input type="text" name="tradicao" value="{{ ficha.tradicao }}" placeholder="Ex: Piromancia">
+                    </div>
+                    <div>
+                        <label>Escolas Conhecidas</label>
+                        <input type="text" name="escolas" value="{{ ficha.escolas }}" placeholder="Ex: Evocação, Abjuração">
+                    </div>
+                </div>
+
+                <div class="grid-row grid-2" style="margin-top: 15px;">
+                    <div>
+                        <label>Atributo de Conjuração</label>
+                        <select name="atributo_chave">
+                            <option value="Inteligência" {% if ficha.atributo_chave == 'Inteligência' %}selected{% endif %}>Inteligência</option>
+                            <option value="Sabedoria" {% if ficha.atributo_chave == 'Sabedoria' %}selected{% endif %}>Sabedoria</option>
+                            <option value="Carisma" {% if ficha.atributo_chave == 'Carisma' %}selected{% endif %}>Carisma</option>
+                            <option value="Força" {% if ficha.atributo_chave == 'Força' %}selected{% endif %}>Força</option>
+                            <option value="Destreza" {% if ficha.atributo_chave == 'Destreza' %}selected{% endif %}>Destreza</option>
+                            <option value="Constituição" {% if ficha.atributo_chave == 'Constituição' %}selected{% endif %}>Constituição</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>CD dos Feitiços</label>
+                        <input type="number" name="cd_magia" value="{{ ficha.cd_magia }}">
+                    </div>
+                </div>
+
+                <label style="margin-top: 20px;">Espaços de Magia</label>
+                <div class="grid-row grid-6" style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; text-align: center; grid-template-columns: repeat(6, 1fr);">
+                    <div><span style="font-size: 0.8em; color: #aaa;">1º</span><input type="number" name="slots_nv1" value="{{ ficha.slots_nv1 }}" style="text-align: center;"></div>
+                    <div><span style="font-size: 0.8em; color: #aaa;">2º</span><input type="number" name="slots_nv2" value="{{ ficha.slots_nv2 }}" style="text-align: center;"></div>
+                    <div><span style="font-size: 0.8em; color: #aaa;">3º</span><input type="number" name="slots_nv3" value="{{ ficha.slots_nv3 }}" style="text-align: center;"></div>
+                    <div><span style="font-size: 0.8em; color: #aaa;">4º</span><input type="number" name="slots_nv4" value="{{ ficha.slots_nv4 }}" style="text-align: center;"></div>
+                    <div><span style="font-size: 0.8em; color: #aaa;">5º</span><input type="number" name="slots_nv5" value="{{ ficha.slots_nv5 }}" style="text-align: center;"></div>
+                    <div><span style="font-size: 0.8em; color: #aaa;">6º</span><input type="number" name="slots_nv6" value="{{ ficha.slots_nv6 }}" style="text-align: center;"></div>
+                </div>
+
+                <label style="margin-top: 20px;">Lista de Feitiços</label>
+                <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+                    <div id="lista-magias">
+                        {% for mag in ficha.magias %}
+                        <div class="grid-row" id="mag-{{ loop.index0 }}" style="grid-template-columns: 2fr 0.5fr 1fr 2fr 0.5fr; gap: 5px; margin-bottom: 5px;">
+                            <input type="text" name="magia_nome_{{ loop.index0 }}" value="{{ mag.nome }}" placeholder="Nome do Feitiço">
+                            <input type="number" name="magia_circulo_{{ loop.index0 }}" value="{{ mag.circulo }}" placeholder="Círculo" style="text-align: center;">
+                            <input type="text" name="magia_alcance_{{ loop.index0 }}" value="{{ mag.alcance }}" placeholder="Alcance">
+                            <input type="text" name="magia_efeito_{{ loop.index0 }}" value="{{ mag.efeito }}" placeholder="Efeito Resumido">
+                            <button type="button" class="btn-small btn-remove" onclick="removeEl('mag-{{ loop.index0 }}')">X</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn-small btn-add" style="background: linear-gradient(to bottom, #673ab7, #512da8); border-color: #7b1fa2;" onclick="addMagia()">+ Adicionar Magia</button>
+                </div>
+            </div>
+
             <div class="grid-row grid-2">
                 <div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h3 class="section-title">Inventário</h3>
-                        <span style="font-size: 0.8em; color: #888;">(Qtd / Slots)</span>
+                        <h3 class="section-title"> Inventário</h3>
+                        <span style="font-size: 0.8em; color: #888;">(Qtd / Espaços)</span>
                     </div>
 
                     <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
@@ -213,7 +272,7 @@
                 </div>
 
                 <div>
-                    <h3 class="section-title">Notas & História</h3>
+                    <h3 class="section-title"> Notas & História</h3>
                     <textarea name="notas" rows="12" style="width: 100%; background: #222; border: 1px solid #555; color: #fff; border-radius: 4px; padding: 10px; font-family: inherit;">{{ ficha.notas or "" }}</textarea>
                 </div>
             </div>
@@ -229,6 +288,7 @@
     let idxAtaque = {{ ficha.ataques|length }};
     let idxHab = {{ ficha.habilidades|length }};
     let idxInv = {{ ficha.inventario|length }};
+    let idxMagia = {{ ficha.magias|length }};
 
     // --- FUNÇÃO ADICIONAR ATAQUE ---
     function addAtaque() {
@@ -268,6 +328,25 @@
         `;
         container.appendChild(div);
         idxHab++;
+    }
+
+    // --- FUNÇÃO ADICIONAR MAGIA (NOVA) ---
+    function addMagia() {
+        const container = document.getElementById('lista-magias');
+        const div = document.createElement('div');
+        div.className = 'grid-row';
+        div.id = `mag-${idxMagia}`;
+        div.style.cssText = "grid-template-columns: 2fr 0.5fr 1fr 2fr 0.5fr; gap: 5px; margin-bottom: 5px;";
+        
+        div.innerHTML = `
+            <input type="text" name="magia_nome_${idxMagia}" placeholder="Nome do Feitiço">
+            <input type="number" name="magia_circulo_${idxMagia}" placeholder="1" style="text-align: center;">
+            <input type="text" name="magia_alcance_${idxMagia}" placeholder="Alcance">
+            <input type="text" name="magia_efeito_${idxMagia}" placeholder="Efeito Resumido">
+            <button type="button" class="btn-small btn-remove" onclick="removeEl('mag-${idxMagia}')">X</button>
+        `;
+        container.appendChild(div);
+        idxMagia++;
     }
 
     // --- FUNÇÃO ADICIONAR INVENTÁRIO ---

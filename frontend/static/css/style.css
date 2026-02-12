@@ -1,63 +1,60 @@
 /* =========================================
-   0. IMPORTAÇÃO DE FONTES & VARIÁVEIS
+   IMPORTAÇÃO DE FONTES & VARIÁVEIS
    ========================================= */
-/* Fontes: Cinzel (Títulos épicos) e Lato (Leitura fácil) */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:ital,wght@0,400;0,700;1,400&family=MedievalSharp&display=swap');
 
 :root {
-    /* Paleta de Cores RPG */
     --bg-dark: #121212;
     --panel-bg: #1e1e1e;
     --panel-border: #3e3e3e;
-    
-    --gold-main: #c5a059;       /* Dourado Fosco */
-    --gold-bright: #ffd700;     /* Dourado Brilhante */
-    --gold-dim: #8a6d3b;        /* Dourado Escuro */
-    
+    --gold-main: #c5a059;
+    --gold-bright: #ffd700;
+    --gold-dim: #8a6d3b;
     --iron: #7a7a7a;
-    --blood-red: #8a2be2;       /* Roxo Místico (ou troque por #8b0000 para vermelho) */
-    
+    --blood-red: #8a2be2;
     --text-main: #e0e0e0;
     --text-muted: #a0a0a0;
 }
 
 /* =========================================
-   1. GERAL (Reset & Background)
+   GERAL (Reset & Background)
    ========================================= */
-body { 
-    font-family: 'Lato', sans-serif; /* Fonte de corpo legível */
-    color: var(--text-main); 
+body {
+    font-family: 'Lato', sans-serif;
+    color: var(--text-main);
     padding: 20px;
-    padding-bottom: 80px; 
+    padding-bottom: 80px;
     margin: 0;
-    min-height: 100vh; 
+    min-height: 100vh;
     position: relative;
     background-color: #000;
 }
 
-/* Background com Blur e Overlay Escuro */
 body::before {
     content: "";
-    position: fixed; 
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -1; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
     background: url('../img/medieval-background.jpg') no-repeat center center;
-    background-size: cover; 
-    filter: blur(4px) brightness(0.4) sepia(0.3); /* Sepia dá tom envelhecido */
-    transform: scale(1.1); 
+    background-size: cover;
+    filter: blur(4px) brightness(0.4) sepia(0.3);
+    transform: scale(1.1);
 }
 
-h1, h2, h3 { 
-    font-family: 'Cinzel', serif; /* Fonte Medieval para títulos */
-    color: var(--gold-main); 
+h1, h2, h3 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-main);
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 2px 2px 0px #000; 
+    text-shadow: 2px 2px 0px #000;
 }
 
-h1 { 
-    text-align: center; 
-    margin-bottom: 30px; 
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
     font-weight: 700;
     border-bottom: 1px solid var(--gold-dim);
     display: inline-block;
@@ -65,169 +62,186 @@ h1 {
     width: 100%;
 }
 
-a { text-decoration: none; transition: 0.3s; color: var(--gold-main); }
-a:hover { color: var(--gold-bright); text-shadow: 0 0 10px var(--gold-dim); }
+a {
+    text-decoration: none;
+    transition: 0.3s;
+    color: var(--gold-main);
+}
 
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fillBar { from { width: 0%; } }
+a:hover {
+    color: var(--gold-bright);
+    text-shadow: 0 0 10px var(--gold-dim);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 /* =========================================
-   2. CONTAINERS & CARDS (A MOLDURA RÍGIDA)
+   CONTAINERS & CARDS
    ========================================= */
-.container { 
-    width: 100%; max-width: 800px; 
-    background: rgba(20, 20, 20, 0.95); /* Quase preto sólido */
-    padding: 30px; 
-    
-    /* Borda Dupla Estilo RPG */
+.container {
+    width: 100%;
+    max-width: 800px;
+    background: rgba(20, 20, 20, 0.95);
+    padding: 30px;
     border: 3px double var(--gold-dim);
-    box-shadow: 
-        0 0 0 1px #000, /* Linha preta fina interna */
-        0 20px 50px rgba(0,0,0,0.9), /* Sombra pesada */
-        inset 0 0 60px rgba(0,0,0,0.8); /* Vinheta interna */
-        
-    border-radius: 4px; /* Cantos levemente arredondados, quase retos */
-    margin: 40px auto; 
+    box-shadow: 0 0 0 1px #000, 0 20px 50px rgba(0, 0, 0, 0.9), inset 0 0 60px rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
+    margin: 40px auto;
     animation: slideUp 0.6s ease-out;
     position: relative;
 }
 
-/* Detalhe decorativo nos cantos (opcional, simula cantoneiras) */
 .container::after {
     content: "";
     position: absolute;
-    top: 5px; left: 5px; right: 5px; bottom: 5px;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
     border: 1px solid rgba(197, 160, 89, 0.3);
     pointer-events: none;
 }
 
-.card { 
+.card {
     background: linear-gradient(145deg, #2b2b2b, #1a1a1a);
-    max-width: 800px; margin: 0 auto 20px auto; 
-    padding: 20px; 
+    max-width: 800px;
+    margin: 0 auto 20px auto;
+    padding: 20px;
     border: 1px solid var(--gold-dim);
-    border-left: 4px solid var(--gold-main); /* Detalhe lateral */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    border-left: 4px solid var(--gold-main);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease;
 }
 
 .card:hover {
     transform: translateY(-5px);
     border-color: var(--gold-bright);
-    box-shadow: 0 10px 25px rgba(197, 160, 89, 0.15); 
+    box-shadow: 0 10px 25px rgba(197, 160, 89, 0.15);
     cursor: pointer;
 }
 
 /* =========================================
-   3. FORMULÁRIOS & INPUTS
+   FORMULÁRIOS & INPUTS
    ========================================= */
-label { 
-    display: block; margin-top: 15px; 
-    color: var(--gold-main); 
+label {
+    display: block;
+    margin-top: 15px;
+    color: var(--gold-main);
     font-family: 'Cinzel', serif;
-    font-size: 0.85em; 
-    font-weight: bold; 
+    font-size: 0.85em;
+    font-weight: bold;
 }
 
-/* Inputs parecendo slots de pedra/metal */
-input, select, textarea { 
-    width: 100%; padding: 12px; margin-top: 5px; 
-    background: #0f0f0f; 
-    border: 1px solid #444; 
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    background: #0f0f0f;
+    border: 1px solid #444;
     border-bottom: 2px solid #555;
-    color: #e0e0e0; 
-    border-radius: 2px; 
-    box-sizing: border-box; 
-    transition: 0.3s; 
+    color: #e0e0e0;
+    border-radius: 2px;
+    box-sizing: border-box;
+    transition: 0.3s;
     font-family: 'Lato', sans-serif;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.7); /* Profundidade interna */
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7);
 }
 
-input:focus, select:focus, textarea:focus { 
-    border-color: var(--gold-main); 
-    outline: none; 
-    background: #151515; 
+input:focus, select:focus, textarea:focus {
+    border-color: var(--gold-main);
+    outline: none;
+    background: #151515;
     box-shadow: 0 0 10px rgba(197, 160, 89, 0.2);
 }
 
-.section-title { 
-    border-bottom: 1px solid var(--gold-dim); 
-    padding-bottom: 5px; 
-    margin-top: 35px; margin-bottom: 15px; 
-    color: #fff; 
+.section-title {
+    border-bottom: 1px solid var(--gold-dim);
+    padding-bottom: 5px;
+    margin-top: 35px;
+    margin-bottom: 15px;
+    color: #fff;
     font-size: 1.4em;
     display: flex;
     align-items: center;
     gap: 10px;
 }
-/* Pequeno losango decorativo antes do título */
+
 .section-title::before {
     content: "❖";
     color: var(--gold-main);
     font-size: 0.8em;
 }
 
-hr { border: 0; border-top: 1px solid var(--gold-dim); opacity: 0.3; margin: 30px 0; }
+hr {
+    border: 0;
+    border-top: 1px solid var(--gold-dim);
+    opacity: 0.3;
+    margin: 30px 0;
+}
 
 /* =========================================
-   4. GRIDS & LAYOUT
+   GRIDS & LAYOUT
    ========================================= */
 .grid-row { display: grid; gap: 15px; }
 .grid-2 { grid-template-columns: 1fr 1fr; }
 .grid-3 { grid-template-columns: repeat(3, 1fr); }
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
-/* Caixas de Status e Atributos */
-.stats-grid { 
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; 
-    background: rgba(0,0,0,0.4); 
-    padding: 15px; 
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px;
     border: 1px solid #333;
     box-shadow: inset 0 0 15px #000;
-    border-radius: 4px; 
+    border-radius: 4px;
     margin-bottom: 15px;
 }
-.bars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-@media (max-width: 600px) { 
-    .stats-grid { grid-template-columns: repeat(3, 1fr); row-gap: 15px; } 
-    .bars-grid { grid-template-columns: 1fr; } 
-    .grid-row { grid-template-columns: 1fr; } 
+.bars-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+@media (max-width: 600px) {
+    .stats-grid { grid-template-columns: repeat(3, 1fr); row-gap: 15px; }
+    .bars-grid { grid-template-columns: 1fr; }
+    .grid-row { grid-template-columns: 1fr; }
 }
 
 /* =========================================
-   5. BOTÕES (Estilo Placa de Madeira/Metal)
+   BOTÕES
    ========================================= */
-button { 
-    width: 100%; margin-top: 30px; padding: 15px; 
-    
-    /* Gradiente Metalico/Dourado */
+button {
+    width: 100%;
+    margin-top: 30px;
+    padding: 15px;
     background: linear-gradient(to bottom, #d4af37, #8a6d3b);
-    color: #1a0500; 
-    
+    color: #1a0500;
     font-family: 'Cinzel', serif;
-    font-weight: 900; 
+    font-weight: 900;
     text-transform: uppercase;
-    
-    border: 1px solid #ffe6a0; 
-    border-radius: 2px; 
-    cursor: pointer; 
-    font-size: 1.1em; 
-    transition: 0.2s; 
-    box-shadow: 0 4px 0 #5c4013, 0 10px 10px rgba(0,0,0,0.5); /* Efeito 3D */
-    text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+    border: 1px solid #ffe6a0;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: 0.2s;
+    box-shadow: 0 4px 0 #5c4013, 0 10px 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 button:active {
-    transform: translateY(4px); /* Afunda o botão */
-    box-shadow: 0 0 0 #5c4013, inset 0 2px 5px rgba(0,0,0,0.5);
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #5c4013, inset 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
-button:hover { 
-    filter: brightness(1.1);
-}
+button:hover { filter: brightness(1.1); }
 
-/* Botões Pequenos (Add/Remove) */
 .btn-small {
     font-family: 'Lato', sans-serif;
     text-transform: none;
@@ -254,35 +268,20 @@ button:hover {
     border: 1px solid #333;
     transition: 0.2s;
 }
-.btn-remove:hover { 
-    color: #ff5252; 
+
+.btn-remove:hover {
+    color: #ff5252;
     border-color: #ff5252;
     background: rgba(255, 82, 82, 0.1);
 }
 
-/* Botões de Cabeçalho (Novo/Voltar) */
-.btn-novo { 
-    background: linear-gradient(to bottom, #444, #222); 
-    color: var(--gold-main); 
-    padding: 8px 20px; 
-    border: 1px solid #555;
-    box-shadow: 0 2px 5px #000;
-    font-family: 'Cinzel', serif;
-    font-weight: bold;
-    font-size: 0.85em;
-}
-.btn-novo:hover { 
-    color: #fff; 
-    border-color: var(--gold-main);
-}
-
 /* =========================================
-   6. SISTEMA DE ABAS (TABS) - MEDIEVAL
+   SISTEMA DE ABAS (TABS)
    ========================================= */
 .tab {
     display: flex;
     justify-content: flex-start;
-    border-bottom: 2px solid var(--gold-dim); /* Linha grossa dourada */
+    border-bottom: 2px solid var(--gold-dim);
     margin-bottom: 20px;
     padding-left: 0;
     gap: 5px;
@@ -293,18 +292,15 @@ button:hover {
     color: #666 !important;
     font-family: 'Cinzel', serif !important;
     font-weight: bold !important;
-    
     border: 1px solid #333 !important;
     border-bottom: none !important;
-    
-    /* Formato de Aba de Arquivo */
     clip-path: polygon(10% 0, 90% 0, 100% 100%, 0% 100%);
     padding: 10px 25px !important;
     width: auto !important;
     margin: 0 !important;
     box-shadow: none !important;
     position: relative;
-    top: 2px; /* Encosta na linha */
+    top: 2px;
 }
 
 .tab button:hover {
@@ -313,8 +309,8 @@ button:hover {
 }
 
 .tab button.active {
-    background: var(--gold-dim) !important; /* Dourado escuro */
-    color: #000 !important; /* Texto preto para contraste */
+    background: var(--gold-dim) !important;
+    color: #000 !important;
     border-color: var(--gold-main) !important;
     text-shadow: none !important;
     z-index: 2;
@@ -322,49 +318,245 @@ button:hover {
 }
 
 .tabcontent {
-    display: none; 
+    display: none;
     animation: fadeEffect 0.4s;
-    border-top: none;
-    /* Fundo levemente mais claro dentro da aba */
-    background: rgba(255, 255, 255, 0.02); 
+    background: rgba(255, 255, 255, 0.02);
     padding: 20px;
     border: 1px solid rgba(197, 160, 89, 0.1);
     border-top: none;
 }
 
-@keyframes fadeEffect { from {opacity: 0; transform: translateY(5px);} to {opacity: 1; transform: translateY(0);} }
+@keyframes fadeEffect {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 /* =========================================
-   7. EXTRAS VISUAIS & STATUS
+   EXTRAS VISUAIS & STATUS
    ========================================= */
-.stat-box { text-align: center; }
-.stat-label { font-size: 0.7em; color: var(--gold-dim); font-family: 'Cinzel', serif; letter-spacing: 1px; }
-.stat-value { font-size: 1.4em; font-family: 'MedievalSharp', cursive; color: #fff; text-shadow: 0 0 10px var(--gold-dim); }
+.stat-box {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
-.bar-box { 
-    background: #000; 
-    padding: 8px 12px; 
-    border-radius: 2px; 
-    font-size: 0.9em; 
-    display: flex; justify-content: space-between; align-items: center; 
-    border: 1px solid #333; 
+.stat-label {
+    font-size: 0.7em;
+    color: var(--gold-dim);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    font-size: 1.8em;
+    font-family: 'MedievalSharp', cursive;
+    color: #fff;
+    text-shadow: 0 0 10px var(--gold-dim);
+    line-height: 1;
+}
+
+.bar-box {
+    background: #000;
+    padding: 8px 12px;
+    border-radius: 2px;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #333;
     box-shadow: inset 0 0 5px #000;
 }
 
-/* Cores das Barras */
-.pv { border-left: 3px solid #b71c1c; color: #ef9a9a; } /* Vermelho Sangue */
-.ph { border-left: 3px solid #0d47a1; color: #90caf9; } /* Azul Ação */
-.pa { border-left: 3px solid #f57f17; color: #fff59d; } /* Amarelo Energia */
-.pg { border-left: 3px solid #4a148c; color: #e1bee7; } /* Roxo Grima */
+.pv { border-left: 3px solid #b71c1c; color: #ef9a9a; }
+.ph { border-left: 3px solid #0d47a1; color: #90caf9; }
+.pa { border-left: 3px solid #f57f17; color: #fff59d; }
+.pg { border-left: 3px solid #4a148c; color: #e1bee7; }
 
-.char-portrait { 
-    width: 150px; height: 150px; 
-    background: #000; 
-    border: 4px solid var(--gold-dim); /* Moldura do retrato */
-    border-radius: 50%; 
-    margin: 0 auto 20px auto; 
-    display: flex; align-items: center; justify-content: center; overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+.char-portrait {
+    width: 150px;
+    height: 150px;
+    background: #000;
+    border: 4px solid var(--gold-dim);
+    border-radius: 50%;
+    margin: 0 auto 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
-.app-footer { background: linear-gradient(to top, #000, transparent); }
+/* =========================================
+   HUB DE SELEÇÃO
+   ========================================= */
+.hub-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid var(--gold-dim);
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.char-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    justify-items: center;
+}
+
+.char-card {
+    position: relative;
+    padding: 20px;
+    background: linear-gradient(160deg, #252525, #151515);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    transition: 0.3s;
+    text-decoration: none !important;
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+    width: 100%;
+    max-width: 320px;
+    height: 280px;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.char-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: var(--gold-main);
+    box-shadow: 0 15px 30px rgba(197, 160, 89, 0.2);
+}
+
+.card-add {
+    justify-content: center;
+    align-items: center;
+    border-style: dashed !important;
+    border-color: #444 !important;
+    background: rgba(0, 0, 0, 0.2) !important;
+}
+
+.card-add .material-icons {
+    font-size: 4em;
+    color: #333;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.card-add:hover .material-icons {
+    color: var(--gold-main);
+    transform: scale(1.1);
+}
+
+.char-card h2 {
+    font-size: 1.5em;
+    margin: 0 0 5px 0;
+    color: var(--gold-main);
+}
+
+.char-info {
+    font-size: 0.9em;
+    color: #888;
+    font-style: italic;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.mini-bars {
+    display: grid;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.mini-bar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75em;
+    color: #aaa;
+}
+
+.mini-track {
+    flex-grow: 1;
+    background: #000;
+    height: 4px;
+    margin-left: 10px;
+    border-radius: 2px;
+    border: 1px solid #333;
+    overflow: hidden;
+}
+
+.mini-fill {
+    height: 100%;
+    display: block;
+}
+
+.btn-delete-card {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: #444;
+    font-size: 1.2em;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.3s;
+}
+
+.btn-delete-card:hover {
+    color: #ff5252;
+    transform: scale(1.2);
+}
+
+/* =========================================
+   FOOTER
+   ========================================= */
+.app-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    box-sizing: border-box;
+    z-index: 100;
+    background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+    pointer-events: none;
+}
+
+.footer-text {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    pointer-events: auto;
+    text-shadow: 0 2px 2px #000;
+}
+
+.footer-logo {
+    height: 50px;
+    width: auto;
+    filter: drop-shadow(0 0 5px #000) sepia(0.5);
+    pointer-events: auto;
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+.footer-logo:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px var(--gold-dim));
+}

@@ -4,67 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giharad RPG - Seleção</title>
+    <link href="{{ url_for('static', path='css/style.css') }}?v=10" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="{{ url_for('static', path='css/style.css') }}?v=2" rel="stylesheet">
 </head>
 <body>
+
+<div class="container" style="max-width: 1000px; border-radius: 0;">
     
-    <div class="header">
-        <h1>Seleção de Personagem</h1>
-        <a href="/novo" class="btn-novo">+ Criar Novo</a>
+    <div class="hub-header" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+        <h1 style="margin: 0; border: none; font-size: 2.2em; width: 100%;">Giharad RPG</h1>
+        <span style="color: #666; font-family: 'Cinzel', serif;">Selecione seu Personagem</span>
     </div>
 
-    <div class="grid-row grid-3" style="max-width: 1000px; margin: 0 auto;">
-        
-        {% for ficha in personagens %}
-            <a href="/ficha/{{ ficha.id }}" style="display: block; text-decoration: none;">
-                <div class="card">
-                    
-                    <form action="/deletar/{{ ficha.id }}" method="post" onsubmit="return confirm('Deletar {{ ficha.nome }}?');" style="position: absolute; top: 10px; right: 10px; z-index: 10;">
-                        <button type="submit" class="btn-delete" title="Excluir">
-                            <span class="material-icons" style="font-size: 1.2em;">close</span>
-                        </button>
-                    </form>
+    <div class="char-grid">
+        {% for p in personagens %}
+        <div class="char-card" style="border-radius: 0;">
+            
+            <form action="/deletar/{{ p.id }}" method="post" onsubmit="return confirm('Tem certeza que deseja deletar {{ p.nome }}?');" style="position: absolute; top: 10px; right: 10px; z-index: 50;">
+                <button type="submit" class="btn-remove" style="width: 30px; height: 30px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); border: 1px solid #555; box-shadow: none;">
+                    <span class="material-icons" style="font-size: 16px; color: #fff;">close</span>
+                </button>
+            </form>
 
-                    <h2 style="font-size: 1.4em; margin-bottom: 5px;">{{ ficha.nome }}</h2>
-                    <span class="tag" style="background: #ff9800; color: #000;">Nível {{ ficha.nivel }}</span>
-                    <p style="color: #aaa; margin: 10px 0;">{{ ficha.raca }} - {{ ficha.classe }}</p>
-                    
-                    <div class="progress-track">
-                        <div class="progress-fill fill-pv" style="width: {{ (ficha.pv_atual / ficha.pv_max * 100)|int if ficha.pv_max > 0 else 0 }}%;"></div>
+            <a href="/ficha/{{ p.id }}" style="display: flex; flex-direction: column; height: 100%; text-decoration: none !important; color: inherit;">
+                
+                <div style="display: flex; align-items: center; gap: 10px; padding-right: 40px; margin-bottom: 5px;">
+                    <h2 style="margin: 0; font-size: 1.5em; line-height: 1; text-decoration: none;">{{ p.nome }}</h2>
+                    <span style="background: #111; color: var(--gold-main); padding: 3px 8px; border-radius: 0; font-size: 0.7em; border: 1px solid #444; white-space: nowrap; font-family: 'Cinzel', serif;">
+                        Nvl {{ p.nivel }}
+                    </span>
+                </div>
+                
+                <div class="char-info">
+                    {{ p.raca }} | {{ p.classe }}
+                </div>
+
+                <div class="mini-bars">
+                    <div class="mini-bar-row">
+                        <span style="color: #ef9a9a; width: 25px;">PV</span>
+                        <div class="mini-track" style="border-radius: 0;">
+                            <div class="mini-fill" style="width: {{ (p.pv_atual / p.pv_max * 100) if p.pv_max > 0 else 0 }}%; background-color: #b71c1c;"></div>
+                        </div>
                     </div>
-                    <span style="font-size: 0.7em; color: #666; float: right; margin-top: 2px;">PV: {{ ficha.pv_atual }}/{{ ficha.pv_max }}</span>
 
-                    <div class="progress-track">
-                        <div class="progress-fill fill-pa" style="width: {{ (ficha.pa_atual / ficha.pa_max * 100)|int if ficha.pa_max > 0 else 0 }}%;"></div>
+                    <div class="mini-bar-row">
+                        <span style="color: #fff59d; width: 25px;">PA</span>
+                        <div class="mini-track" style="border-radius: 0;">
+                            <div class="mini-fill" style="width: {{ (p.pa_atual / p.pa_max * 100) if p.pa_max > 0 else 0 }}%; background-color: #f57f17;"></div>
+                        </div>
                     </div>
-                    <span style="font-size: 0.7em; color: #666; float: right; margin-top: 2px;">PA: {{ ficha.pa_atual }}/{{ ficha.pa_max }}</span>
 
-                    <div class="progress-track">
-                        <div class="progress-fill fill-ph" style="width: {{ (ficha.ph_atual / ficha.ph_max * 100)|int if ficha.ph_max > 0 else 0 }}%;"></div>
+                    <div class="mini-bar-row">
+                        <span style="color: #90caf9; width: 25px;">PH</span>
+                        <div class="mini-track" style="border-radius: 0;">
+                            <div class="mini-fill" style="width: {{ (p.ph_atual / p.ph_max * 100) if p.ph_max > 0 else 0 }}%; background-color: #0d47a1;"></div>
+                        </div>
                     </div>
-                    <span style="font-size: 0.7em; color: #666; float: right; margin-top: 2px;">PH: {{ ficha.ph_atual }}/{{ ficha.ph_max }}</span>
 
-                    <div class="progress-track">
-                        <div class="progress-fill fill-pg" style="width: {{ (ficha.pg_atual / ficha.pg_max * 100)|int if ficha.pg_max > 0 else 0 }}%;"></div>
+                    <div class="mini-bar-row">
+                        <span style="color: #e1bee7; width: 25px;">PG</span>
+                        <div class="mini-track" style="border-radius: 0;">
+                            <div class="mini-fill" style="width: {{ (p.pg_atual / p.pg_max * 100) if p.pg_max > 0 else 0 }}%; background-color: #7b1fa2;"></div>
+                        </div>
                     </div>
-                    <span style="font-size: 0.7em; color: #666; float: right; margin-top: 2px;">PG: {{ ficha.pg_atual }}/{{ ficha.pg_max }}</span>
-
                 </div>
             </a>
-        {% else %}
-            <p style="text-align:center; color: #666; grid-column: span 3;">Nenhum personagem encontrado... Crie um personagem!</p>
+        </div>
         {% endfor %}
 
+        <a href="/novo" class="char-card card-add" style="border-radius: 0; text-decoration: none !important;">
+            <span class="material-icons">add_circle_outline</span>
+            <span style="color: #666; font-family: 'Cinzel', serif; text-decoration: none;">Criar Novo</span>
+        </a>
     </div>
+
 </div>
 
-    <footer class="app-footer">
-        <div class="footer-text">
-            Feito por Thiago "DrSauce" - Alpha 0.1
-        </div>
-        <img src="{{ url_for('static', path='img/logo.png') }}" alt="Giharad RPG Logo" class="footer-logo">
-    </footer>
+<div class="app-footer">
+    <span class="footer-text">Criado por Thiago "DrSauce" - v1.0</span>
+    <img src="{{ url_for('static', path='img/logo.png') }}" alt="Logo Giharad" class="footer-logo">
+</div>
 
 </body>
 </html>

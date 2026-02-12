@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novo Personagem</title>
-    <link href="{{ url_for('static', path='css/style.css') }}?v=4" rel="stylesheet">
+    <link href="{{ url_for('static', path='css/style.css') }}?v=8" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
-    <h1>⚔️ Novo Personagem</h1>
+    <h1> Novo Personagem</h1>
     
     <form action="/enviar_cadastro" method="post">
         
@@ -69,9 +69,7 @@
         <div class="grid-row" style="grid-template-columns: 1fr; gap: 20px;">
             
             <div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h3 class="section-title">Ataques</h3>
-                </div>
+                <h3 class="section-title"> Ataques</h3>
                 <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
                     <div class="grid-row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 0.5fr; gap: 5px; margin-bottom: 10px; color: #aaa; font-size: 0.8em; text-align: center;">
                         <div style="text-align: left;">Nome</div>
@@ -83,29 +81,74 @@
                         <div>Alc</div>
                         <div></div>
                     </div>
-                    
                     <div id="lista-ataques"></div>
                     <button type="button" class="btn-small btn-add" onclick="addAtaque()">+ Adicionar Ataque</button>
                 </div>
             </div>
 
             <div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h3 class="section-title">Habilidades</h3>
-                </div>
+                <h3 class="section-title"> Habilidades</h3>
                 <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
                     <div id="lista-habilidades"></div>
                     <button type="button" class="btn-small btn-add" onclick="addHabilidade()">+ Adicionar Habilidade</button>
                 </div>
             </div>
 
+            <div>
+                <h3 class="section-title" style="color: #b388ff; border-bottom-color: #b388ff;"> Magia</h3>
+                
+                <div class="grid-row grid-2">
+                    <div>
+                        <label>Tradição Hermética</label>
+                        <input type="text" name="tradicao" placeholder="Ex: Piromancia">
+                    </div>
+                    <div>
+                        <label>Escolas Conhecidas</label>
+                        <input type="text" name="escolas" placeholder="Ex: Evocação, Abjuração">
+                    </div>
+                </div>
+
+                <div class="grid-row grid-2" style="margin-top: 15px;">
+                    <div>
+                        <label>Atributo de Conjuração</label>
+                        <select name="atributo_chave">
+                            <option value="Inteligência">Inteligência</option>
+                            <option value="Sabedoria">Sabedoria</option>
+                            <option value="Carisma">Carisma</option>
+                            <option value="Força">Força</option>
+                            <option value="Destreza">Destreza</option>
+                            <option value="Constituição">Constituição</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>CD da Magia</label>
+                        <input type="number" name="cd_magia" value="10">
+                    </div>
+                </div>
+
+                <label style="margin-top: 20px;">Espaços de Magia</label>
+                <div class="grid-row grid-6" style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; text-align: center; grid-template-columns: repeat(6, 1fr);">
+                    <div><span style="font-size: 0.8em; color: #aaa;">1º</span><input type="number" name="slots_nv1" value="0" style="text-align: center;"></div>
+                    <div><span style="font-size: 0.8em; color: #aaa;">2º</span><input type="number" name="slots_nv2" value="0" style="text-align: center;"></div>
+                    <div><span style="font-size: 0.8em; color: #aaa;">3º</span><input type="number" name="slots_nv3" value="0" style="text-align: center;"></div>
+                    <div><span style="font-size: 0.8em; color: #aaa;">4º</span><input type="number" name="slots_nv4" value="0" style="text-align: center;"></div>
+                    <div><span style="font-size: 0.8em; color: #aaa;">5º</span><input type="number" name="slots_nv5" value="0" style="text-align: center;"></div>
+                    <div><span style="font-size: 0.8em; color: #aaa;">6º</span><input type="number" name="slots_nv6" value="0" style="text-align: center;"></div>
+                </div>
+
+                <label style="margin-top: 20px;">Lista de Feitiços</label>
+                <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+                    <div id="lista-magias"></div>
+                    <button type="button" class="btn-small btn-add" style="background: linear-gradient(to bottom, #673ab7, #512da8); border-color: #7b1fa2;" onclick="addMagia()">+ Adicionar Magia</button>
+                </div>
+            </div>
+
             <div class="grid-row grid-2">
                 <div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h3 class="section-title">Inventário</h3>
-                        <span style="font-size: 0.8em; color: #888;">(Qtd / Slots)</span>
+                        <h3 class="section-title"> Inventário</h3>
+                        <span style="font-size: 0.8em; color: #888;">(Qtd / Espaços)</span>
                     </div>
-                    
                     <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
                         <div id="lista-inventario"></div>
                         <button type="button" class="btn-small btn-add" onclick="addInventario()">+ Adicionar Item</button>
@@ -113,7 +156,7 @@
                 </div>
 
                 <div>
-                    <h3 class="section-title">Notas</h3>
+                    <h3 class="section-title"> Notas</h3>
                     <textarea name="notas" rows="12" style="width: 100%; background: #222; border: 1px solid #555; color: #fff; border-radius: 4px; padding: 10px; font-family: inherit;" placeholder="Escreva aqui a história do seu personagem..."></textarea>
                 </div>
             </div>
@@ -128,16 +171,14 @@
     let idxAtaque = 0;
     let idxHab = 0;
     let idxInv = 0;
+    let idxMagia = 0;
 
-    // --- ADICIONAR ATAQUE ---
     function addAtaque() {
         const container = document.getElementById('lista-ataques');
         const div = document.createElement('div');
         div.className = 'grid-row';
         div.id = `atk-${idxAtaque}`;
-        // Note as colunas: 7 inputs + 1 botão de delete
         div.style.cssText = "grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 0.5fr; gap: 5px; margin-bottom: 5px;";
-        
         div.innerHTML = `
             <input type="text" name="ataque_nome_${idxAtaque}" placeholder="Arma">
             <input type="text" name="ataque_attr_${idxAtaque}" placeholder="FOR" style="text-align: center;">
@@ -152,34 +193,47 @@
         idxAtaque++;
     }
 
-    // --- ADICIONAR HABILIDADE ---
     function addHabilidade() {
         const container = document.getElementById('lista-habilidades');
         const div = document.createElement('div');
         div.className = 'grid-row';
         div.id = `hab-${idxHab}`;
         div.style.cssText = "grid-template-columns: 1fr 1fr 2fr 0.5fr; gap: 5px; margin-bottom: 5px;";
-        
         div.innerHTML = `
-            <input type="text" name="hab_nome_${idxHab}" placeholder="Nome da Habilidade">
-            <input type="text" name="hab_custo_${idxHab}" placeholder="Custo (Ex: 3 PA)">
-            <input type="text" name="hab_efeito_${idxHab}" placeholder="Descrição curta...">
+            <input type="text" name="hab_nome_${idxHab}" placeholder="Nome">
+            <input type="text" name="hab_custo_${idxHab}" placeholder="Custo">
+            <input type="text" name="hab_efeito_${idxHab}" placeholder="Efeito...">
             <button type="button" class="btn-small btn-remove" onclick="removeEl('hab-${idxHab}')">X</button>
         `;
         container.appendChild(div);
         idxHab++;
     }
 
-    // --- ADICIONAR INVENTÁRIO ---
+    function addMagia() {
+        const container = document.getElementById('lista-magias');
+        const div = document.createElement('div');
+        div.className = 'grid-row';
+        div.id = `mag-${idxMagia}`;
+        div.style.cssText = "grid-template-columns: 2fr 0.5fr 1fr 2fr 0.5fr; gap: 5px; margin-bottom: 5px;";
+        div.innerHTML = `
+            <input type="text" name="magia_nome_${idxMagia}" placeholder="Nome do Feitiço">
+            <input type="number" name="magia_circulo_${idxMagia}" placeholder="1" style="text-align: center;">
+            <input type="text" name="magia_alcance_${idxMagia}" placeholder="Alcance">
+            <input type="text" name="magia_efeito_${idxMagia}" placeholder="Efeito Resumido">
+            <button type="button" class="btn-small btn-remove" onclick="removeEl('mag-${idxMagia}')">X</button>
+        `;
+        container.appendChild(div);
+        idxMagia++;
+    }
+
     function addInventario() {
         const container = document.getElementById('lista-inventario');
         const div = document.createElement('div');
         div.className = 'grid-row';
         div.id = `inv-${idxInv}`;
         div.style.cssText = "grid-template-columns: 3fr 1fr 1fr 0.5fr; gap: 5px; margin-bottom: 5px;";
-        
         div.innerHTML = `
-            <input type="text" name="item_nome_${idxInv}" placeholder="Nome do Item">
+            <input type="text" name="item_nome_${idxInv}" placeholder="Item">
             <input type="number" name="item_qtd_${idxInv}" value="1" style="text-align: center;">
             <input type="number" name="item_slot_${idxInv}" value="0" style="text-align: center; color: #ffd740;">
             <button type="button" class="btn-small btn-remove" onclick="removeEl('inv-${idxInv}')">X</button>
@@ -188,18 +242,14 @@
         idxInv++;
     }
 
-    // --- REMOVER ITEM GENÉRICO ---
     function removeEl(id) {
         document.getElementById(id).remove();
     }
 
-    // Inicializa com alguns slots vazios
     window.onload = function() {
-        // Cria 1 slot de Ataque e Habilidade para não ficar vazio
         addAtaque();
         addHabilidade();
-        
-        // Cria 5 slots de inventário (como era o padrão)
+        addMagia();
         for(let i=0; i<5; i++) addInventario();
     };
 </script>
