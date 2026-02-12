@@ -62,9 +62,9 @@ def processar_listas(form_data):
                 "efeito": form_data.get(f"hab_efeito_{i}") or "-"
             })
 
-    # Processar Inventário (10 slots) com ESPAÇOS
+    # Processar Inventário (30 slots) com ESPAÇOS
     lista_inventario = []
-    for i in range(10):
+    for i in range(30):
         nome = form_data.get(f"item_nome_{i}")
         if nome:
             lista_inventario.append({
