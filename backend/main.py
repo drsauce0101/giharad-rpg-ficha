@@ -10,11 +10,11 @@ from fastapi.staticfiles import StaticFiles
 
 # LISTA MESTRA DE COMPETENCIAS
 LISTA_COMPETENCIAS = [
-    "Acrobacia", "Adestramento", "Atletismo", "Atuacao", "Cavalgar", 
-    "Conhecimento", "Cura", "Diplomacia", "Enganacao", "Fortitude", 
-    "Furtividade", "Tatica", "Intimidacao", "Intuicao", "Investigacao", 
-    "Jogatina", "Ladinagem", "Feiticaria", "Nobreza", "Percepcao", 
-    "Pilotagem", "Reflexos", "Religiao", "Sobrevivencia", "Vontade"
+    "Acrobacia", "Adestramento", "Atletismo", "Atuação", "Cavalgar", 
+    "Conhecimento", "Cura", "Diplomacia", "Enganação", "Fortitude", 
+    "Furtividade", "Tática", "Intimidação", "Intuição", "Investigação", 
+    "Jogatina", "Ladinagem", "Feitiçaria", "Nobreza", "Percepção", 
+    "Pilotagem", "Reflexos", "Religião", "Sobrevivência", "Vontade"
 ]
 
 @asynccontextmanager
@@ -30,7 +30,6 @@ STATIC_DIR = BASE_DIR / "frontend" / "static"
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
-# FUNCAO PARA EVITAR CRASH COM CAMPOS VAZIOS
 def safe_int(value, default=0):
     try:
         if value is None or str(value).strip() == "":
@@ -109,6 +108,11 @@ async def processar_formulario(request: Request, session: Session = Depends(get_
     competencias_selecionadas = {s: safe_int(form_data.get(s)) for s in LISTA_COMPETENCIAS}
     ataques, habilidades, inventario, magias = processar_listas(form_data)
 
+    # Processamento dos Marcadores Unificados (0 a 4)
+    morte_val = sum(1 for i in range(1, 5) if form_data.get(f"morte_{i}"))
+    fadiga_val = sum(1 for i in range(1, 5) if form_data.get(f"fadiga_{i}"))
+    cicatrizes_val = sum(1 for i in range(1, 5) if form_data.get(f"cicatriz_{i}"))
+
     novo_char = Personagem(
         nome=form_data.get("nome"),
         jogador=form_data.get("jogador"),
@@ -130,6 +134,10 @@ async def processar_formulario(request: Request, session: Session = Depends(get_
         ph_max=safe_int(form_data.get("ph_max"), 0), ph_atual=safe_int(form_data.get("ph_max"), 0),
         pa_max=safe_int(form_data.get("pa_max"), 0), pa_atual=safe_int(form_data.get("pa_max"), 0),
         pg_max=safe_int(form_data.get("pg_max"), 0), pg_atual=safe_int(form_data.get("pg_max"), 0),
+        # Campos de marcadores numéricos
+        marcadores_morte=morte_val,
+        marcadores_fadiga=fadiga_val,
+        marcadores_cicatrizes=cicatrizes_val,
         competencias=competencias_selecionadas,
         ataques=ataques, habilidades=habilidades, inventario=inventario, magias=magias,
         notas=form_data.get("notas"),
@@ -154,7 +162,7 @@ async def atualizar_personagem(request: Request, char_id: int, session: Session 
     if not personagem: return RedirectResponse("/")
     form_data = await request.form()
 
-    # Campos basicos
+    # Campos básicos
     personagem.nome = form_data.get("nome")
     personagem.jogador = form_data.get("jogador")
     personagem.raca = form_data.get("raca")
@@ -183,10 +191,15 @@ async def atualizar_personagem(request: Request, char_id: int, session: Session 
     personagem.pg_max = safe_int(form_data.get("pg_max"), 0)
     personagem.pg_atual = safe_int(form_data.get("pg_atual"), 0)
 
-    # Competencias
+    # Atualização dos Marcadores (Contagem de checkboxes morte_i, fadiga_i, cicatriz_i)
+    personagem.marcadores_morte = sum(1 for i in range(1, 5) if form_data.get(f"morte_{i}"))
+    personagem.marcadores_fadiga = sum(1 for i in range(1, 5) if form_data.get(f"fadiga_{i}"))
+    personagem.marcadores_cicatrizes = sum(1 for i in range(1, 5) if form_data.get(f"cicatriz_{i}"))
+
+    # Competências
     personagem.competencias = {s: safe_int(form_data.get(s)) for s in LISTA_COMPETENCIAS}
 
-    # Listas Dinamicas
+    # Listas Dinâmicas
     ataques, habilidades, inventario, magias = processar_listas(form_data)
     personagem.ataques = ataques
     personagem.habilidades = habilidades

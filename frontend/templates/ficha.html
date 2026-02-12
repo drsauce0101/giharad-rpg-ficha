@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ ficha.nome }} - Giharad</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
-    <link href="/static/css/style.css?v=17" rel="stylesheet">
+    <link href="/static/css/style.css?v=26" rel="stylesheet">
 </head>
 <body>
 
@@ -15,7 +14,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 2px solid var(--gold-dim); margin-bottom: 20px;">
         <div>
             <h1 style="text-align: left; margin: 0; font-size: 2.5em; border: none;">{{ ficha.nome }}</h1>
-            <span style="font-family: 'Cinzel', serif; color: var(--gold-dim);">{{ ficha.raca }} {{ ficha.classe }} | Nivel {{ ficha.nivel }}</span>
+            <span style="font-family: 'Cinzel', serif; color: var(--gold-dim);">{{ ficha.raca }} {{ ficha.classe }} | Nível {{ ficha.nivel }}</span>
         </div>
         <div style="display: flex; gap: 10px;">
             <a href="/editar/{{ ficha.id }}" class="btn-novo">EDITAR</a>
@@ -27,7 +26,7 @@
         <button class="tablinks active" onclick="openTab(event, 'Geral')">Geral</button>
         <button class="tablinks" onclick="openTab(event, 'Habilidades')">Habilidades</button>
         <button class="tablinks" onclick="openTab(event, 'Magia')">Magia</button>
-        <button class="tablinks" onclick="openTab(event, 'Inventario')">Inventario</button>
+        <button class="tablinks" onclick="openTab(event, 'Inventario')">Inventário</button>
         <button class="tablinks" onclick="openTab(event, 'Anotacoes')">Notas</button>
     </div>
 
@@ -57,6 +56,50 @@
                 <div class="stat-box"><span class="stat-label">SAB</span><span class="stat-value">d{{ ficha.sabedoria }}</span></div>
                 <div class="stat-box"><span class="stat-label">CAR</span><span class="stat-value">d{{ ficha.carisma }}</span></div>
             </div>
+        </div>
+
+        <div class="grid-row grid-3" style="margin-top: 20px; background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #333; border-radius: 0;">
+            <div class="stat-box">
+                <label class="stat-label" style="color: #ff5252;">Morte</label>
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                    {% for i in range(1, 5) %}
+                    <div style="width: 18px; height: 18px; border: 1px solid #ff5252; background: {% if ficha.marcadores_morte >= i %}#ff5252{% else %}transparent{% endif %}; {% if i == 4 %}box-shadow: 0 0 5px #ff5252;{% endif %}"></div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="stat-box">
+                <label class="stat-label" style="color: #ffd700;">Fadiga</label>
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                    {% for i in range(1, 5) %}
+                    <div style="width: 18px; height: 18px; border: 1px solid #ffd700; background: {% if ficha.marcadores_fadiga >= i %}#ffd700{% else %}transparent{% endif %}; {% if i == 4 %}box-shadow: 0 0 5px #ffd700;{% endif %}"></div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="stat-box">
+                <label class="stat-label" style="color: #b388ff;">Cicatrizes</label>
+                <div style="display: flex; gap: 8px; margin-top: 10px;">
+                    {% for i in range(1, 5) %}
+                    <div style="width: 18px; height: 18px; border: 1px solid #b388ff; background: {% if ficha.marcadores_cicatrizes >= i %}#b388ff{% else %}transparent{% endif %}; {% if i == 4 %}box-shadow: 0 0 5px #b388ff;{% endif %}"></div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Competências</h3>
+        <div class="grid-row grid-3" style="background: rgba(0,0,0,0.2); padding: 15px; border: 1px solid #333; margin-top: 10px;">
+            {% for skill, valor in ficha.competencias.items() %}
+            <div style="display: flex; justify-content: space-between; padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <span style="font-size: 0.85em; color: var(--gold-dim); font-family: 'Cinzel', serif;">{{ skill }}</span>
+                <strong style="font-family: 'MedievalSharp'; 
+                    {% if valor > 0 %} color: #4caf50; 
+                    {% elif valor < 0 %} color: #f44336; 
+                    {% else %} color: #fff; {% endif %}">
+                    {{ "+" if valor > 0 }}{{ valor }}
+                </strong>
+            </div>
+            {% endfor %}
         </div>
     </div>
 
@@ -116,9 +159,9 @@
                 <h3 class="section-title">Conjuração</h3>
                 <div class="grid-row grid-2" style="margin-bottom: 20px;">
                     <div class="bar-box" style="border-left: 3px solid #b388ff;"><span>Atributo</span> <strong>{{ ficha.atributo_chave }}</strong></div>
-                    <div class="bar-box" style="border-left: 3px solid #b388ff;"><span>CD Magia</span> <strong>{{ ficha.cd_magia }}</strong></div>
+                    <div class="bar-box" style="border-left: 3px solid #b388ff;"><span>CD dos Feitiços</span> <strong>{{ ficha.cd_magia }}</strong></div>
                 </div>
-                <h3 class="section-title">Circulos</h3>
+                <h3 class="section-title">Círculos</h3>
                 <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
                     <div class="stat-box"><span class="stat-label">1º</span><span class="stat-value">{{ ficha.slots_nv1 }}</span></div>
                     <div class="stat-box"><span class="stat-label">2º</span><span class="stat-value">{{ ficha.slots_nv2 }}</span></div>
@@ -129,7 +172,7 @@
                 </div>
             </div>
             <div>
-                <h3 class="section-title">Grimorio</h3>
+                <h3 class="section-title">Grimório</h3>
                 <div style="background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #444; min-height: 250px;">
                     {% if ficha.magias %}
                         {% for mag in ficha.magias %}
@@ -150,28 +193,27 @@
     </div>
     
     <div id="Inventario" class="tabcontent">
-        <h3 class="section-title">Inventario</h3>
+        <h3 class="section-title">Inventário</h3>
         <div style="background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #444;">
             {% if ficha.inventario %}
                 {% for item in ficha.inventario %}
                 <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333;">
                     <span>{{ item.nome }} (x{{ item.qtd }})</span>
-                    <span style="color: var(--gold-dim);">Espacos: {{ item.espacos }}</span>
+                    <span style="color: var(--gold-dim);">Espaços: {{ item.espacos }}</span>
                 </div>
                 {% endfor %}
             {% else %}
-                <p style="color: #666; text-align: center;">Inventario vazio.</p>
+                <p style="color: #666; text-align: center;">Inventário vazio.</p>
             {% endif %}
         </div>
     </div>
 
     <div id="Anotacoes" class="tabcontent">
-        <h3 class="section-title">Historia</h3>
+        <h3 class="section-title">História</h3>
         <div style="white-space: pre-wrap; font-style: italic; color: #ccc; background: rgba(0,0,0,0.2); padding: 20px; border: 1px solid #333;">
-            {{ ficha.notas or "Nenhuma historia registrada." }}
+            {{ ficha.notas or "Nenhuma história registrada." }}
         </div>
     </div>
-
 </div>
 
 <script>

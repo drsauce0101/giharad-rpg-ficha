@@ -39,8 +39,12 @@ class Personagem(SQLModel, table=True):
     pg_max: int
     pg_atual: int
 
+    # Marcadores (0 a 4)
+    marcadores_morte: int = 0  
+    marcadores_fadiga: int = 0 
+    marcadores_cicatrizes: int = 0 
+
     # -- LISTAS ESPECIAIS --
-    # OBS: sa_type=JSON diz ao banco para tratar isso como um objeto JSON
     competencias: Dict[str, int] = Field(default={}, sa_type=JSON)
     
     # Lista de Ataques: [{nome, dano, acerto...}]
