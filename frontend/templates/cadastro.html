@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novo Personagem</title>
-    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='css/style.css') }}?v=4" rel="stylesheet">
 </head>
 <body>
 
@@ -42,15 +42,15 @@
 
         <h3 class="section-title">Status Iniciais (Máximos)</h3>
         <div class="grid-row grid-4">
-            <div><label>❤️ Vida (PV)</label><input type="number" name="pv_max" value="10"></div>
-            <div><label>✨ Hafa (PH)</label><input type="number" name="ph_max" value="0"></div>
-            <div><label>⚡ Ação (PA)</label><input type="number" name="pa_max" value="0"></div>
-            <div><label>💀 Grima (PG)</label><input type="number" name="pg_max" value="0"></div>
+            <div><label>Vida (PV)</label><input type="number" name="pv_max" value="10"></div>
+            <div><label>Hafa (PH)</label><input type="number" name="ph_max" value="0"></div>
+            <div><label>Ação (PA)</label><input type="number" name="pa_max" value="0"></div>
+            <div><label>Grima (PG)</label><input type="number" name="pg_max" value="0"></div>
         </div>
 
         <div class="grid-row grid-2" style="margin-top: 15px;">
-            <div><label>🛡️ Defesa</label><input type="number" name="defesa" value="10"></div>
-            <div><label>💎 Experiência (XP)</label><input type="number" name="experiencia" value="0"></div>
+            <div><label>Defesa</label><input type="number" name="defesa" value="10"></div>
+            <div><label>Experiência (XP)</label><input type="number" name="experiencia" value="0"></div>
         </div>
 
         <h3 class="section-title">Competências (Bônus)</h3>
@@ -69,66 +69,51 @@
         <div class="grid-row" style="grid-template-columns: 1fr; gap: 20px;">
             
             <div>
-                <h3 class="section-title">⚔️ Ataques</h3>
-                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
-                    <div class="grid-row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr; gap: 5px; margin-bottom: 10px; color: #aaa; font-size: 0.8em; text-align: center;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 class="section-title">Ataques</h3>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+                    <div class="grid-row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 0.5fr; gap: 5px; margin-bottom: 10px; color: #aaa; font-size: 0.8em; text-align: center;">
                         <div style="text-align: left;">Nome</div>
-                        <div>Atributo</div>
-                        <div>Bônus</div>
+                        <div>Atr</div>
+                        <div>Acerto</div>
                         <div>Dano</div>
-                        <div>Explosão</div>
+                        <div>Expl</div>
                         <div>Margem</div>
-                        <div>Alcance</div>
+                        <div>Alc</div>
+                        <div></div>
                     </div>
-                    {% for i in range(5) %}
-                    <div class="grid-row" style="grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr; gap: 5px; margin-bottom: 10px;">
-                        <input type="text" name="ataque_nome_{{i}}" placeholder="Arma">
-                        <input type="text" name="ataque_attr_{{i}}" placeholder="FOR" style="text-align: center;">
-                        <input type="text" name="ataque_acerto_{{i}}" placeholder="+0" style="text-align: center;">
-                        <input type="text" name="ataque_dano_{{i}}" placeholder="1d8" style="text-align: center;">
-                        <input type="text" name="ataque_explosivo_{{i}}" placeholder="2d8" style="text-align: center;">
-                        <input type="text" name="ataque_margem_{{i}}" placeholder="20" style="text-align: center;">
-                        <input type="text" name="ataque_alcance_{{i}}" placeholder="1.5m" style="text-align: center;">
-                    </div>
-                    {% endfor %}
+                    
+                    <div id="lista-ataques"></div>
+                    <button type="button" class="btn-small btn-add" onclick="addAtaque()">+ Adicionar Ataque</button>
                 </div>
             </div>
 
             <div>
-                <h3 class="section-title">🔮 Habilidades</h3>
-                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
-                    {% for i in range(5) %}
-                    <div class="grid-row" style="grid-template-columns: 1fr 1fr 2fr; gap: 10px; margin-bottom: 10px;">
-                        <input type="text" name="hab_nome_{{i}}" placeholder="Nome da Habilidade">
-                        <input type="text" name="hab_custo_{{i}}" placeholder="Custo (Ex: 3 PA)">
-                        <input type="text" name="hab_efeito_{{i}}" placeholder="Descrição curta...">
-                    </div>
-                    {% endfor %}
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 class="section-title">Habilidades</h3>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+                    <div id="lista-habilidades"></div>
+                    <button type="button" class="btn-small btn-add" onclick="addHabilidade()">+ Adicionar Habilidade</button>
                 </div>
             </div>
 
             <div class="grid-row grid-2">
                 <div>
-                    <h3 class="section-title">🎒 Inventário</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 class="section-title">Inventário</h3>
+                        <span style="font-size: 0.8em; color: #888;">(Qtd / Slots)</span>
+                    </div>
+                    
                     <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
-                        <div class="grid-row" style="grid-template-columns: 3fr 1fr 1fr; gap: 5px; margin-bottom: 5px; color: #aaa; font-size: 0.8em; text-align: center;">
-                            <div style="text-align: left; padding-left: 5px;">Item</div>
-                            <div>Qtd</div>
-                            <div>Espaços</div>
-                        </div>
-
-                        {% for i in range(5) %}
-                        <div class="grid-row" style="grid-template-columns: 3fr 1fr 1fr; gap: 5px; margin-bottom: 5px;">
-                            <input type="text" name="item_nome_{{i}}" placeholder="Nome do Item">
-                            <input type="number" name="item_qtd_{{i}}" value="1" style="text-align: center;">
-                            <input type="number" name="item_slot_{{i}}" value="0" style="text-align: center; color: #ffd740;">
-                        </div>
-                        {% endfor %}
+                        <div id="lista-inventario"></div>
+                        <button type="button" class="btn-small btn-add" onclick="addInventario()">+ Adicionar Item</button>
                     </div>
                 </div>
 
                 <div>
-                    <h3 class="section-title">📜 Notas</h3>
+                    <h3 class="section-title">Notas</h3>
                     <textarea name="notas" rows="12" style="width: 100%; background: #222; border: 1px solid #555; color: #fff; border-radius: 4px; padding: 10px; font-family: inherit;" placeholder="Escreva aqui a história do seu personagem..."></textarea>
                 </div>
             </div>
@@ -138,6 +123,86 @@
     </form>
     <a href="/">← Voltar para a lista</a>
 </div>
+
+<script>
+    let idxAtaque = 0;
+    let idxHab = 0;
+    let idxInv = 0;
+
+    // --- ADICIONAR ATAQUE ---
+    function addAtaque() {
+        const container = document.getElementById('lista-ataques');
+        const div = document.createElement('div');
+        div.className = 'grid-row';
+        div.id = `atk-${idxAtaque}`;
+        // Note as colunas: 7 inputs + 1 botão de delete
+        div.style.cssText = "grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 0.5fr; gap: 5px; margin-bottom: 5px;";
+        
+        div.innerHTML = `
+            <input type="text" name="ataque_nome_${idxAtaque}" placeholder="Arma">
+            <input type="text" name="ataque_attr_${idxAtaque}" placeholder="FOR" style="text-align: center;">
+            <input type="text" name="ataque_acerto_${idxAtaque}" placeholder="+0" style="text-align: center;">
+            <input type="text" name="ataque_dano_${idxAtaque}" placeholder="1d8" style="text-align: center;">
+            <input type="text" name="ataque_explosivo_${idxAtaque}" placeholder="2d8" style="text-align: center;">
+            <input type="text" name="ataque_margem_${idxAtaque}" placeholder="20" style="text-align: center;">
+            <input type="text" name="ataque_alcance_${idxAtaque}" placeholder="1.5m" style="text-align: center;">
+            <button type="button" class="btn-small btn-remove" onclick="removeEl('atk-${idxAtaque}')">X</button>
+        `;
+        container.appendChild(div);
+        idxAtaque++;
+    }
+
+    // --- ADICIONAR HABILIDADE ---
+    function addHabilidade() {
+        const container = document.getElementById('lista-habilidades');
+        const div = document.createElement('div');
+        div.className = 'grid-row';
+        div.id = `hab-${idxHab}`;
+        div.style.cssText = "grid-template-columns: 1fr 1fr 2fr 0.5fr; gap: 5px; margin-bottom: 5px;";
+        
+        div.innerHTML = `
+            <input type="text" name="hab_nome_${idxHab}" placeholder="Nome da Habilidade">
+            <input type="text" name="hab_custo_${idxHab}" placeholder="Custo (Ex: 3 PA)">
+            <input type="text" name="hab_efeito_${idxHab}" placeholder="Descrição curta...">
+            <button type="button" class="btn-small btn-remove" onclick="removeEl('hab-${idxHab}')">X</button>
+        `;
+        container.appendChild(div);
+        idxHab++;
+    }
+
+    // --- ADICIONAR INVENTÁRIO ---
+    function addInventario() {
+        const container = document.getElementById('lista-inventario');
+        const div = document.createElement('div');
+        div.className = 'grid-row';
+        div.id = `inv-${idxInv}`;
+        div.style.cssText = "grid-template-columns: 3fr 1fr 1fr 0.5fr; gap: 5px; margin-bottom: 5px;";
+        
+        div.innerHTML = `
+            <input type="text" name="item_nome_${idxInv}" placeholder="Nome do Item">
+            <input type="number" name="item_qtd_${idxInv}" value="1" style="text-align: center;">
+            <input type="number" name="item_slot_${idxInv}" value="0" style="text-align: center; color: #ffd740;">
+            <button type="button" class="btn-small btn-remove" onclick="removeEl('inv-${idxInv}')">X</button>
+        `;
+        container.appendChild(div);
+        idxInv++;
+    }
+
+    // --- REMOVER ITEM GENÉRICO ---
+    function removeEl(id) {
+        document.getElementById(id).remove();
+    }
+
+    // Inicializa com alguns slots vazios
+    window.onload = function() {
+        // Cria 1 slot de Ataque e Habilidade para não ficar vazio
+        addAtaque();
+        addHabilidade();
+        
+        // Cria 5 slots de inventário (como era o padrão)
+        for(let i=0; i<5; i++) addInventario();
+    };
+</script>
 
 </body>
 </html>

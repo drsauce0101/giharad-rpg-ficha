@@ -95,10 +95,10 @@
     </div>
 
     <div class="tab">
-        <button class="tablinks active" onclick="openTab(event, 'Geral')">📊 Geral</button>
-        <button class="tablinks" onclick="openTab(event, 'Habilidades')">⚔️ Habilidades</button>
-        <button class="tablinks" onclick="openTab(event, 'Inventario')">🎒 Inventário</button>
-        <button class="tablinks" onclick="openTab(event, 'Anotacoes')">📜 Anotações</button>
+        <button class="tablinks active" onclick="openTab(event, 'Geral')">Geral</button>
+        <button class="tablinks" onclick="openTab(event, 'Habilidades')">Habilidades</button>
+        <button class="tablinks" onclick="openTab(event, 'Inventario')">Inventário</button>
+        <button class="tablinks" onclick="openTab(event, 'Anotacoes')">Anotações</button>
     </div>
 
     <div id="Geral" class="tabcontent" style="display: block;">
@@ -112,18 +112,18 @@
         <div class="grid-row grid-2">
             <div class="grid-row" style="grid-template-columns: 1fr;">
                 <div class="bars-grid" style="grid-template-columns: 1fr 1fr;">
-                    <div class="bar-box pv" style="font-size: 1.2em;"><span>❤️ Vida</span> <strong>{{ ficha.pv_atual }}/{{ ficha.pv_max }}</strong></div>
-                    <div class="bar-box ph" style="font-size: 1.2em;"><span>✨ Hafa</span> <strong>{{ ficha.ph_atual }}/{{ ficha.ph_max }}</strong></div>
-                    <div class="bar-box pa" style="font-size: 1.2em;"><span>⚡ Ação</span> <strong>{{ ficha.pa_atual }}/{{ ficha.pa_max }}</strong></div>
-                    <div class="bar-box pg" style="font-size: 1.2em;"><span>💀 Grima</span> <strong>{{ ficha.pg_atual }}/{{ ficha.pg_max }}</strong></div>
+                    <div class="bar-box pv" style="font-size: 1.2em;"><span>Vida</span> <strong>{{ ficha.pv_atual }}/{{ ficha.pv_max }}</strong></div>
+                    <div class="bar-box ph" style="font-size: 1.2em;"><span>Hafa</span> <strong>{{ ficha.ph_atual }}/{{ ficha.ph_max }}</strong></div>
+                    <div class="bar-box pa" style="font-size: 1.2em;"><span>Ação</span> <strong>{{ ficha.pa_atual }}/{{ ficha.pa_max }}</strong></div>
+                    <div class="bar-box pg" style="font-size: 1.2em;"><span>Grima</span> <strong>{{ ficha.pg_atual }}/{{ ficha.pg_max }}</strong></div>
                 </div>
                 
                 <div class="grid-row grid-2" style="margin-top: 10px;">
                     <div class="bar-box" style="justify-content: center; background: #333; height: 50px; align-items: center;">
-                        <span style="font-size: 1.5em;">🛡️ {{ ficha.defesa }}</span>
+                        <span style="font-size: 1.5em;">{{ ficha.defesa }}</span>
                     </div>
                     <div class="bar-box" style="justify-content: center; background: #333; height: 50px; align-items: center;">
-                        <span style="font-size: 1.5em; color: #00e5ff;">💎 {{ ficha.experiencia }} XP</span>
+                        <span style="font-size: 1.5em; color: #00e5ff;">{{ ficha.experiencia }} XP</span>
                     </div>
                 </div>
             </div>
@@ -157,7 +157,7 @@
 
     <div id="Habilidades" class="tabcontent">
         
-        <h3 class="section-title">⚔️ Ataques</h3>
+        <h3 class="section-title">Ataques</h3>
         <div class="grid-row grid-2"> 
             {% if ficha.ataques %}
                 {% for atk in ficha.ataques %}
@@ -179,7 +179,7 @@
             {% endif %}
         </div>
 
-        <h3 class="section-title" style="margin-top: 30px;">🔮 Habilidades & Magias</h3>
+        <h3 class="section-title" style="margin-top: 30px;">Habilidades</h3>
         <div class="grid-row grid-2">
             {% if ficha.habilidades %}
                 {% for hab in ficha.habilidades %}
@@ -198,7 +198,7 @@
     </div>
 
     <div id="Inventario" class="tabcontent">
-        <h3 class="section-title">🎒 Inventário</h3>
+        <h3 class="section-title">Inventário</h3>
         <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; min-height: 300px; border: 1px solid #444;">
             {% if ficha.inventario %}
                 <ul style="list-style: none; padding: 0; margin: 0;">
@@ -211,7 +211,7 @@
                     <li style="border-bottom: 1px solid #333; padding: 10px 0; display: flex; justify-content: space-between; align-items: center;">
                         <span style="flex: 3; font-size: 1.1em;">{{ item.nome }}</span>
                         <span style="flex: 1; text-align: center; color: #fff; font-weight: bold;">x{{ item.qtd }}</span>
-                        <span style="flex: 1; text-align: right; color: #ffd740;">📦 {{ item.espacos }}</span>
+                        <span style="flex: 1; text-align: right; color: #ffd740;">Espaços {{ item.espacos }}</span>
                     </li>
                     {% endfor %}
                 </ul>
@@ -233,7 +233,7 @@
             </div>
 
             <div>
-                <h3 class="section-title">📜 História & Notas</h3>
+                <h3 class="section-title">História & Notas</h3>
                 <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px; color: #ccc; font-style: italic; white-space: pre-wrap; min-height: 300px; border: 1px solid #444; font-size: 1.1em; line-height: 1.6;">{{ ficha.notas or "Sem anotações..." }}</div>
             </div>
         </div>

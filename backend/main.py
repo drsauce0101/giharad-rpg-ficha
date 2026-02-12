@@ -36,42 +36,45 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 # Processa as listas de Ataques, Habilidades e Inventário do form
 def processar_listas(form_data):
-    # Processar Ataques (5 slots) com NOVAS COLUNAS
+    # 1. Processar Ataques (Até 100 slots)
     lista_ataques = []
-    for i in range(5):
+    for i in range(100):
         nome = form_data.get(f"ataque_nome_{i}")
-        if nome: 
-            lista_ataques.append({
-                "nome": nome,
-                "atributo": form_data.get(f"ataque_attr_{i}") or "-",
-                "acerto": form_data.get(f"ataque_acerto_{i}") or "+0",
-                "dano": form_data.get(f"ataque_dano_{i}") or "-",
-                "explosivo": form_data.get(f"ataque_explosivo_{i}") or "-", 
-                "margem": form_data.get(f"ataque_margem_{i}") or "20",       
-                "alcance": form_data.get(f"ataque_alcance_{i}") or "-"       
-            })
+        if not nome: continue # Pula se estiver vazio/deletado
+            
+        lista_ataques.append({
+            "nome": nome,
+            "atributo": form_data.get(f"ataque_attr_{i}") or "-",
+            "acerto": form_data.get(f"ataque_acerto_{i}") or "+0",
+            "dano": form_data.get(f"ataque_dano_{i}") or "-",
+            "explosivo": form_data.get(f"ataque_explosivo_{i}") or "-",
+            "margem": form_data.get(f"ataque_margem_{i}") or "20",
+            "alcance": form_data.get(f"ataque_alcance_{i}") or "-"
+        })
 
-    # Processar Habilidades (5 slots)
+    # 2. Processar Habilidades (Até 100 slots)
     lista_habilidades = []
-    for i in range(5):
+    for i in range(100):
         nome = form_data.get(f"hab_nome_{i}")
-        if nome:
-            lista_habilidades.append({
-                "nome": nome,
-                "custo": form_data.get(f"hab_custo_{i}") or "-",
-                "efeito": form_data.get(f"hab_efeito_{i}") or "-"
-            })
+        if not nome: continue
+            
+        lista_habilidades.append({
+            "nome": nome,
+            "custo": form_data.get(f"hab_custo_{i}") or "-",
+            "efeito": form_data.get(f"hab_efeito_{i}") or "-"
+        })
 
-    # Processar Inventário (30 slots) com ESPAÇOS
+    # 3. Processar Inventário (Até 100 slots)
     lista_inventario = []
-    for i in range(30):
+    for i in range(100):
         nome = form_data.get(f"item_nome_{i}")
-        if nome:
-            lista_inventario.append({
-                "nome": nome,
-                "qtd": form_data.get(f"item_qtd_{i}") or "1",
-                "espacos": form_data.get(f"item_slot_{i}") or "0" 
-            })
+        if not nome: continue
+            
+        lista_inventario.append({
+            "nome": nome,
+            "qtd": form_data.get(f"item_qtd_{i}") or "1",
+            "espacos": form_data.get(f"item_slot_{i}") or "0"
+        })
             
     return lista_ataques, lista_habilidades, lista_inventario
 
