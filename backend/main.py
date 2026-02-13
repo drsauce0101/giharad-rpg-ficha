@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
-from fastapi import FastAPI, Depends, Request, Form
+from fastapi import FastAPI, Depends, Request, Form, Body # Adicionado Body
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlmodel import Session, select
@@ -8,7 +8,7 @@ from .database import engine, get_session
 from .models import SQLModel, Personagem
 from fastapi.staticfiles import StaticFiles 
 
-# LISTA MESTRA DE COMPETENCIAS
+# LISTA MESTRA DE COMPETÊNCIAS
 LISTA_COMPETENCIAS = [
     "Acrobacia", "Adestramento", "Atletismo", "Atuação", "Cavalgar", 
     "Conhecimento", "Cura", "Diplomacia", "Enganação", "Fortitude", 
@@ -236,3 +236,36 @@ def pagina_editar(request: Request, char_id: int, session: Session = Depends(get
     personagem = session.get(Personagem, char_id)
     if not personagem: return RedirectResponse("/")
     return templates.TemplateResponse(request=request, name="editar.html", context={"ficha": personagem, "lista_skills": LISTA_COMPETENCIAS})
+
+@app.post("/api/atualizar_campo/{char_id}")
+async def api_atualizar_campo(
+    char_id: int, 
+    data: dict = Body(...), 
+    session: Session = Depends(get_session)
+):
+    personagem = session.get(Personagem, char_id)
+    if not personagem:
+        return {"status": "error", "message": "Personagem não encontrado"}
+
+    for campo, valor in data.items():
+        if hasattr(personagem, campo):
+            # Lógica para campos que devem ser convertidos para inteiro
+            campos_numericos = [
+                "nivel", "forca", "destreza", "constituicao", "inteligencia", 
+                "sabedoria", "carisma", "defesa", "experiencia",
+                "pv_max", "pv_atual", "pa_max", "pa_atual", 
+                "ph_max", "ph_atual", "pg_max", "pg_atual",
+                "marcadores_morte", "marcadores_fadiga", "marcadores_cicatrizes"
+            ]
+            
+            if campo in campos_numericos:
+                setattr(personagem, campo, safe_int(valor))
+            elif campo == "competencias":
+                # Para dicionários de competências enviadas via API
+                personagem.competencias = valor
+            else:
+                setattr(personagem, campo, valor)
+    
+    session.add(personagem)
+    session.commit()
+    return {"status": "success", "field": list(data.keys())[0]}
