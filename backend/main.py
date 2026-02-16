@@ -231,12 +231,6 @@ def deletar_personagem(char_id: int, session: Session = Depends(get_session)):
         session.commit()
     return RedirectResponse("/", status_code=303)
 
-@app.get("/editar/{char_id}", response_class=HTMLResponse)
-def pagina_editar(request: Request, char_id: int, session: Session = Depends(get_session)):
-    personagem = session.get(Personagem, char_id)
-    if not personagem: return RedirectResponse("/")
-    return templates.TemplateResponse(request=request, name="editar.html", context={"ficha": personagem, "lista_skills": LISTA_COMPETENCIAS})
-
 @app.post("/api/atualizar_campo/{char_id}")
 async def api_atualizar_campo(
     char_id: int, 

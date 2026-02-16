@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ ficha.nome }} - Giharad</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="/static/css/style.css?v=36" rel="stylesheet">
-    </head>
+    <link href="/static/css/style.css?v=40" rel="stylesheet">
+</head>
 <body>
 
 <div class="container" style="max-width: 950px;">
@@ -16,11 +16,11 @@
             <h1 style="text-align: left; margin: 0; font-size: 2.5em; border: none;">
                 <input type="text" class="editable" value="{{ ficha.nome }}" onblur="salvar('nome', this.value)">
             </h1>
-            <div style="font-family: 'Cinzel', serif; color: var(--gold-dim); display: flex; gap: 5px;">
+            <div style="font-family: 'Cinzel', serif; color: var(--gold-dim); display: flex; gap: 5px; align-items: center;">
                 <input type="text" class="editable" style="width: auto;" value="{{ ficha.raca }}" onblur="salvar('raca', this.value)">
                 <input type="text" class="editable" style="width: auto;" value="{{ ficha.classe }}" onblur="salvar('classe', this.value)">
-                | Nível 
-                <input type="number" class="editable" style="width: 40px;" value="{{ ficha.nivel }}" onblur="salvar('nivel', this.value)">
+                Nível 
+                <input type="number" class="editable" style="width: 40px; text-align: center;" value="{{ ficha.nivel }}" onblur="salvar('nivel', this.value)">
             </div>
         </div>
         <div style="display: flex; gap: 10px;">
@@ -45,11 +45,11 @@
 
         <div class="grid-row grid-2">
             <div class="bars-grid">
-                <div class="bar-box pv"><span>Vida</span> <strong><input type="number" class="editable" style="width: 35px; text-align: right;" value="{{ ficha.pv_atual }}" onblur="salvar('pv_atual', this.value)">/<input type="number" class="editable" style="width: 35px; text-align: left;" value="{{ ficha.pv_max }}" onblur="salvar('pv_max', this.value)"></strong></div>
-                <div class="bar-box pa"><span>Ação</span> <strong><input type="number" class="editable" style="width: 35px; text-align: right;" value="{{ ficha.pa_atual }}" onblur="salvar('pa_atual', this.value)">/<input type="number" class="editable" style="width: 35px; text-align: left;" value="{{ ficha.pa_max }}" onblur="salvar('pa_max', this.value)"></strong></div>
-                <div class="bar-box ph"><span>Hafa</span> <strong><input type="number" class="editable" style="width: 35px; text-align: right;" value="{{ ficha.ph_atual }}" onblur="salvar('ph_atual', this.value)">/<input type="number" class="editable" style="width: 35px; text-align: left;" value="{{ ficha.ph_max }}" onblur="salvar('ph_max', this.value)"></strong></div>
-                <div class="bar-box pg"><span>Grima</span> <strong><input type="number" class="editable" style="width: 35px; text-align: right;" value="{{ ficha.pg_atual }}" onblur="salvar('pg_atual', this.value)">/<input type="number" class="editable" style="width: 35px; text-align: left;" value="{{ ficha.pg_max }}" onblur="salvar('pg_max', this.value)"></strong></div>
-                <div class="bar-box" style="grid-column: span 2; justify-content: center; border-color: var(--gold-main);"><span style="font-family: 'Cinzel'; font-size: 1.2em;">DEFESA <input type="number" class="editable" style="width: 50px; font-weight: bold;" value="{{ ficha.defesa }}" onblur="salvar('defesa', this.value)"></span></div>
+                <div class="bar-box pv"><span>Vida</span> <strong><input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pv_atual }}" onblur="salvar('pv_atual', this.value)"> / <input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pv_max }}" onblur="salvar('pv_max', this.value)"></strong></div>
+                <div class="bar-box pa"><span>Ação</span> <strong><input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pa_atual }}" onblur="salvar('pa_atual', this.value)"> / <input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pa_max }}" onblur="salvar('pa_max', this.value)"></strong></div>
+                <div class="bar-box ph"><span>Hafa</span> <strong><input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.ph_atual }}" onblur="salvar('ph_atual', this.value)"> / <input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.ph_max }}" onblur="salvar('ph_max', this.value)"></strong></div>
+                <div class="bar-box pg"><span>Grima</span> <strong><input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pg_atual }}" onblur="salvar('pg_atual', this.value)"> / <input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pg_max }}" onblur="salvar('pg_max', this.value)"></strong></div>
+                <div class="bar-box" style="grid-column: span 2; justify-content: center; border-color: var(--gold-main);"><span style="font-family: 'Cinzel'; font-size: 1.2em;">DEFESA <input type="number" class="editable" style="width: 50px; font-weight: bold; text-align: center;" value="{{ ficha.defesa }}" onblur="salvar('defesa', this.value)"></span></div>
             </div>
 
             <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
@@ -98,7 +98,13 @@
             {% for skill, valor in ficha.competencias.items() %}
             <div style="display: flex; justify-content: space-between; padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">
                 <span style="font-size: 0.85em; color: var(--gold-dim); font-family: 'Cinzel', serif;">{{ skill }}</span>
-                <strong style="font-family: 'MedievalSharp';"><input type="number" class="editable" style="width: 40px; text-align: right; {% if valor > 0 %} color: #4caf50; {% elif valor < 0 %} color: #f44336; {% else %} color: #fff; {% endif %}" value="{{ valor }}" onblur="salvarCompetencia('{{ skill }}', this.value)"></strong>
+                <strong style="font-family: 'MedievalSharp';">
+                    <input type="number" class="editable" 
+                           style="width: 40px; text-align: right; {% if valor > 0 %} color: #4caf50; {% elif valor < 0 %} color: #f44336; {% else %} color: #fff; {% endif %}" 
+                           value="{{ valor }}" 
+                           oninput="atualizarCor(this)"
+                           onblur="salvarCompetencia('{{ skill }}', this.value)">
+                </strong>
             </div>
             {% endfor %}
         </div>
@@ -110,10 +116,10 @@
             {% for atk in ficha.ataques %}
             <div class="card-container item-row" style="background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #444; border-radius: 4px; margin-bottom: 15px;">
                 <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px;">
-                    <strong style="color: var(--gold-main); font-family: 'Cinzel', serif; font-size: 1.1em;">
+                    <strong style="color: var(--gold-main); font-family: 'Cinzel', serif; font-size: 1.1em; flex-grow: 1;">
                         <input type="text" class="input-transparent" name="nome" value="{{ atk.nome }}" placeholder="Nome do Ataque" onblur="salvarLista('ataques')">
                     </strong>
-                    <span style="font-size: 0.8em; color: #888; display: flex; align-items: center; gap: 5px;">
+                    <span style="font-size: 0.8em; color: #888; display: flex; align-items: center; gap: 5px; white-space: nowrap;">
                         Alcance: <input type="text" class="input-transparent" name="alcance" value="{{ atk.alcance }}" style="width: 80px; text-align: right; font-style: italic;" onblur="salvarLista('ataques')">
                     </span>
                 </div>
@@ -134,11 +140,11 @@
             {% for hab in ficha.habilidades %}
             <div class="card-container item-row" style="background: rgba(255,255,255,0.03); padding: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-dim); margin-bottom: 15px;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <strong style="color: #fff; font-family: 'Cinzel', serif; letter-spacing: 1px;">
+                    <strong style="color: #fff; font-family: 'Cinzel', serif; letter-spacing: 1px; flex-grow: 1;">
                         <input type="text" class="input-transparent" name="nome" value="{{ hab.nome }}" placeholder="Nome da Habilidade" onblur="salvarLista('habilidades')">
                     </strong>
-                    <span style="background: #222; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; color: var(--gold-main); border: 1px solid #444;">
-                        <input type="text" class="input-transparent" name="custo" value="{{ hab.custo }}" placeholder="Custo" style="width: 30px; text-align: center;" onblur="salvarLista('habilidades')">
+                    <span style="background: #222; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; color: var(--gold-main); border: 1px solid #444; min-width: 30px;">
+                        <input type="text" class="input-transparent" name="custo" value="{{ hab.custo }}" placeholder="-" style="width: 100%; text-align: center;" onblur="salvarLista('habilidades')">
                     </span>
                 </div>
                 <div style="color: #ccc; font-size: 0.95em; line-height: 1.4;">
@@ -177,17 +183,21 @@
                     {% for mag in ficha.magias %}
                     <div class="card-container item-row" style="border-bottom: 1px solid #333; padding: 10px 0; margin-bottom: 5px;">
                         <div style="display: flex; justify-content: space-between;">
-                            <strong style="color: #fff;"><input type="text" class="input-transparent" name="nome" value="{{ mag.nome }}" placeholder="Nome do Feitiço" onblur="salvarLista('magias')"></strong>
-                            <span style="color: #b388ff; font-weight: bold;"><input type="text" class="input-transparent" name="circulo" value="{{ mag.circulo }}" style="width: 20px; text-align: center; color: #b388ff;" onblur="salvarLista('magias')">º</span>
+                            <strong style="color: #fff; flex-grow: 1;">
+                                <input type="text" class="input-transparent" name="nome" value="{{ mag.nome }}" placeholder="Nome do Feitiço" onblur="salvarLista('magias')">
+                            </strong>
+                            <span style="color: #b388ff; font-weight: bold; white-space: nowrap;">
+                                <input type="text" class="input-transparent" name="circulo" value="{{ mag.circulo }}" style="width: 20px; text-align: center; color: #b388ff;" onblur="salvarLista('magias')">º
+                            </span>
                         </div>
                         <div style="color: #ccc; font-size: 0.85em; margin-top: 5px;">
-                            <textarea class="input-transparent" name="efeito" rows="2" placeholder="Efeito..." onblur="salvarLista('magias')">{{ mag.efeito }}</textarea>
+                            <textarea class="input-transparent" name="efeito" rows="1" placeholder="Efeito..." onblur="salvarLista('magias')">{{ mag.efeito }}</textarea>
                         </div>
                         <button class="btn-delete-item" onclick="removerItem(this, 'magias')"><span class="material-icons">delete</span></button>
                     </div>
                     {% endfor %}
                 </div>
-                <button class="btn-add" onclick="adicionarMagia()">+ Adicionar Magia</button>
+                <button class="btn-add" onclick="adicionarMagia()">+ Adicionar Feitiço</button>
             </div>
         </div>
     </div>
@@ -217,6 +227,14 @@
 </div>
 
 <script>
+// --- FUNÇÃO NOVA: ATUALIZAR COR EM TEMPO REAL ---
+function atualizarCor(input) {
+    const val = parseInt(input.value) || 0;
+    if (val > 0) input.style.color = '#4caf50'; // Verde
+    else if (val < 0) input.style.color = '#f44336'; // Vermelho
+    else input.style.color = '#fff'; // Branco
+}
+
 // --- MOTOR DE SALVAMENTO ---
 function salvar(campo, valor) {
     fetch(`/api/atualizar_campo/{{ ficha.id }}`, {
@@ -248,73 +266,69 @@ function removerItem(btn, tipo) {
     }
 }
 
-// --- CRIAR NOVOS ITENS ---
+// --- FUNÇÕES DE ADICIONAR (Javascript) ---
 function adicionarAtaque() {
-    const html = `
-        <div class="card-container item-row" style="background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #444; border-radius: 4px; margin-bottom: 15px;">
-            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px;">
-                <strong style="color: var(--gold-main); font-family: 'Cinzel', serif; font-size: 1.1em;">
-                    <input type="text" class="input-transparent" name="nome" placeholder="Novo Ataque" onblur="salvarLista('ataques')">
-                </strong>
-                <span style="font-size: 0.8em; color: #888; display: flex; gap: 5px;">
-                    Alcance: <input type="text" class="input-transparent" name="alcance" placeholder="-" style="width: 60px; text-align: right;" onblur="salvarLista('ataques')">
-                </span>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9em;">
-                <div>Acerto: <strong style="color: #fff;"><input type="text" class="input-transparent" name="acerto" placeholder="+0" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></strong></div>
-                <div>Dano: <strong style="color: #fff;"><input type="text" class="input-transparent" name="dano" placeholder="1d6" style="display:inline; width: 60px;" onblur="salvarLista('ataques')"></strong></div>
-                <div>Margem: <input type="text" class="input-transparent" name="margem" placeholder="20" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></div>
-                <div>Explosivo: <input type="text" class="input-transparent" name="explosivo" placeholder="-" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></div>
-            </div>
-            <button class="btn-delete-item" onclick="removerItem(this, 'ataques')"><span class="material-icons">delete</span></button>
-        </div>`;
+    const html = `<div class="card-container item-row" style="background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #444; border-radius: 4px; margin-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px;">
+            <strong style="color: var(--gold-main); font-family: 'Cinzel', serif; font-size: 1.1em; flex-grow: 1;">
+                <input type="text" class="input-transparent" name="nome" placeholder="Novo Ataque" onblur="salvarLista('ataques')">
+            </strong>
+            <span style="font-size: 0.8em; color: #888; display: flex; align-items: center; gap: 5px; white-space: nowrap;">
+                Alcance: <input type="text" class="input-transparent" name="alcance" placeholder="-" style="width: 60px; text-align: right;" onblur="salvarLista('ataques')">
+            </span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9em;">
+            <div>Acerto: <strong style="color: #fff;"><input type="text" class="input-transparent" name="acerto" placeholder="+0" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></strong></div>
+            <div>Dano: <strong style="color: #fff;"><input type="text" class="input-transparent" name="dano" placeholder="1d6" style="display:inline; width: 60px;" onblur="salvarLista('ataques')"></strong></div>
+            <div>Margem: <input type="text" class="input-transparent" name="margem" placeholder="20" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></div>
+            <div>Explosivo: <input type="text" class="input-transparent" name="explosivo" placeholder="-" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></div>
+        </div>
+        <button class="btn-delete-item" onclick="removerItem(this, 'ataques')"><span class="material-icons">delete</span></button>
+    </div>`;
     document.getElementById('lista-ataques').insertAdjacentHTML('beforeend', html);
 }
 
 function adicionarHabilidade() {
-    const html = `
-        <div class="card-container item-row" style="background: rgba(255,255,255,0.03); padding: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-dim); margin-bottom: 15px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <strong style="color: #fff; font-family: 'Cinzel', serif; letter-spacing: 1px;">
-                    <input type="text" class="input-transparent" name="nome" placeholder="Nova Habilidade" onblur="salvarLista('habilidades')">
-                </strong>
-                <span style="background: #222; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; color: var(--gold-main); border: 1px solid #444;">
-                    <input type="text" class="input-transparent" name="custo" placeholder="-" style="width: 30px; text-align: center;" onblur="salvarLista('habilidades')">
-                </span>
-            </div>
-            <div style="color: #ccc; font-size: 0.95em; line-height: 1.4;">
-                <textarea class="input-transparent" name="efeito" rows="2" placeholder="Descrição..." onblur="salvarLista('habilidades')"></textarea>
-            </div>
-            <button class="btn-delete-item" onclick="removerItem(this, 'habilidades')"><span class="material-icons">delete</span></button>
-        </div>`;
+    const html = `<div class="card-container item-row" style="background: rgba(255,255,255,0.03); padding: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-dim); margin-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <strong style="color: #fff; font-family: 'Cinzel', serif; letter-spacing: 1px; flex-grow: 1;">
+                <input type="text" class="input-transparent" name="nome" placeholder="Nova Habilidade" onblur="salvarLista('habilidades')">
+            </strong>
+            <span style="background: #222; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; color: var(--gold-main); border: 1px solid #444; min-width: 30px;">
+                <input type="text" class="input-transparent" name="custo" placeholder="-" style="width: 100%; text-align: center;" onblur="salvarLista('habilidades')">
+            </span>
+        </div>
+        <div style="color: #ccc; font-size: 0.95em; line-height: 1.4;">
+            <textarea class="input-transparent" name="efeito" rows="2" placeholder="Descrição..." onblur="salvarLista('habilidades')"></textarea>
+        </div>
+        <button class="btn-delete-item" onclick="removerItem(this, 'habilidades')"><span class="material-icons">delete</span></button>
+    </div>`;
     document.getElementById('lista-habilidades').insertAdjacentHTML('beforeend', html);
 }
 
 function adicionarMagia() {
-    const html = `
-        <div class="card-container item-row" style="border-bottom: 1px solid #333; padding: 10px 0; margin-bottom: 5px;">
-            <div style="display: flex; justify-content: space-between;">
-                <strong style="color: #fff;"><input type="text" class="input-transparent" name="nome" placeholder="Novo Feitiço" onblur="salvarLista('magias')"></strong>
-                <span style="color: #b388ff;"><input type="text" class="input-transparent" name="circulo" placeholder="1" style="width: 20px; text-align: center; color: #b388ff;" onblur="salvarLista('magias')">º</span>
-            </div>
-            <div style="color: #ccc; font-size: 0.85em; margin-top: 5px;">
-                <textarea class="input-transparent" name="efeito" rows="1" placeholder="Efeito..." onblur="salvarLista('magias')"></textarea>
-            </div>
-            <button class="btn-delete-item" onclick="removerItem(this, 'magias')"><span class="material-icons">delete</span></button>
-        </div>`;
+    const html = `<div class="card-container item-row" style="border-bottom: 1px solid #333; padding: 10px 0; margin-bottom: 5px;">
+        <div style="display: flex; justify-content: space-between;">
+            <strong style="color: #fff; flex-grow: 1;"><input type="text" class="input-transparent" name="nome" placeholder="Novo Feitiço" onblur="salvarLista('magias')"></strong>
+            <span style="color: #b388ff; white-space: nowrap;"><input type="text" class="input-transparent" name="circulo" placeholder="1" style="width: 20px; text-align: center; color: #b388ff;" onblur="salvarLista('magias')">º</span>
+        </div>
+        <div style="color: #ccc; font-size: 0.85em; margin-top: 5px;">
+            <textarea class="input-transparent" name="efeito" rows="1" placeholder="Efeito..." onblur="salvarLista('magias')"></textarea>
+        </div>
+        <button class="btn-delete-item" onclick="removerItem(this, 'magias')"><span class="material-icons">delete</span></button>
+    </div>`;
     document.getElementById('lista-magias').insertAdjacentHTML('beforeend', html);
 }
 
 function adicionarItemInventario() {
-    const html = `
-        <div class="card-container item-row" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333;">
-            <span style="flex-grow: 1;">
-                <input type="text" class="input-transparent" name="nome" placeholder="Item" style="display:inline; width: auto;" onblur="salvarLista('inventario')"> 
-                (x<input type="text" class="input-transparent" name="qtd" value="1" style="display:inline; width: 25px; text-align: center;" onblur="salvarLista('inventario')">)
-            </span>
-            <span style="color: var(--gold-dim);">Espaços: <input type="text" class="input-transparent" name="espacos" value="0" style="display:inline; width: 25px; text-align: center;" onblur="salvarLista('inventario')"></span>
-            <button class="btn-delete-item" onclick="removerItem(this, 'inventario')"><span class="material-icons">delete</span></button>
-        </div>`;
+    const html = `<div class="card-container item-row" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333;">
+        <span style="flex-grow: 1;">
+            <input type="text" class="input-transparent" name="nome" placeholder="Item" style="display:inline; width: auto;" onblur="salvarLista('inventario')"> 
+            (x<input type="text" class="input-transparent" name="qtd" value="1" style="display:inline; width: 25px; text-align: center;" onblur="salvarLista('inventario')">)
+        </span>
+        <span style="color: var(--gold-dim);">Espaços: <input type="text" class="input-transparent" name="espacos" value="0" style="display:inline; width: 25px; text-align: center;" onblur="salvarLista('inventario')"></span>
+        <button class="btn-delete-item" onclick="removerItem(this, 'inventario')"><span class="material-icons">delete</span></button>
+    </div>`;
     document.getElementById('lista-inventario').insertAdjacentHTML('beforeend', html);
 }
 

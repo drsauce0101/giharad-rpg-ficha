@@ -4,25 +4,186 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giharad RPG - Seleção</title>
-    <link href="{{ url_for('static', path='css/style.css') }}?v=10" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        /* 1. FONTES E VARIÁVEIS */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:ital,wght@0,400;0,700;1,400&family=MedievalSharp&display=swap');
+
+        :root {
+            --bg-dark: #121212;
+            --panel-bg: #1e1e1e;
+            --panel-border: #3e3e3e;
+            --gold-main: #c5a059;
+            --gold-bright: #ffd700;
+            --gold-dim: #8a6d3b;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+        }
+
+        /* 2. GERAL */
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-main);
+            padding: 20px;
+            padding-bottom: 80px;
+            margin: 0;
+            min-height: 100vh;
+            position: relative;
+            background-color: #000;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: url('/static/img/medieval-background.jpg') no-repeat center center;
+            background-size: cover;
+            filter: blur(4px) brightness(0.4) sepia(0.3);
+            transform: scale(1.1);
+        }
+
+        h1, h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-main);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        a { text-decoration: none; transition: 0.3s; color: inherit; }
+
+        /* 3. LAYOUT DA INDEX */
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(20, 20, 20, 0.95);
+            padding: 30px;
+            border: 3px double var(--gold-dim);
+            box-shadow: 0 0 0 1px #000, 0 20px 50px rgba(0, 0, 0, 0.9);
+            border-radius: 4px;
+            margin: 40px auto;
+        }
+
+        .hub-header {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-bottom: 2px solid var(--gold-dim); padding-bottom: 15px; margin-bottom: 30px; text-align: center;
+        }
+
+        .char-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            justify-items: center;
+        }
+
+        /* 4. CARTÕES DE PERSONAGEM */
+        .char-card {
+            position: relative;
+            padding: 20px;
+            background: linear-gradient(160deg, #252525, #151515);
+            border: 1px solid var(--panel-border);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            transition: 0.3s;
+            text-decoration: none !important;
+            display: flex; flex-direction: column;
+            color: inherit;
+            width: 100%; max-width: 320px; height: 280px;
+            box-sizing: border-box; border-radius: 4px;
+        }
+
+        .char-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--gold-main);
+            box-shadow: 0 15px 30px rgba(197, 160, 89, 0.2);
+            cursor: pointer;
+        }
+
+        .char-info {
+            font-size: 0.9em; color: #888; font-style: italic; margin-bottom: 15px;
+            border-bottom: 1px solid #333; padding-bottom: 10px;
+        }
+
+        /* Botão Adicionar Novo */
+        .card-add {
+            justify-content: center; align-items: center;
+            border-style: dashed !important; border-color: #444 !important;
+            background: rgba(0, 0, 0, 0.2) !important;
+        }
+        .card-add .material-icons {
+            font-size: 4em; color: #333; margin-bottom: 10px; transition: 0.3s;
+        }
+        .card-add:hover .material-icons {
+            color: var(--gold-main); transform: scale(1.1);
+        }
+
+        /* 5. MINI BARRAS DE STATUS */
+        .mini-bars {
+            display: grid; gap: 8px; margin-top: auto;
+        }
+        .mini-bar-row {
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 0.75em; color: #aaa;
+        }
+        .mini-track {
+            flex-grow: 1; background: #000; height: 6px; margin-left: 10px;
+            border-radius: 2px; border: 1px solid #333; overflow: hidden;
+        }
+        .mini-fill {
+            height: 100%; display: block;
+        }
+
+        /* 6. BOTÃO DELETAR */
+        .btn-remove {
+            cursor: pointer; transition: 0.2s; background: rgba(0,0,0,0.6);
+            border: 1px solid #555; border-radius: 50%; width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .btn-remove:hover {
+            border-color: #ff5252; background: rgba(255, 82, 82, 0.2);
+        }
+        .btn-remove .material-icons { color: #fff; font-size: 16px; }
+        .btn-remove:hover .material-icons { color: #ff5252; }
+
+        /* 7. FOOTER */
+        .app-footer {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 80px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 40px; box-sizing: border-box; z-index: 100;
+            background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+            pointer-events: none;
+        }
+        .footer-text {
+            font-family: 'Cinzel', serif; font-size: 0.8em; color: var(--gold-dim);
+            text-transform: uppercase; letter-spacing: 2px; pointer-events: auto;
+            text-shadow: 0 2px 2px #000;
+        }
+        .footer-logo {
+            height: 50px; width: auto; filter: drop-shadow(0 0 5px #000) sepia(0.5);
+            pointer-events: auto; opacity: 0.8; transition: 0.3s;
+        }
+        .footer-logo:hover {
+            opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 10px var(--gold-dim));
+        }
+    </style>
 </head>
 <body>
 
-<div class="container" style="max-width: 1000px; border-radius: 0;">
+<div class="container">
     
-    <div class="hub-header" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+    <div class="hub-header">
         <h1 style="margin: 0; border: none; font-size: 2.2em; width: 100%;">Fichas de Jogador</h1>
         <span style="color: #666; font-family: 'Cinzel', serif;">Selecione seu Personagem</span>
     </div>
 
     <div class="char-grid">
         {% for p in personagens %}
-        <div class="char-card" style="border-radius: 0;">
+        <div class="char-card">
             
             <form action="/deletar/{{ p.id }}" method="post" onsubmit="return confirm('Tem certeza que deseja deletar {{ p.nome }}?');" style="position: absolute; top: 10px; right: 10px; z-index: 50;">
-                <button type="submit" class="btn-remove" style="width: 30px; height: 30px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); border: 1px solid #555; box-shadow: none;">
-                    <span class="material-icons" style="font-size: 16px; color: #fff;">close</span>
+                <button type="submit" class="btn-remove">
+                    <span class="material-icons">close</span>
                 </button>
             </form>
 
@@ -30,7 +191,7 @@
                 
                 <div style="display: flex; align-items: center; gap: 10px; padding-right: 40px; margin-bottom: 5px;">
                     <h2 style="margin: 0; font-size: 1.5em; line-height: 1; text-decoration: none;">{{ p.nome }}</h2>
-                    <span style="background: #111; color: var(--gold-main); padding: 3px 8px; border-radius: 0; font-size: 0.7em; border: 1px solid #444; white-space: nowrap; font-family: 'Cinzel', serif;">
+                    <span style="background: #111; color: var(--gold-main); padding: 3px 8px; border-radius: 2px; font-size: 0.7em; border: 1px solid #444; white-space: nowrap; font-family: 'Cinzel', serif;">
                         Nvl {{ p.nivel }}
                     </span>
                 </div>
@@ -42,28 +203,28 @@
                 <div class="mini-bars">
                     <div class="mini-bar-row">
                         <span style="color: #ef9a9a; width: 25px;">PV</span>
-                        <div class="mini-track" style="border-radius: 0;">
+                        <div class="mini-track">
                             <div class="mini-fill" style="width: {{ (p.pv_atual / p.pv_max * 100) if p.pv_max > 0 else 0 }}%; background-color: #b71c1c;"></div>
                         </div>
                     </div>
 
                     <div class="mini-bar-row">
                         <span style="color: #fff59d; width: 25px;">PA</span>
-                        <div class="mini-track" style="border-radius: 0;">
+                        <div class="mini-track">
                             <div class="mini-fill" style="width: {{ (p.pa_atual / p.pa_max * 100) if p.pa_max > 0 else 0 }}%; background-color: #f57f17;"></div>
                         </div>
                     </div>
 
                     <div class="mini-bar-row">
                         <span style="color: #90caf9; width: 25px;">PH</span>
-                        <div class="mini-track" style="border-radius: 0;">
+                        <div class="mini-track">
                             <div class="mini-fill" style="width: {{ (p.ph_atual / p.ph_max * 100) if p.ph_max > 0 else 0 }}%; background-color: #0d47a1;"></div>
                         </div>
                     </div>
 
                     <div class="mini-bar-row">
                         <span style="color: #e1bee7; width: 25px;">PG</span>
-                        <div class="mini-track" style="border-radius: 0;">
+                        <div class="mini-track">
                             <div class="mini-fill" style="width: {{ (p.pg_atual / p.pg_max * 100) if p.pg_max > 0 else 0 }}%; background-color: #7b1fa2;"></div>
                         </div>
                     </div>
@@ -72,7 +233,7 @@
         </div>
         {% endfor %}
 
-        <a href="/novo" class="char-card card-add" style="border-radius: 0; text-decoration: none !important;">
+        <a href="/novo" class="char-card card-add">
             <span class="material-icons">add_circle_outline</span>
             <span style="color: #666; font-family: 'Cinzel', serif; text-decoration: none;">Criar Novo</span>
         </a>
@@ -82,7 +243,7 @@
 
 <div class="app-footer">
     <span class="footer-text">Criado por Thiago "DrSauce" - v1.0</span>
-    <img src="{{ url_for('static', path='img/logo.png') }}" alt="Logo Giharad" class="footer-logo">
+    <img src="/static/img/logo.png" alt="Logo Giharad" class="footer-logo">
 </div>
 
 </body>
