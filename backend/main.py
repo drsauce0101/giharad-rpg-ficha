@@ -26,6 +26,16 @@ LISTA_COMPETENCIAS = [
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     SQLModel.metadata.create_all(engine)
+    try:
+        with Session(engine) as session:
+            from sqlalchemy import text
+            session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_fisico INTEGER DEFAULT 0"))
+            session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_presenca INTEGER DEFAULT 0"))
+            session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_carisma INTEGER DEFAULT 0"))
+            session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_astucia INTEGER DEFAULT 0"))
+            session.commit()
+    except Exception:
+        pass
     yield
 
 app = FastAPI(lifespan=lifespan)
@@ -85,6 +95,7 @@ def criar_personagem_direto(session: Session = Depends(get_session)):
         classe="Nenhuma",
         nivel=1,
         fisico=4, presenca=4, carisma=4, astucia=4,
+        bonus_fisico=0, bonus_presenca=0, bonus_carisma=0, bonus_astucia=0,
         pv_max=10, pv_atual=10,
         pa_max=3, pa_atual=3,
         defesa=10,
@@ -131,7 +142,7 @@ async def api_atualizar_campo(
     try:
         for campo, valor in data.items():
             # Converte números se necessário
-            if campo in ['nivel', 'pv_max', 'pv_atual', 'pa_max', 'pa_atual', 'defesa', 'fisico', 'presenca', 'carisma', 'astucia']:
+            if campo in ['nivel', 'pv_max', 'pv_atual', 'pa_max', 'pa_atual', 'defesa', 'fisico', 'presenca', 'carisma', 'astucia', 'bonus_fisico', 'bonus_presenca', 'bonus_carisma', 'bonus_astucia']:
                 valor = safe_int(valor)
             
             if hasattr(personagem, campo):

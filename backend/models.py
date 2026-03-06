@@ -30,6 +30,12 @@ class Personagem(SQLModel, table=True):
     carisma: int
     astucia: int
 
+    # Bônus/Penalidades dos Atributos
+    bonus_fisico: int = Field(default=0)
+    bonus_presenca: int = Field(default=0)
+    bonus_carisma: int = Field(default=0)
+    bonus_astucia: int = Field(default=0)
+
     # Expertise e Incapacidade
     fisico_exp: int = Field(default=0)
     fisico_inc: int = Field(default=0)

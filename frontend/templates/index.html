@@ -23,7 +23,7 @@
             <div class="char-card" style="position: relative;">
 
                 <form action="/deletar/{{ p.id }}" method="post"
-                    onsubmit="return confirm('Tem certeza que deseja banir {{ p.nome }} dos registros?');" 
+                    onsubmit="return confirm('Tem certeza que deseja banir {{ p.nome }} dos registros?');"
                     style="position: absolute; top: 10px; right: 10px; z-index: 50; margin: 0;">
                     <button type="submit" class="btn-remove" title="Deletar Personagem">
                         <span class="material-icons">close</span>
@@ -32,7 +32,8 @@
 
                 <a href="/ficha/{{ p.id }}" class="char-card-link">
 
-                    <div style="display: flex; align-items: center; gap: 10px; padding-right: 40px; margin-bottom: 5px;">
+                    <div
+                        style="display: flex; align-items: center; gap: 10px; padding-right: 40px; margin-bottom: 5px;">
                         <h2 class="char-name-title">{{ p.nome }}</h2>
                         <span class="char-badge-level">
                             Nvl {{ p.nivel }}
@@ -45,17 +46,20 @@
 
                     <div class="mini-bars">
                         {% set status = [
-                            ('PV', p.pv_atual, p.pv_max, '#b71c1c', '#ef9a9a'),
-                            ('PA', p.pa_atual, p.pa_max, '#f57f17', '#fff59d'),
-                            ('PH', p.ph_atual, p.ph_max, '#0d47a1', '#90caf9'),
-                            ('PG', p.pg_atual, p.pg_max, '#7b1fa2', '#e1bee7')
+                        ('PV', p.pv_atual, p.pv_max, '#b71c1c', '#ef9a9a'),
+                        ('PA', p.pa_atual, p.pa_max, '#f57f17', '#fff59d'),
+                        ('PH', p.ph_atual, p.ph_max, '#0d47a1', '#90caf9'),
+                        ('PG', p.pg_atual, p.pg_max, '#7b1fa2', '#e1bee7')
                         ] %}
-                        
+
                         {% for label, atual, max, color, text_color in status %}
                         <div class="mini-bar-row">
-                            <span style="color: {{ text_color }}; width: 25px; font-weight: bold; font-size: 0.7em;">{{ label }}</span>
+                            <span style="color: {{ text_color }}; width: 25px; font-weight: bold; font-size: 0.7em;">{{
+                                label }}</span>
                             <div class="mini-track">
-                                <div class="mini-fill" style="width: {{ (atual / max * 100)|round(1) if max > 0 else 0 }}%; background-color: {{ color }};"></div>
+                                <div class="mini-fill"
+                                    style="width: {{ (atual / max * 100)|round(1) if max > 0 else 0 }}%; background-color: {{ color }};">
+                                </div>
                             </div>
                         </div>
                         {% endfor %}
@@ -64,9 +68,12 @@
             </div>
             {% endfor %}
 
-            <a href="/novo" class="char-card card-add" style="display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed #444; transition: 0.3s;">
+            <a href="/novo" class="char-card card-add"
+                style="display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed #444; transition: 0.3s;">
                 <span class="material-icons" style="font-size: 3em; color: var(--gold-main);">add_circle_outline</span>
-                <span style="color: var(--gold-main); font-family: 'Cinzel', serif; margin-top: 10px; font-weight: bold;">FORJAR NOVA LENDA</span>
+                <span
+                    style="color: var(--gold-main); font-family: 'Cinzel', serif; margin-top: 10px; font-weight: bold;">FORJAR
+                    NOVA LENDA</span>
                 <small style="color: #666; font-size: 0.7em; margin-top: 5px;">Criação Instantânea</small>
             </a>
         </div>
@@ -82,4 +89,5 @@
     </div>
 
 </body>
+
 </html>

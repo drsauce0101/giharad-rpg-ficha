@@ -16,13 +16,17 @@
         <div class="ficha-header-flex">
             <div class="flex-grow-1">
                 <h1 class="ficha-title">
-                    <input type="text" class="input-transparent" value="{{ ficha.nome }}" onblur="salvar('nome', this.value)">
+                    <input type="text" class="input-transparent" value="{{ ficha.nome }}"
+                        onblur="salvar('nome', this.value)">
                 </h1>
                 <div class="ficha-subtitle-flex">
-                    <input type="text" class="input-transparent w-auto" style="min-width: 100px;" value="{{ ficha.raca }}" onblur="salvar('raca', this.value)">
-                    <input type="text" class="input-transparent w-auto" style="min-width: 100px;" value="{{ ficha.classe }}" onblur="salvar('classe', this.value)">
+                    <input type="text" class="input-transparent w-auto" style="min-width: 100px;"
+                        value="{{ ficha.raca }}" onblur="salvar('raca', this.value)">
+                    <input type="text" class="input-transparent w-auto" style="min-width: 100px;"
+                        value="{{ ficha.classe }}" onblur="salvar('classe', this.value)">
                     | Nível
-                    <input type="number" class="input-transparent w-40 text-center" value="{{ ficha.nivel }}" onblur="salvar('nivel', this.value)">
+                    <input type="number" class="input-transparent w-40 text-center" value="{{ ficha.nivel }}"
+                        onblur="salvar('nivel', this.value)">
                 </div>
             </div>
             <div>
@@ -40,62 +44,108 @@
 
         <div id="Geral" class="tabcontent" style="display: block;">
             <div class="grid-row grid-3 panel-box-bordered text-center">
-                <div><span class="stat-label">Antecedente</span><br><input type="text" class="input-transparent text-center font-bold" value="{{ ficha.antecedente }}" onblur="salvar('antecedente', this.value)"></div>
-                <div><span class="stat-label">Guardião</span><br><input type="text" class="input-transparent text-center font-bold" value="{{ ficha.guardiao }}" onblur="salvar('guardiao', this.value)"></div>
-                <div><span class="stat-label">Ascensão</span><br><input type="text" class="input-transparent text-center font-bold" value="{{ ficha.ascensao }}" onblur="salvar('ascensao', this.value)"></div>
+                <div><span class="stat-label">Antecedente</span><br><input type="text"
+                        class="input-transparent text-center font-bold" value="{{ ficha.antecedente }}"
+                        onblur="salvar('antecedente', this.value)"></div>
+                <div><span class="stat-label">Guardião</span><br><input type="text"
+                        class="input-transparent text-center font-bold" value="{{ ficha.guardiao }}"
+                        onblur="salvar('guardiao', this.value)"></div>
+                <div><span class="stat-label">Ascensão</span><br><input type="text"
+                        class="input-transparent text-center font-bold" value="{{ ficha.ascensao }}"
+                        onblur="salvar('ascensao', this.value)"></div>
             </div>
 
             <div class="grid-row grid-2">
                 <div class="bars-grid">
-                    <div class="bar-box pv"><span>Vida</span> <strong><input type="number" class="input-transparent w-35 text-right" value="{{ ficha.pv_atual }}" onblur="salvar('pv_atual', this.value)"> / <input type="number" class="input-transparent w-35 text-left" value="{{ ficha.pv_max }}" onblur="salvar('pv_max', this.value)"></strong></div>
-                    <div class="bar-box pa"><span>Ação</span> <strong><input type="number" class="input-transparent w-35 text-right" value="{{ ficha.pa_atual }}" onblur="salvar('pa_atual', this.value)"> / <input type="number" class="input-transparent w-35 text-left" value="{{ ficha.pa_max }}" onblur="salvar('pa_max', this.value)"></strong></div>
-                    <div class="bar-box ph"><span>Hafa</span> <strong><input type="number" class="input-transparent w-35 text-right" value="{{ ficha.ph_atual }}" onblur="salvar('ph_atual', this.value)"> / <input type="number" class="input-transparent w-35 text-left" value="{{ ficha.ph_max }}" onblur="salvar('ph_max', this.value)"></strong></div>
-                    <div class="bar-box pg"><span>Grima</span> <strong><input type="number" class="input-transparent w-35 text-right" value="{{ ficha.pg_atual }}" onblur="salvar('pg_atual', this.value)"> / <input type="number" class="input-transparent w-35 text-left" value="{{ ficha.pg_max }}" onblur="salvar('pg_max', this.value)"></strong></div>
-                    <div class="bar-box bar-box-defesa"><span class="defesa-label">DEFESA <input type="number" class="input-transparent w-50 text-center font-bold" value="{{ ficha.defesa }}" onblur="salvar('defesa', this.value)"></span></div>
+                    <div class="bar-box pv"><span>Vida</span> <strong><input type="number"
+                                class="input-transparent w-35 text-right" value="{{ ficha.pv_atual }}"
+                                onblur="salvar('pv_atual', this.value)"> / <input type="number"
+                                class="input-transparent w-35 text-left" value="{{ ficha.pv_max }}"
+                                onblur="salvar('pv_max', this.value)"></strong></div>
+                    <div class="bar-box pa"><span>Ação</span> <strong><input type="number"
+                                class="input-transparent w-35 text-right" value="{{ ficha.pa_atual }}"
+                                onblur="salvar('pa_atual', this.value)"> / <input type="number"
+                                class="input-transparent w-35 text-left" value="{{ ficha.pa_max }}"
+                                onblur="salvar('pa_max', this.value)"></strong></div>
+                    <div class="bar-box ph"><span>Hafa</span> <strong><input type="number"
+                                class="input-transparent w-35 text-right" value="{{ ficha.ph_atual }}"
+                                onblur="salvar('ph_atual', this.value)"> / <input type="number"
+                                class="input-transparent w-35 text-left" value="{{ ficha.ph_max }}"
+                                onblur="salvar('ph_max', this.value)"></strong></div>
+                    <div class="bar-box pg"><span>Grima</span> <strong><input type="number"
+                                class="input-transparent w-35 text-right" value="{{ ficha.pg_atual }}"
+                                onblur="salvar('pg_atual', this.value)"> / <input type="number"
+                                class="input-transparent w-35 text-left" value="{{ ficha.pg_max }}"
+                                onblur="salvar('pg_max', this.value)"></strong></div>
+                    <div class="bar-box bar-box-defesa"><span class="defesa-label">DEFESA <input type="number"
+                                class="input-transparent w-50 text-center font-bold" value="{{ ficha.defesa }}"
+                                onblur="salvar('defesa', this.value)"></span></div>
                 </div>
 
                 <div class="stats-grid grid-4">
                     {% set attrs = [('FÍS', 'fisico'), ('PRE', 'presenca'), ('CAR', 'carisma'), ('AST', 'astucia')] %}
-                    
+
                     {% macro draw_svg(valor) %}
-                        {% if valor == 4 %}<polygon points="50,10 90,85 10,85" />
-                        {% elif valor == 6 %}<rect x="15" y="15" width="70" height="70" />
-                        {% elif valor == 8 %}<polygon points="50,5 90,50 50,95 10,50" />
-                        {% elif valor == 10 %}<polygon points="50,5 85,35 50,95 15,35" />
-                        {% elif valor == 12 %}<polygon points="50,5 90,40 75,90 25,90 10,40" />
-                        {% elif valor == 20 %}<polygon points="50,5 90,25 90,75 50,95 10,75 10,25" />
-                        {% else %}<circle cx="50" cy="50" r="40" />{% endif %}
+                    {% if valor == 4 %}
+                    <polygon points="50,10 90,85 10,85" />
+                    {% elif valor == 6 %}
+                    <rect x="15" y="15" width="70" height="70" />
+                    {% elif valor == 8 %}
+                    <polygon points="50,5 90,50 50,95 10,50" />
+                    {% elif valor == 10 %}
+                    <polygon points="50,5 85,35 50,95 15,35" />
+                    {% elif valor == 12 %}
+                    <polygon points="50,5 90,40 75,90 25,90 10,40" />
+                    {% elif valor == 20 %}
+                    <polygon points="50,5 90,25 90,75 50,95 10,75 10,25" />
+                    {% else %}
+                    <circle cx="50" cy="50" r="40" />{% endif %}
                     {% endmacro %}
 
                     {% for label, field in attrs %}
                     <div class="stat-box" style="padding: 10px 0;">
                         <span class="stat-label">{{ label }}</span>
-                        
+
+                        <div style="text-align: center; margin-top: -5px; margin-bottom: 5px;">
+                            {% set attr_bonus = ficha|attr('bonus_' ~ field)|int %}
+                            {% set bonus_color = '#fff' %}
+                            {% if attr_bonus > 0 %}{% set bonus_color = '#4caf50' %}{% elif attr_bonus < 0 %}{% set
+                                bonus_color='#f44336' %}{% endif %} <input type="number"
+                                class="input-transparent w-40 text-center font-bold"
+                                style="color: {{ bonus_color }}; font-size: 1.1rem; border-bottom: 1px dashed rgba(255,255,255,0.3);"
+                                title="Bônus/Penalidade do Atributo" value="{{ attr_bonus }}"
+                                oninput="atualizarCor(this)" onblur="salvar('bonus_{{ field }}', this.value)">
+                        </div>
+
                         <div class="dice-container">
                             {% set valor = ficha|attr(field)|int %}
                             <svg class="dice-svg" viewBox="0 0 100 100">
                                 {{ draw_svg(valor) }}
                             </svg>
                             <span class="dice-label">{{ valor }}</span>
-                            <select class="dice-select-hidden" onchange="salvar('{{ field }}', this.value).then(() => location.reload())">
+                            <select class="dice-select-hidden"
+                                onchange="salvar('{{ field }}', this.value).then(() => location.reload())">
                                 {% for faces in [4, 6, 8, 10, 12, 20] %}
-                                <option value="{{ faces }}" {{ 'selected' if valor == faces else '' }}>d{{ faces }}</option>
+                                <option value="{{ faces }}" {{ 'selected' if valor==faces else '' }}>d{{ faces }}
+                                </option>
                                 {% endfor %}
                             </select>
                         </div>
 
                         <div style="display: flex; gap: 10px; margin-top: 10px; justify-content: center;">
-                            
+
                             {% set exp_val = ficha|attr(field ~ '_exp')|int %}
                             <div class="mini-dice-container expertise-dice" title="Expertise (+)">
                                 <svg class="dice-svg {{ 'empty-dice' if exp_val == 0 else '' }}" viewBox="0 0 100 100">
                                     {{ draw_svg(exp_val) }}
                                 </svg>
                                 <span class="mini-dice-label">{{ exp_val if exp_val > 0 else '' }}</span>
-                                <select class="dice-select-hidden" onchange="salvar('{{ field }}_exp', this.value).then(() => location.reload())">
-                                    <option value="0" {{ 'selected' if exp_val == 0 else '' }}>-</option>
+                                <select class="dice-select-hidden"
+                                    onchange="salvar('{{ field }}_exp', this.value).then(() => location.reload())">
+                                    <option value="0" {{ 'selected' if exp_val==0 else '' }}>-</option>
                                     {% for faces in [4, 6, 8, 10, 12] %}
-                                    <option value="{{ faces }}" {{ 'selected' if exp_val == faces else '' }}>d{{ faces }}</option>
+                                    <option value="{{ faces }}" {{ 'selected' if exp_val==faces else '' }}>d{{ faces }}
+                                    </option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -106,10 +156,12 @@
                                     {{ draw_svg(inc_val) }}
                                 </svg>
                                 <span class="mini-dice-label">{{ inc_val if inc_val > 0 else '' }}</span>
-                                <select class="dice-select-hidden" onchange="salvar('{{ field }}_inc', this.value).then(() => location.reload())">
-                                    <option value="0" {{ 'selected' if inc_val == 0 else '' }}>-</option>
+                                <select class="dice-select-hidden"
+                                    onchange="salvar('{{ field }}_inc', this.value).then(() => location.reload())">
+                                    <option value="0" {{ 'selected' if inc_val==0 else '' }}>-</option>
                                     {% for faces in [4, 6, 8, 10, 12] %}
-                                    <option value="{{ faces }}" {{ 'selected' if inc_val == faces else '' }}>d{{ faces }}</option>
+                                    <option value="{{ faces }}" {{ 'selected' if inc_val==faces else '' }}>d{{ faces }}
+                                    </option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -121,14 +173,18 @@
             </div>
 
             <div class="grid-row grid-3 panel-box-bordered-no-radius mt-20">
-                {% for m_tipo, m_campo, m_cor in [('Morte', 'marcadores_morte', '#ff5252'), ('Fadiga', 'marcadores_fadiga', '#ffd700'), ('Cicatrizes', 'marcadores_cicatrizes', '#b388ff')] %}
+                {% for m_tipo, m_campo, m_cor in [('Morte', 'marcadores_morte', '#ff5252'), ('Fadiga',
+                'marcadores_fadiga', '#ffd700'), ('Cicatrizes', 'marcadores_cicatrizes', '#b388ff')] %}
                 <div class="stat-box">
                     <label class="stat-label" style="color: {{ m_cor }};">{{ m_tipo }}</label>
                     <div class="marcador-flex">
                         {% set m_valor = ficha|attr(m_campo)|int %}
                         {% for i in range(1, 5) %}
                         {% set m_bg = m_cor if m_valor >= i else 'transparent' %}
-                        <div class="marcador-circulo marcador-click" onclick="marcar('{{ m_campo }}', {{ i }}, {{ m_valor }})" style="width: 18px; height: 18px; border: 1px solid {{ m_cor }}; background: {{ m_bg }};"></div>
+                        <div class="marcador-circulo marcador-click"
+                            onclick="marcar('{{ m_campo }}', {{ i }}, {{ m_valor }})"
+                            style="width: 18px; height: 18px; border: 1px solid {{ m_cor }}; background: {{ m_bg }};">
+                        </div>
                         {% endfor %}
                     </div>
                 </div>
@@ -139,130 +195,164 @@
             <div class="grid-row grid-3 skills-panel mt-10">
                 {% for skill, valor in ficha.competencias.items() %}
                 {% set skill_color = '#fff' %}
-                {% if valor > 0 %}{% set skill_color = '#4caf50' %}{% elif valor < 0 %}{% set skill_color = '#f44336' %}{% endif %}
-                <div class="skill-row">
+                {% if valor > 0 %}{% set skill_color = '#4caf50' %}{% elif valor < 0 %}{% set skill_color='#f44336' %}{%
+                    endif %} <div class="skill-row">
                     <span class="skill-name">{{ skill }}</span>
                     <strong class="skill-value-wrap">
-                        <input type="number" class="input-transparent comp-input w-40 text-right" data-skill="{{ skill }}" style="color: {{ skill_color }};" value="{{ valor }}" oninput="atualizarCor(this)" onblur="salvarCompetencia()">
+                        <input type="number" class="input-transparent comp-input w-40 text-right"
+                            data-skill="{{ skill }}" style="color: {{ skill_color }};" value="{{ valor }}"
+                            oninput="atualizarCor(this)" onblur="salvarCompetencia()">
                     </strong>
-                </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
+    </div>
 
-        <div id="Habilidades" class="tabcontent">
-            <h3 class="section-title">Ataques</h3>
-            <div id="lista-ataques">
-                {% for atk in ficha.ataques %}
-                <div class="card-container item-row atk-card">
-                    <div class="atk-header">
-                        <strong class="atk-name-wrap">
-                            <input type="text" class="input-transparent" name="nome" value="{{ atk.nome }}" placeholder="Nome do Ataque" onblur="salvarLista('ataques')">
-                        </strong>
-                        <span class="atk-reach">
-                            Alcance: <input type="text" class="input-transparent w-80 text-right italic" name="alcance" value="{{ atk.alcance }}" onblur="salvarLista('ataques')">
-                        </span>
-                    </div>
-                    <div class="atk-stats-grid">
-                        <div>Acerto: <strong class="white-text"><input type="text" class="input-transparent d-inline w-40" name="acerto" value="{{ atk.acerto }}" onblur="salvarLista('ataques')"></strong></div>
-                        <div>Dano: <strong class="white-text"><input type="text" class="input-transparent d-inline w-60" name="dano" value="{{ atk.dano }}" onblur="salvarLista('ataques')"></strong></div>
-                        <div>Margem: <input type="text" class="input-transparent d-inline w-40" name="margem" value="{{ atk.margem }}" onblur="salvarLista('ataques')"></div>
-                        <div>Explosivo: <input type="text" class="input-transparent d-inline w-40" name="explosivo" value="{{ atk.explosivo }}" onblur="salvarLista('ataques')"></div>
-                    </div>
-                    <button class="btn-delete-item" onclick="removerItem(this, 'ataques')"><span class="material-icons">delete</span></button>
-                </div>
-                {% endfor %}
-            </div>
-            <button class="btn-add" onclick="adicionarAtaque()">+ Adicionar Ataque</button>
-
-            <h3 class="section-title mt-30">Habilidades</h3>
-            <div id="lista-habilidades">
-                {% for hab in ficha.habilidades %}
-                <div class="card-container item-row hab-card">
-                    <div class="hab-header">
-                        <strong class="hab-name-wrap">
-                            <input type="text" class="input-transparent" name="nome" value="{{ hab.nome }}" placeholder="Nome da Habilidade" onblur="salvarLista('habilidades')">
-                        </strong>
-                        <span class="hab-cost-wrap">
-                            <input type="text" class="input-transparent w-100 text-center" name="custo" value="{{ hab.custo }}" placeholder="-" onblur="salvarLista('habilidades')">
-                        </span>
-                    </div>
-                    <div class="hab-effect-wrap">
-                        <textarea class="input-transparent" name="efeito" rows="2" placeholder="Descrição do efeito..." onblur="salvarLista('habilidades')">{{ hab.efeito }}</textarea>
-                    </div>
-                    <button class="btn-delete-item" onclick="removerItem(this, 'habilidades')"><span class="material-icons">delete</span></button>
-                </div>
-                {% endfor %}
-            </div>
-            <button class="btn-add" onclick="adicionarHabilidade()">+ Adicionar Habilidade</button>
-        </div>
-
-        <div id="Magia" class="tabcontent">
-            <div class="grid-row grid-2 panel-box-bordered">
-                <div class="stat-box"><span class="stat-label">Tradição</span><strong class="magic-tradition-val"><input type="text" class="input-transparent text-center magic-color" value="{{ ficha.tradicao }}" onblur="salvar('tradicao', this.value)"></strong></div>
-                <div class="stat-box"><span class="stat-label">Escolas</span><input type="text" class="input-transparent text-center font-bold" value="{{ ficha.escolas }}" onblur="salvar('escolas', this.value)"></div>
-            </div>
-
-            <div class="grid-row grid-2">
-                <div>
-                    <h3 class="section-title">Conjuração</h3>
-                    <div class="grid-row grid-2 mb-20">
-                        <div class="bar-box magic-slot-box"><span>Atributo</span> <strong><input type="text" class="input-transparent w-80 text-right" value="{{ ficha.atributo_chave }}" onblur="salvar('atributo_chave', this.value)"></strong></div>
-                        <div class="bar-box magic-slot-box"><span>CD Feitiços</span> <strong><input type="number" class="input-transparent w-40 text-right" value="{{ ficha.cd_magia }}" onblur="salvar('cd_magia', this.value)"></strong></div>
-                    </div>
-                    <h3 class="section-title">Círculos</h3>
-                    <div class="stats-grid grid-3">
-                        {% for i in range(1, 7) %}
-                        <div class="stat-box"><span class="stat-label">{{ i }}º</span><span class="stat-value"><input type="number" class="input-transparent text-center" value="{{ ficha|attr('slots_nv' ~ i) }}" onblur="salvar('slots_nv{{ i }}', this.value)"></span></div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div>
-                    <h3 class="section-title">Grimório</h3>
-                    <div id="lista-magias" class="mag-list-panel">
-                        {% for mag in ficha.magias %}
-                        <div class="card-container item-row mag-card">
-                            <div class="flex-between">
-                                <strong class="mag-name-wrap">
-                                    <input type="text" class="input-transparent" name="nome" value="{{ mag.nome }}" placeholder="Nome do Feitiço" onblur="salvarLista('magias')">
-                                </strong>
-                                <span class="mag-circle-wrap">
-                                    <input type="text" class="input-transparent w-20 text-center magic-color" name="circulo" value="{{ mag.circulo }}" onblur="salvarLista('magias')">º
-                                </span>
-                            </div>
-                            <div class="mag-effect-wrap">
-                                <textarea class="input-transparent" name="efeito" rows="1" placeholder="Efeito..." onblur="salvarLista('magias')">{{ mag.efeito }}</textarea>
-                            </div>
-                            <button class="btn-delete-item" onclick="removerItem(this, 'magias')"><span class="material-icons">delete</span></button>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <button class="btn-add btn-add-magic" onclick="adicionarMagia()">+ Adicionar Magia</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="Inventario" class="tabcontent">
-            <h3 class="section-title">Mochila</h3>
-            <div id="lista-inventario" class="inv-panel">
-                {% for item in ficha.inventario %}
-                <div class="card-container item-row inv-card">
-                    <span class="flex-grow-1">
-                        <input type="text" class="input-transparent d-inline w-auto" name="nome" value="{{ item.nome }}" placeholder="Nome do Item" onblur="salvarLista('inventario')"> 
-                        (x<input type="text" class="input-transparent d-inline w-25 text-center" name="qtd" value="{{ item.qtd }}" onblur="salvarLista('inventario')">)
+    <div id="Habilidades" class="tabcontent">
+        <h3 class="section-title">Ataques</h3>
+        <div id="lista-ataques">
+            {% for atk in ficha.ataques %}
+            <div class="card-container item-row atk-card">
+                <div class="atk-header">
+                    <strong class="atk-name-wrap">
+                        <input type="text" class="input-transparent" name="nome" value="{{ atk.nome }}"
+                            placeholder="Nome do Ataque" onblur="salvarLista('ataques')">
+                    </strong>
+                    <span class="atk-reach">
+                        Alcance: <input type="text" class="input-transparent w-80 text-right italic" name="alcance"
+                            value="{{ atk.alcance }}" onblur="salvarLista('ataques')">
                     </span>
-                    <span class="inv-slot-wrap">Espaços: <input type="text" class="input-transparent d-inline w-25 text-center" name="espacos" value="{{ item.espacos }}" onblur="salvarLista('inventario')"></span>
-                    <button class="btn-delete-item" onclick="removerItem(this, 'inventario')"><span class="material-icons">delete</span></button>
                 </div>
-                {% endfor %}
+                <div class="atk-stats-grid">
+                    <div>Acerto: <strong class="white-text"><input type="text" class="input-transparent d-inline w-40"
+                                name="acerto" value="{{ atk.acerto }}" onblur="salvarLista('ataques')"></strong></div>
+                    <div>Dano: <strong class="white-text"><input type="text" class="input-transparent d-inline w-60"
+                                name="dano" value="{{ atk.dano }}" onblur="salvarLista('ataques')"></strong></div>
+                    <div>Margem: <input type="text" class="input-transparent d-inline w-40" name="margem"
+                            value="{{ atk.margem }}" onblur="salvarLista('ataques')"></div>
+                    <div>Explosivo: <input type="text" class="input-transparent d-inline w-40" name="explosivo"
+                            value="{{ atk.explosivo }}" onblur="salvarLista('ataques')"></div>
+                </div>
+                <button class="btn-delete-item" onclick="removerItem(this, 'ataques')"><span
+                        class="material-icons">delete</span></button>
             </div>
-            <button class="btn-add" onclick="adicionarItemInventario()">+ Adicionar Item</button>
+            {% endfor %}
+        </div>
+        <button class="btn-add" onclick="adicionarAtaque()">+ Adicionar Ataque</button>
+
+        <h3 class="section-title mt-30">Habilidades</h3>
+        <div id="lista-habilidades">
+            {% for hab in ficha.habilidades %}
+            <div class="card-container item-row hab-card">
+                <div class="hab-header">
+                    <strong class="hab-name-wrap">
+                        <input type="text" class="input-transparent" name="nome" value="{{ hab.nome }}"
+                            placeholder="Nome da Habilidade" onblur="salvarLista('habilidades')">
+                    </strong>
+                    <span class="hab-cost-wrap">
+                        <input type="text" class="input-transparent w-100 text-center" name="custo"
+                            value="{{ hab.custo }}" placeholder="-" onblur="salvarLista('habilidades')">
+                    </span>
+                </div>
+                <div class="hab-effect-wrap">
+                    <textarea class="input-transparent" name="efeito" rows="2" placeholder="Descrição do efeito..."
+                        onblur="salvarLista('habilidades')">{{ hab.efeito }}</textarea>
+                </div>
+                <button class="btn-delete-item" onclick="removerItem(this, 'habilidades')"><span
+                        class="material-icons">delete</span></button>
+            </div>
+            {% endfor %}
+        </div>
+        <button class="btn-add" onclick="adicionarHabilidade()">+ Adicionar Habilidade</button>
+    </div>
+
+    <div id="Magia" class="tabcontent">
+        <div class="grid-row grid-2 panel-box-bordered">
+            <div class="stat-box"><span class="stat-label">Tradição</span><strong class="magic-tradition-val"><input
+                        type="text" class="input-transparent text-center magic-color" value="{{ ficha.tradicao }}"
+                        onblur="salvar('tradicao', this.value)"></strong></div>
+            <div class="stat-box"><span class="stat-label">Escolas</span><input type="text"
+                    class="input-transparent text-center font-bold" value="{{ ficha.escolas }}"
+                    onblur="salvar('escolas', this.value)"></div>
         </div>
 
-        <div id="Anotacoes" class="tabcontent">
-            <h3 class="section-title">História</h3>
-            <textarea class="input-transparent notes-textarea" onblur="salvar('notas', this.value)">{{ ficha.notas }}</textarea>
+        <div class="grid-row grid-2">
+            <div>
+                <h3 class="section-title">Conjuração</h3>
+                <div class="grid-row grid-2 mb-20">
+                    <div class="bar-box magic-slot-box"><span>Atributo</span> <strong><input type="text"
+                                class="input-transparent w-80 text-right" value="{{ ficha.atributo_chave }}"
+                                onblur="salvar('atributo_chave', this.value)"></strong></div>
+                    <div class="bar-box magic-slot-box"><span>CD Feitiços</span> <strong><input type="number"
+                                class="input-transparent w-40 text-right" value="{{ ficha.cd_magia }}"
+                                onblur="salvar('cd_magia', this.value)"></strong></div>
+                </div>
+                <h3 class="section-title">Círculos</h3>
+                <div class="stats-grid grid-3">
+                    {% for i in range(1, 7) %}
+                    <div class="stat-box"><span class="stat-label">{{ i }}º</span><span class="stat-value"><input
+                                type="number" class="input-transparent text-center"
+                                value="{{ ficha|attr('slots_nv' ~ i) }}"
+                                onblur="salvar('slots_nv{{ i }}', this.value)"></span></div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div>
+                <h3 class="section-title">Grimório</h3>
+                <div id="lista-magias" class="mag-list-panel">
+                    {% for mag in ficha.magias %}
+                    <div class="card-container item-row mag-card">
+                        <div class="flex-between">
+                            <strong class="mag-name-wrap">
+                                <input type="text" class="input-transparent" name="nome" value="{{ mag.nome }}"
+                                    placeholder="Nome do Feitiço" onblur="salvarLista('magias')">
+                            </strong>
+                            <span class="mag-circle-wrap">
+                                <input type="text" class="input-transparent w-20 text-center magic-color" name="circulo"
+                                    value="{{ mag.circulo }}" onblur="salvarLista('magias')">º
+                            </span>
+                        </div>
+                        <div class="mag-effect-wrap">
+                            <textarea class="input-transparent" name="efeito" rows="1" placeholder="Efeito..."
+                                onblur="salvarLista('magias')">{{ mag.efeito }}</textarea>
+                        </div>
+                        <button class="btn-delete-item" onclick="removerItem(this, 'magias')"><span
+                                class="material-icons">delete</span></button>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button class="btn-add btn-add-magic" onclick="adicionarMagia()">+ Adicionar Magia</button>
+            </div>
         </div>
+    </div>
+
+    <div id="Inventario" class="tabcontent">
+        <h3 class="section-title">Mochila</h3>
+        <div id="lista-inventario" class="inv-panel">
+            {% for item in ficha.inventario %}
+            <div class="card-container item-row inv-card">
+                <span class="flex-grow-1">
+                    <input type="text" class="input-transparent d-inline w-auto" name="nome" value="{{ item.nome }}"
+                        placeholder="Nome do Item" onblur="salvarLista('inventario')">
+                    (x<input type="text" class="input-transparent d-inline w-25 text-center" name="qtd"
+                        value="{{ item.qtd }}" onblur="salvarLista('inventario')">)
+                </span>
+                <span class="inv-slot-wrap">Espaços: <input type="text"
+                        class="input-transparent d-inline w-25 text-center" name="espacos" value="{{ item.espacos }}"
+                        onblur="salvarLista('inventario')"></span>
+                <button class="btn-delete-item" onclick="removerItem(this, 'inventario')"><span
+                        class="material-icons">delete</span></button>
+            </div>
+            {% endfor %}
+        </div>
+        <button class="btn-add" onclick="adicionarItemInventario()">+ Adicionar Item</button>
+    </div>
+
+    <div id="Anotacoes" class="tabcontent">
+        <h3 class="section-title">História</h3>
+        <textarea class="input-transparent notes-textarea"
+            onblur="salvar('notas', this.value)">{{ ficha.notas }}</textarea>
+    </div>
 
     </div>
 
@@ -397,7 +487,7 @@
         }
     </script>
 
-    
+
 
 </body>
 
