@@ -1,72 +1,81 @@
 from typing import Optional, Dict, List, Any
-from sqlmodel import Field, SQLModel, JSON
+from sqlmodel import Field, SQLModel
+from sqlalchemy import JSON, Column # Importamos Column também
 
-# -- MODELOS DE DADOS --
+# Função atualizada com acentos e separação de Idioma/Atuação
+def default_competencias():
+    return {
+        "Vigor": 0, "Manejo Animal": 0, "Dissimulação": 0, "Artimanha": 0,
+        "Esoterismo": 0, "Sagacidade": 0, "Condução": 0, "Reflexos": 0,
+        "Fortitude": 0, "Vontade": 0, "Aristocracia": 0, "Coordenação": 0,
+        "Sobrevivência": 0, "Medicina": 0, "Profissão": 0, "Idioma": 0, "Atuação": 0
+    }
+
 class Personagem(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     
-    # Identificação
     nome: str
     jogador: str
     raca: str
     classe: str
     nivel: int = 1
     
-    # Lore
     antecedente: Optional[str] = None
     guardiao: Optional[str] = None
     ascensao: Optional[str] = None
     
-    # Atributos (d4, d6, etc...)
-    forca: int
-    destreza: int
-    constituicao: int
-    inteligencia: int
-    sabedoria: int
+    # Atributos Principais
+    fisico: int
+    presenca: int
     carisma: int
+    astucia: int
+
+    # Expertise e Incapacidade
+    fisico_exp: int = Field(default=0)
+    fisico_inc: int = Field(default=0)
+    presenca_exp: int = Field(default=0)
+    presenca_inc: int = Field(default=0)
+    carisma_exp: int = Field(default=0)
+    carisma_inc: int = Field(default=0)
+    astucia_exp: int = Field(default=0)
+    astucia_inc: int = Field(default=0)
 
     # Status de Combate
-    defesa: int
-    experiencia: int
+    defesa: int = Field(default=10)
+    experiencia: int = Field(default=0)
 
-    # Barras de Status (Máximos e Atuais)
-    pv_max: int
-    pv_atual: int
-    pa_max: int
-    pa_atual: int
-    ph_max: int
-    ph_atual: int
-    pg_max: int
-    pg_atual: int
+    pv_max: int = Field(default=10)
+    pv_atual: int = Field(default=10)
+    pa_max: int = Field(default=3)
+    pa_atual: int = Field(default=3)
+    ph_max: int = Field(default=0)
+    ph_atual: int = Field(default=0)
+    pg_max: int = Field(default=0)
+    pg_atual: int = Field(default=0)
 
-    # Marcadores (0 a 4)
     marcadores_morte: int = 0  
     marcadores_fadiga: int = 0 
     marcadores_cicatrizes: int = 0 
 
-    # -- LISTAS ESPECIAIS --
-    competencias: Dict[str, int] = Field(default={}, sa_type=JSON)
+    # IMPORTANTE: Usando sa_column=Column(JSON) para estabilidade no SQLite
+    competencias: Dict[str, int] = Field(
+        default_factory=default_competencias, 
+        sa_column=Column(JSON)
+    )
     
-    # Lista de Ataques: [{nome, dano, acerto...}]
-    ataques: List[Dict[str, str]] = Field(default=[], sa_type=JSON)
+    ataques: List[Dict[str, Any]] = Field(default_factory=list, sa_column=Column(JSON))
+    habilidades: List[Dict[str, Any]] = Field(default_factory=list, sa_column=Column(JSON))
+    inventario: List[Dict[str, Any]] = Field(default_factory=list, sa_column=Column(JSON))
     
-    # Lista de Habilidades: [{nome, custo, efeito...}]
-    habilidades: List[Dict[str, str]] = Field(default=[], sa_type=JSON)
-    
-    # Lista de Itens: [{nome, qtd, slots...}]
-    inventario: List[Dict[str, str]] = Field(default=[], sa_type=JSON)
-    
-    # Texto Livre
     notas: Optional[str] = Field(default="", sa_column_kwargs={"nullable": True})
 
-    # -- SISTEMA DE MAGIA (NOVO) --
+    # Feitiçaria (Mantemos o nome técnico 'magia' no banco para evitar migrations complexas, 
+    # mas o HTML chamará de Feitiço)
     tradicao: Optional[str] = Field(default="")
     escolas: Optional[str] = Field(default="")
-    
-    atributo_chave: str = Field(default="Inteligência")
+    atributo_chave: str = Field(default="Astúcia")
     cd_magia: int = Field(default=10)
     
-    # Espaços de Magia (Slots Máximos)
     slots_nv1: int = Field(default=0)
     slots_nv2: int = Field(default=0)
     slots_nv3: int = Field(default=0)
@@ -74,5 +83,4 @@ class Personagem(SQLModel, table=True):
     slots_nv5: int = Field(default=0)
     slots_nv6: int = Field(default=0)
     
-    # Grimório: Lista de Magias [{nome, circulo, alcance, efeito}]
-    magias: List[Dict[str, str]] = Field(default=[], sa_type=JSON)
+    magias: List[Dict[str, Any]] = Field(default_factory=list, sa_column=Column(JSON))

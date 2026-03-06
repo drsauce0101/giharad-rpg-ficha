@@ -1,358 +1,404 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ ficha.nome }} - Giharad</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="/static/css/style.css?v=40" rel="stylesheet">
+    <link href="{{ url_for('static', path='css/style.css') }}?v=56" rel="stylesheet">
 </head>
+
 <body>
 
-<div class="container" style="max-width: 950px;">
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 2px solid var(--gold-dim); margin-bottom: 20px;">
-        <div style="flex-grow: 1;">
-            <h1 style="text-align: left; margin: 0; font-size: 2.5em; border: none;">
-                <input type="text" class="editable" value="{{ ficha.nome }}" onblur="salvar('nome', this.value)">
-            </h1>
-            <div style="font-family: 'Cinzel', serif; color: var(--gold-dim); display: flex; gap: 5px; align-items: center;">
-                <input type="text" class="editable" style="width: auto;" value="{{ ficha.raca }}" onblur="salvar('raca', this.value)">
-                <input type="text" class="editable" style="width: auto;" value="{{ ficha.classe }}" onblur="salvar('classe', this.value)">
-                Nível 
-                <input type="number" class="editable" style="width: 40px; text-align: center;" value="{{ ficha.nivel }}" onblur="salvar('nivel', this.value)">
+    <div class="container container-ficha">
+
+        <div class="ficha-header-flex">
+            <div class="flex-grow-1">
+                <h1 class="ficha-title">
+                    <input type="text" class="input-transparent" value="{{ ficha.nome }}" onblur="salvar('nome', this.value)">
+                </h1>
+                <div class="ficha-subtitle-flex">
+                    <input type="text" class="input-transparent w-auto" style="min-width: 100px;" value="{{ ficha.raca }}" onblur="salvar('raca', this.value)">
+                    <input type="text" class="input-transparent w-auto" style="min-width: 100px;" value="{{ ficha.classe }}" onblur="salvar('classe', this.value)">
+                    | Nível
+                    <input type="number" class="input-transparent w-40 text-center" value="{{ ficha.nivel }}" onblur="salvar('nivel', this.value)">
+                </div>
+            </div>
+            <div>
+                <a href="/" class="btn-novo bg-333">VOLTAR</a>
             </div>
         </div>
-        <div style="display: flex; gap: 10px;">
-            <a href="/" class="btn-novo" style="background: #333;">VOLTAR</a>
-        </div>
-    </div>
 
-    <div class="tab">
-        <button class="tablinks active" onclick="openTab(event, 'Geral')">Geral</button>
-        <button class="tablinks" onclick="openTab(event, 'Habilidades')">Habilidades</button>
-        <button class="tablinks" onclick="openTab(event, 'Magia')">Magia</button>
-        <button class="tablinks" onclick="openTab(event, 'Inventario')">Inventário</button>
-        <button class="tablinks" onclick="openTab(event, 'Anotacoes')">Notas</button>
-    </div>
-
-    <div id="Geral" class="tabcontent" style="display: block;">
-        <div class="grid-row grid-3" style="background: rgba(0,0,0,0.4); padding: 15px; border: 1px solid #333; margin-bottom: 20px; text-align: center;">
-            <div><span class="stat-label">Antecedente</span><br><input type="text" class="editable" style="text-align: center; font-weight: bold;" value="{{ ficha.antecedente }}" onblur="salvar('antecedente', this.value)"></div>
-            <div><span class="stat-label">Guardião</span><br><input type="text" class="editable" style="text-align: center; font-weight: bold;" value="{{ ficha.guardiao }}" onblur="salvar('guardiao', this.value)"></div>
-            <div><span class="stat-label">Ascensão</span><br><input type="text" class="editable" style="text-align: center; font-weight: bold;" value="{{ ficha.ascensao }}" onblur="salvar('ascensao', this.value)"></div>
+        <div class="tab">
+            <button class="tablinks active" onclick="openTab(event, 'Geral')">Geral</button>
+            <button class="tablinks" onclick="openTab(event, 'Habilidades')">Habilidades</button>
+            <button class="tablinks" onclick="openTab(event, 'Magia')">Magia</button>
+            <button class="tablinks" onclick="openTab(event, 'Inventario')">Inventário</button>
+            <button class="tablinks" onclick="openTab(event, 'Anotacoes')">Notas</button>
         </div>
 
-        <div class="grid-row grid-2">
-            <div class="bars-grid">
-                <div class="bar-box pv"><span>Vida</span> <strong><input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pv_atual }}" onblur="salvar('pv_atual', this.value)"> / <input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pv_max }}" onblur="salvar('pv_max', this.value)"></strong></div>
-                <div class="bar-box pa"><span>Ação</span> <strong><input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pa_atual }}" onblur="salvar('pa_atual', this.value)"> / <input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pa_max }}" onblur="salvar('pa_max', this.value)"></strong></div>
-                <div class="bar-box ph"><span>Hafa</span> <strong><input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.ph_atual }}" onblur="salvar('ph_atual', this.value)"> / <input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.ph_max }}" onblur="salvar('ph_max', this.value)"></strong></div>
-                <div class="bar-box pg"><span>Grima</span> <strong><input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pg_atual }}" onblur="salvar('pg_atual', this.value)"> / <input type="number" class="editable" style="width: 35px; text-align: center;" value="{{ ficha.pg_max }}" onblur="salvar('pg_max', this.value)"></strong></div>
-                <div class="bar-box" style="grid-column: span 2; justify-content: center; border-color: var(--gold-main);"><span style="font-family: 'Cinzel'; font-size: 1.2em;">DEFESA <input type="number" class="editable" style="width: 50px; font-weight: bold; text-align: center;" value="{{ ficha.defesa }}" onblur="salvar('defesa', this.value)"></span></div>
+        <div id="Geral" class="tabcontent" style="display: block;">
+            <div class="grid-row grid-3 panel-box-bordered text-center">
+                <div><span class="stat-label">Antecedente</span><br><input type="text" class="input-transparent text-center font-bold" value="{{ ficha.antecedente }}" onblur="salvar('antecedente', this.value)"></div>
+                <div><span class="stat-label">Guardião</span><br><input type="text" class="input-transparent text-center font-bold" value="{{ ficha.guardiao }}" onblur="salvar('guardiao', this.value)"></div>
+                <div><span class="stat-label">Ascensão</span><br><input type="text" class="input-transparent text-center font-bold" value="{{ ficha.ascensao }}" onblur="salvar('ascensao', this.value)"></div>
             </div>
 
-            <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
-                {% set attrs = [('FOR', 'forca'), ('DES', 'destreza'), ('CON', 'constituicao'), ('INT', 'inteligencia'), ('SAB', 'sabedoria'), ('CAR', 'carisma')] %}
-                {% for label, field in attrs %}
-                <div class="stat-box">
-                    <span class="stat-label">{{ label }}</span>
-                    <div class="dice-container">
-                        {% set valor = ficha|attr(field)|int %}
-                        <svg class="dice-svg" viewBox="0 0 100 100">
-                            {% if valor == 4 %}<polygon points="50,10 90,85 10,85" />
-                            {% elif valor == 6 %}<rect x="15" y="15" width="70" height="70" />
-                            {% elif valor == 8 %}<polygon points="50,5 90,50 50,95 10,50" />
-                            {% elif valor == 10 %}<polygon points="50,5 85,35 50,95 15,35" />
-                            {% elif valor == 12 %}<polygon points="50,5 90,40 75,90 25,90 10,40" />
-                            {% else %}<polygon points="50,5 90,25 90,75 50,95 10,75 10,25" />{% endif %}
-                        </svg>
-                        <span class="dice-label">{{ valor }}</span>
-                        <select class="dice-select-hidden" onchange="salvar('{{ field }}', this.value); setTimeout(() => location.reload(), 50);">
-                            {% for faces in [4, 6, 8, 10, 12, 20] %}
-                            <option value="{{ faces }}" {% if valor == faces %}selected{% endif %}>d{{ faces }}</option>
-                            {% endfor %}
-                        </select>
+            <div class="grid-row grid-2">
+                <div class="bars-grid">
+                    <div class="bar-box pv"><span>Vida</span> <strong><input type="number" class="input-transparent w-35 text-right" value="{{ ficha.pv_atual }}" onblur="salvar('pv_atual', this.value)"> / <input type="number" class="input-transparent w-35 text-left" value="{{ ficha.pv_max }}" onblur="salvar('pv_max', this.value)"></strong></div>
+                    <div class="bar-box pa"><span>Ação</span> <strong><input type="number" class="input-transparent w-35 text-right" value="{{ ficha.pa_atual }}" onblur="salvar('pa_atual', this.value)"> / <input type="number" class="input-transparent w-35 text-left" value="{{ ficha.pa_max }}" onblur="salvar('pa_max', this.value)"></strong></div>
+                    <div class="bar-box ph"><span>Hafa</span> <strong><input type="number" class="input-transparent w-35 text-right" value="{{ ficha.ph_atual }}" onblur="salvar('ph_atual', this.value)"> / <input type="number" class="input-transparent w-35 text-left" value="{{ ficha.ph_max }}" onblur="salvar('ph_max', this.value)"></strong></div>
+                    <div class="bar-box pg"><span>Grima</span> <strong><input type="number" class="input-transparent w-35 text-right" value="{{ ficha.pg_atual }}" onblur="salvar('pg_atual', this.value)"> / <input type="number" class="input-transparent w-35 text-left" value="{{ ficha.pg_max }}" onblur="salvar('pg_max', this.value)"></strong></div>
+                    <div class="bar-box bar-box-defesa"><span class="defesa-label">DEFESA <input type="number" class="input-transparent w-50 text-center font-bold" value="{{ ficha.defesa }}" onblur="salvar('defesa', this.value)"></span></div>
+                </div>
+
+                <div class="stats-grid grid-4">
+                    {% set attrs = [('FÍS', 'fisico'), ('PRE', 'presenca'), ('CAR', 'carisma'), ('AST', 'astucia')] %}
+                    
+                    {% macro draw_svg(valor) %}
+                        {% if valor == 4 %}<polygon points="50,10 90,85 10,85" />
+                        {% elif valor == 6 %}<rect x="15" y="15" width="70" height="70" />
+                        {% elif valor == 8 %}<polygon points="50,5 90,50 50,95 10,50" />
+                        {% elif valor == 10 %}<polygon points="50,5 85,35 50,95 15,35" />
+                        {% elif valor == 12 %}<polygon points="50,5 90,40 75,90 25,90 10,40" />
+                        {% elif valor == 20 %}<polygon points="50,5 90,25 90,75 50,95 10,75 10,25" />
+                        {% else %}<circle cx="50" cy="50" r="40" />{% endif %}
+                    {% endmacro %}
+
+                    {% for label, field in attrs %}
+                    <div class="stat-box" style="padding: 10px 0;">
+                        <span class="stat-label">{{ label }}</span>
+                        
+                        <div class="dice-container">
+                            {% set valor = ficha|attr(field)|int %}
+                            <svg class="dice-svg" viewBox="0 0 100 100">
+                                {{ draw_svg(valor) }}
+                            </svg>
+                            <span class="dice-label">{{ valor }}</span>
+                            <select class="dice-select-hidden" onchange="salvar('{{ field }}', this.value).then(() => location.reload())">
+                                {% for faces in [4, 6, 8, 10, 12, 20] %}
+                                <option value="{{ faces }}" {{ 'selected' if valor == faces else '' }}>d{{ faces }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 10px; justify-content: center;">
+                            
+                            {% set exp_val = ficha|attr(field ~ '_exp')|int %}
+                            <div class="mini-dice-container expertise-dice" title="Expertise (+)">
+                                <svg class="dice-svg {{ 'empty-dice' if exp_val == 0 else '' }}" viewBox="0 0 100 100">
+                                    {{ draw_svg(exp_val) }}
+                                </svg>
+                                <span class="mini-dice-label">{{ exp_val if exp_val > 0 else '' }}</span>
+                                <select class="dice-select-hidden" onchange="salvar('{{ field }}_exp', this.value).then(() => location.reload())">
+                                    <option value="0" {{ 'selected' if exp_val == 0 else '' }}>-</option>
+                                    {% for faces in [4, 6, 8, 10, 12] %}
+                                    <option value="{{ faces }}" {{ 'selected' if exp_val == faces else '' }}>d{{ faces }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            {% set inc_val = ficha|attr(field ~ '_inc')|int %}
+                            <div class="mini-dice-container incapacidade-dice" title="Incapacidade (-)">
+                                <svg class="dice-svg {{ 'empty-dice' if inc_val == 0 else '' }}" viewBox="0 0 100 100">
+                                    {{ draw_svg(inc_val) }}
+                                </svg>
+                                <span class="mini-dice-label">{{ inc_val if inc_val > 0 else '' }}</span>
+                                <select class="dice-select-hidden" onchange="salvar('{{ field }}_inc', this.value).then(() => location.reload())">
+                                    <option value="0" {{ 'selected' if inc_val == 0 else '' }}>-</option>
+                                    {% for faces in [4, 6, 8, 10, 12] %}
+                                    <option value="{{ faces }}" {{ 'selected' if inc_val == faces else '' }}>d{{ faces }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                        </div>
                     </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="grid-row grid-3 panel-box-bordered-no-radius mt-20">
+                {% for m_tipo, m_campo, m_cor in [('Morte', 'marcadores_morte', '#ff5252'), ('Fadiga', 'marcadores_fadiga', '#ffd700'), ('Cicatrizes', 'marcadores_cicatrizes', '#b388ff')] %}
+                <div class="stat-box">
+                    <label class="stat-label" style="color: {{ m_cor }};">{{ m_tipo }}</label>
+                    <div class="marcador-flex">
+                        {% set m_valor = ficha|attr(m_campo)|int %}
+                        {% for i in range(1, 5) %}
+                        {% set m_bg = m_cor if m_valor >= i else 'transparent' %}
+                        <div class="marcador-circulo marcador-click" onclick="marcar('{{ m_campo }}', {{ i }}, {{ m_valor }})" style="width: 18px; height: 18px; border: 1px solid {{ m_cor }}; background: {{ m_bg }};"></div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <h3 class="section-title">Competências</h3>
+            <div class="grid-row grid-3 skills-panel mt-10">
+                {% for skill, valor in ficha.competencias.items() %}
+                {% set skill_color = '#fff' %}
+                {% if valor > 0 %}{% set skill_color = '#4caf50' %}{% elif valor < 0 %}{% set skill_color = '#f44336' %}{% endif %}
+                <div class="skill-row">
+                    <span class="skill-name">{{ skill }}</span>
+                    <strong class="skill-value-wrap">
+                        <input type="number" class="input-transparent comp-input w-40 text-right" data-skill="{{ skill }}" style="color: {{ skill_color }};" value="{{ valor }}" oninput="atualizarCor(this)" onblur="salvarCompetencia()">
+                    </strong>
                 </div>
                 {% endfor %}
             </div>
         </div>
 
-        <div class="grid-row grid-3" style="margin-top: 20px; background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #333; border-radius: 0;">
-            {% for m_tipo, m_campo, m_cor in [('Morte', 'marcadores_morte', '#ff5252'), ('Fadiga', 'marcadores_fadiga', '#ffd700'), ('Cicatrizes', 'marcadores_cicatrizes', '#b388ff')] %}
-            <div class="stat-box">
-                <label class="stat-label" style="color: {{ m_cor }};">{{ m_tipo }}</label>
-                <div style="display: flex; gap: 8px; margin-top: 10px;">
-                    {% set m_valor = ficha|attr(m_campo)|int %}
-                    {% for i in range(1, 5) %}
-                    <div class="marcador-circulo marcador-click" onclick="marcar('{{ m_campo }}', {{ i }}, {{ m_valor }})" style="width: 18px; height: 18px; border: 1px solid {{ m_cor }}; background: {% if m_valor >= i %}{{ m_cor }}{% else %}transparent{% endif %};"></div>
-                    {% endfor %}
+        <div id="Habilidades" class="tabcontent">
+            <h3 class="section-title">Ataques</h3>
+            <div id="lista-ataques">
+                {% for atk in ficha.ataques %}
+                <div class="card-container item-row atk-card">
+                    <div class="atk-header">
+                        <strong class="atk-name-wrap">
+                            <input type="text" class="input-transparent" name="nome" value="{{ atk.nome }}" placeholder="Nome do Ataque" onblur="salvarLista('ataques')">
+                        </strong>
+                        <span class="atk-reach">
+                            Alcance: <input type="text" class="input-transparent w-80 text-right italic" name="alcance" value="{{ atk.alcance }}" onblur="salvarLista('ataques')">
+                        </span>
+                    </div>
+                    <div class="atk-stats-grid">
+                        <div>Acerto: <strong class="white-text"><input type="text" class="input-transparent d-inline w-40" name="acerto" value="{{ atk.acerto }}" onblur="salvarLista('ataques')"></strong></div>
+                        <div>Dano: <strong class="white-text"><input type="text" class="input-transparent d-inline w-60" name="dano" value="{{ atk.dano }}" onblur="salvarLista('ataques')"></strong></div>
+                        <div>Margem: <input type="text" class="input-transparent d-inline w-40" name="margem" value="{{ atk.margem }}" onblur="salvarLista('ataques')"></div>
+                        <div>Explosivo: <input type="text" class="input-transparent d-inline w-40" name="explosivo" value="{{ atk.explosivo }}" onblur="salvarLista('ataques')"></div>
+                    </div>
+                    <button class="btn-delete-item" onclick="removerItem(this, 'ataques')"><span class="material-icons">delete</span></button>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+            <button class="btn-add" onclick="adicionarAtaque()">+ Adicionar Ataque</button>
+
+            <h3 class="section-title mt-30">Habilidades</h3>
+            <div id="lista-habilidades">
+                {% for hab in ficha.habilidades %}
+                <div class="card-container item-row hab-card">
+                    <div class="hab-header">
+                        <strong class="hab-name-wrap">
+                            <input type="text" class="input-transparent" name="nome" value="{{ hab.nome }}" placeholder="Nome da Habilidade" onblur="salvarLista('habilidades')">
+                        </strong>
+                        <span class="hab-cost-wrap">
+                            <input type="text" class="input-transparent w-100 text-center" name="custo" value="{{ hab.custo }}" placeholder="-" onblur="salvarLista('habilidades')">
+                        </span>
+                    </div>
+                    <div class="hab-effect-wrap">
+                        <textarea class="input-transparent" name="efeito" rows="2" placeholder="Descrição do efeito..." onblur="salvarLista('habilidades')">{{ hab.efeito }}</textarea>
+                    </div>
+                    <button class="btn-delete-item" onclick="removerItem(this, 'habilidades')"><span class="material-icons">delete</span></button>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="btn-add" onclick="adicionarHabilidade()">+ Adicionar Habilidade</button>
         </div>
 
-        <h3 class="section-title">Competências</h3>
-        <div class="grid-row grid-3" style="background: rgba(0,0,0,0.2); padding: 15px; border: 1px solid #333; margin-top: 10px;">
-            {% for skill, valor in ficha.competencias.items() %}
-            <div style="display: flex; justify-content: space-between; padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                <span style="font-size: 0.85em; color: var(--gold-dim); font-family: 'Cinzel', serif;">{{ skill }}</span>
-                <strong style="font-family: 'MedievalSharp';">
-                    <input type="number" class="editable" 
-                           style="width: 40px; text-align: right; {% if valor > 0 %} color: #4caf50; {% elif valor < 0 %} color: #f44336; {% else %} color: #fff; {% endif %}" 
-                           value="{{ valor }}" 
-                           oninput="atualizarCor(this)"
-                           onblur="salvarCompetencia('{{ skill }}', this.value)">
-                </strong>
+        <div id="Magia" class="tabcontent">
+            <div class="grid-row grid-2 panel-box-bordered">
+                <div class="stat-box"><span class="stat-label">Tradição</span><strong class="magic-tradition-val"><input type="text" class="input-transparent text-center magic-color" value="{{ ficha.tradicao }}" onblur="salvar('tradicao', this.value)"></strong></div>
+                <div class="stat-box"><span class="stat-label">Escolas</span><input type="text" class="input-transparent text-center font-bold" value="{{ ficha.escolas }}" onblur="salvar('escolas', this.value)"></div>
             </div>
-            {% endfor %}
+
+            <div class="grid-row grid-2">
+                <div>
+                    <h3 class="section-title">Conjuração</h3>
+                    <div class="grid-row grid-2 mb-20">
+                        <div class="bar-box magic-slot-box"><span>Atributo</span> <strong><input type="text" class="input-transparent w-80 text-right" value="{{ ficha.atributo_chave }}" onblur="salvar('atributo_chave', this.value)"></strong></div>
+                        <div class="bar-box magic-slot-box"><span>CD Feitiços</span> <strong><input type="number" class="input-transparent w-40 text-right" value="{{ ficha.cd_magia }}" onblur="salvar('cd_magia', this.value)"></strong></div>
+                    </div>
+                    <h3 class="section-title">Círculos</h3>
+                    <div class="stats-grid grid-3">
+                        {% for i in range(1, 7) %}
+                        <div class="stat-box"><span class="stat-label">{{ i }}º</span><span class="stat-value"><input type="number" class="input-transparent text-center" value="{{ ficha|attr('slots_nv' ~ i) }}" onblur="salvar('slots_nv{{ i }}', this.value)"></span></div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div>
+                    <h3 class="section-title">Grimório</h3>
+                    <div id="lista-magias" class="mag-list-panel">
+                        {% for mag in ficha.magias %}
+                        <div class="card-container item-row mag-card">
+                            <div class="flex-between">
+                                <strong class="mag-name-wrap">
+                                    <input type="text" class="input-transparent" name="nome" value="{{ mag.nome }}" placeholder="Nome do Feitiço" onblur="salvarLista('magias')">
+                                </strong>
+                                <span class="mag-circle-wrap">
+                                    <input type="text" class="input-transparent w-20 text-center magic-color" name="circulo" value="{{ mag.circulo }}" onblur="salvarLista('magias')">º
+                                </span>
+                            </div>
+                            <div class="mag-effect-wrap">
+                                <textarea class="input-transparent" name="efeito" rows="1" placeholder="Efeito..." onblur="salvarLista('magias')">{{ mag.efeito }}</textarea>
+                            </div>
+                            <button class="btn-delete-item" onclick="removerItem(this, 'magias')"><span class="material-icons">delete</span></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button class="btn-add btn-add-magic" onclick="adicionarMagia()">+ Adicionar Magia</button>
+                </div>
+            </div>
         </div>
+
+        <div id="Inventario" class="tabcontent">
+            <h3 class="section-title">Mochila</h3>
+            <div id="lista-inventario" class="inv-panel">
+                {% for item in ficha.inventario %}
+                <div class="card-container item-row inv-card">
+                    <span class="flex-grow-1">
+                        <input type="text" class="input-transparent d-inline w-auto" name="nome" value="{{ item.nome }}" placeholder="Nome do Item" onblur="salvarLista('inventario')"> 
+                        (x<input type="text" class="input-transparent d-inline w-25 text-center" name="qtd" value="{{ item.qtd }}" onblur="salvarLista('inventario')">)
+                    </span>
+                    <span class="inv-slot-wrap">Espaços: <input type="text" class="input-transparent d-inline w-25 text-center" name="espacos" value="{{ item.espacos }}" onblur="salvarLista('inventario')"></span>
+                    <button class="btn-delete-item" onclick="removerItem(this, 'inventario')"><span class="material-icons">delete</span></button>
+                </div>
+                {% endfor %}
+            </div>
+            <button class="btn-add" onclick="adicionarItemInventario()">+ Adicionar Item</button>
+        </div>
+
+        <div id="Anotacoes" class="tabcontent">
+            <h3 class="section-title">História</h3>
+            <textarea class="input-transparent notes-textarea" onblur="salvar('notas', this.value)">{{ ficha.notas }}</textarea>
+        </div>
+
     </div>
 
-    <div id="Habilidades" class="tabcontent">
-        <h3 class="section-title">Ataques</h3>
-        <div id="lista-ataques">
-            {% for atk in ficha.ataques %}
-            <div class="card-container item-row" style="background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #444; border-radius: 4px; margin-bottom: 15px;">
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px;">
-                    <strong style="color: var(--gold-main); font-family: 'Cinzel', serif; font-size: 1.1em; flex-grow: 1;">
-                        <input type="text" class="input-transparent" name="nome" value="{{ atk.nome }}" placeholder="Nome do Ataque" onblur="salvarLista('ataques')">
+    <script>
+        function atualizarCor(input) {
+            const val = parseInt(input.value) || 0;
+            if (val > 0) input.style.color = '#4caf50';
+            else if (val < 0) input.style.color = '#f44336';
+            else input.style.color = '#fff';
+        }
+
+        function salvar(campo, valor) {
+            return fetch(`/api/atualizar_campo/{{ ficha.id }}`, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ [campo]: valor })
+            }).then(r => { if (!r.ok) console.error("Erro ao salvar"); return r; });
+        }
+
+        function salvarLista(tipo) {
+            const container = document.getElementById(`lista-${tipo}`);
+            const rows = container.querySelectorAll('.item-row');
+            const data = [];
+            rows.forEach(row => {
+                let obj = {};
+                row.querySelectorAll('input, textarea').forEach(input => {
+                    obj[input.name] = input.value;
+                });
+                if (obj.nome) data.push(obj);
+            });
+            salvar(tipo, data);
+        }
+
+        function removerItem(btn, tipo) {
+            if (confirm("Remover este item?")) {
+                btn.closest('.item-row').remove();
+                salvarLista(tipo);
+            }
+        }
+
+        function adicionarAtaque() {
+            const html = `<div class="card-container item-row atk-card">
+                <div class="atk-header">
+                    <strong class="atk-name-wrap">
+                        <input type="text" class="input-transparent" name="nome" placeholder="Novo Ataque" onblur="salvarLista('ataques')">
                     </strong>
-                    <span style="font-size: 0.8em; color: #888; display: flex; align-items: center; gap: 5px; white-space: nowrap;">
-                        Alcance: <input type="text" class="input-transparent" name="alcance" value="{{ atk.alcance }}" style="width: 80px; text-align: right; font-style: italic;" onblur="salvarLista('ataques')">
+                    <span class="atk-reach">
+                        Alcance: <input type="text" class="input-transparent w-80 text-right italic" name="alcance" placeholder="-" onblur="salvarLista('ataques')">
                     </span>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9em;">
-                    <div>Acerto: <strong style="color: #fff;"><input type="text" class="input-transparent" name="acerto" value="{{ atk.acerto }}" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></strong></div>
-                    <div>Dano: <strong style="color: #fff;"><input type="text" class="input-transparent" name="dano" value="{{ atk.dano }}" style="display:inline; width: 60px;" onblur="salvarLista('ataques')"></strong></div>
-                    <div>Margem: <input type="text" class="input-transparent" name="margem" value="{{ atk.margem }}" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></div>
-                    <div>Explosivo: <input type="text" class="input-transparent" name="explosivo" value="{{ atk.explosivo }}" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></div>
+                <div class="atk-stats-grid">
+                    <div>Acerto: <strong class="white-text"><input type="text" class="input-transparent d-inline w-40" name="acerto" placeholder="+0" onblur="salvarLista('ataques')"></strong></div>
+                    <div>Dano: <strong class="white-text"><input type="text" class="input-transparent d-inline w-60" name="dano" placeholder="1d6" onblur="salvarLista('ataques')"></strong></div>
+                    <div>Margem: <input type="text" class="input-transparent d-inline w-40" name="margem" placeholder="20" onblur="salvarLista('ataques')"></div>
+                    <div>Explosivo: <input type="text" class="input-transparent d-inline w-40" name="explosivo" placeholder="-" onblur="salvarLista('ataques')"></div>
                 </div>
                 <button class="btn-delete-item" onclick="removerItem(this, 'ataques')"><span class="material-icons">delete</span></button>
-            </div>
-            {% endfor %}
-        </div>
-        <button class="btn-add" onclick="adicionarAtaque()">+ Adicionar Ataque</button>
+            </div>`;
+            document.getElementById('lista-ataques').insertAdjacentHTML('beforeend', html);
+        }
 
-        <h3 class="section-title" style="margin-top: 30px;">Habilidades</h3>
-        <div id="lista-habilidades">
-            {% for hab in ficha.habilidades %}
-            <div class="card-container item-row" style="background: rgba(255,255,255,0.03); padding: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-dim); margin-bottom: 15px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <strong style="color: #fff; font-family: 'Cinzel', serif; letter-spacing: 1px; flex-grow: 1;">
-                        <input type="text" class="input-transparent" name="nome" value="{{ hab.nome }}" placeholder="Nome da Habilidade" onblur="salvarLista('habilidades')">
+        function adicionarHabilidade() {
+            const html = `<div class="card-container item-row hab-card">
+                <div class="hab-header">
+                    <strong class="hab-name-wrap">
+                        <input type="text" class="input-transparent" name="nome" placeholder="Nova Habilidade" onblur="salvarLista('habilidades')">
                     </strong>
-                    <span style="background: #222; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; color: var(--gold-main); border: 1px solid #444; min-width: 30px;">
-                        <input type="text" class="input-transparent" name="custo" value="{{ hab.custo }}" placeholder="-" style="width: 100%; text-align: center;" onblur="salvarLista('habilidades')">
+                    <span class="hab-cost-wrap">
+                        <input type="text" class="input-transparent w-100 text-center" name="custo" placeholder="-" onblur="salvarLista('habilidades')">
                     </span>
                 </div>
-                <div style="color: #ccc; font-size: 0.95em; line-height: 1.4;">
-                    <textarea class="input-transparent" name="efeito" rows="2" placeholder="Descrição do efeito..." onblur="salvarLista('habilidades')">{{ hab.efeito }}</textarea>
+                <div class="hab-effect-wrap">
+                    <textarea class="input-transparent" name="efeito" rows="2" placeholder="Descrição do efeito..." onblur="salvarLista('habilidades')"></textarea>
                 </div>
                 <button class="btn-delete-item" onclick="removerItem(this, 'habilidades')"><span class="material-icons">delete</span></button>
-            </div>
-            {% endfor %}
-        </div>
-        <button class="btn-add" onclick="adicionarHabilidade()">+ Adicionar Habilidade</button>
-    </div>
+            </div>`;
+            document.getElementById('lista-habilidades').insertAdjacentHTML('beforeend', html);
+        }
 
-    <div id="Magia" class="tabcontent">
-        <div class="grid-row grid-2" style="background: rgba(0,0,0,0.4); padding: 15px; border: 1px solid #333; margin-bottom: 20px;">
-            <div class="stat-box"><span class="stat-label">Tradição</span><strong style="color: #b388ff; font-family: 'MedievalSharp'; font-size: 1.2em;"><input type="text" class="input-transparent" style="text-align: center; color: #b388ff;" value="{{ ficha.tradicao }}" onblur="salvar('tradicao', this.value)"></strong></div>
-            <div class="stat-box"><span class="stat-label">Escolas</span><input type="text" class="input-transparent" style="text-align: center; font-weight: bold;" value="{{ ficha.escolas }}" onblur="salvar('escolas', this.value)"></div>
-        </div>
+        function adicionarMagia() {
+            const html = `<div class="card-container item-row mag-card">
+                <div class="flex-between">
+                    <strong class="mag-name-wrap"><input type="text" class="input-transparent" name="nome" placeholder="Novo Feitiço" onblur="salvarLista('magias')"></strong>
+                    <span class="mag-circle-wrap"><input type="text" class="input-transparent w-20 text-center magic-color" name="circulo" placeholder="1" onblur="salvarLista('magias')">º</span>
+                </div>
+                <div class="mag-effect-wrap">
+                    <textarea class="input-transparent" name="efeito" rows="1" placeholder="Efeito..." onblur="salvarLista('magias')"></textarea>
+                </div>
+                <button class="btn-delete-item" onclick="removerItem(this, 'magias')"><span class="material-icons">delete</span></button>
+            </div>`;
+            document.getElementById('lista-magias').insertAdjacentHTML('beforeend', html);
+        }
 
-        <div class="grid-row grid-2">
-            <div>
-                <h3 class="section-title">Conjuração</h3>
-                <div class="grid-row grid-2" style="margin-bottom: 20px;">
-                    <div class="bar-box" style="border-left: 3px solid #b388ff;"><span>Atributo</span> <strong><input type="text" class="input-transparent" style="width: 80px; text-align: right;" value="{{ ficha.atributo_chave }}" onblur="salvar('atributo_chave', this.value)"></strong></div>
-                    <div class="bar-box" style="border-left: 3px solid #b388ff;"><span>CD dos Feitiços</span> <strong><input type="number" class="input-transparent" style="width: 40px; text-align: right;" value="{{ ficha.cd_magia }}" onblur="salvar('cd_magia', this.value)"></strong></div>
-                </div>
-                <h3 class="section-title">Círculos</h3>
-                <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
-                    {% for i in range(1, 7) %}
-                    <div class="stat-box"><span class="stat-label">{{ i }}º</span><span class="stat-value"><input type="number" class="input-transparent" style="text-align: center;" value="{{ ficha|attr('slots_nv' ~ i) }}" onblur="salvar('slots_nv{{ i }}', this.value)"></span></div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div>
-                <h3 class="section-title">Grimório</h3>
-                <div id="lista-magias" style="background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #444; min-height: 250px;">
-                    {% for mag in ficha.magias %}
-                    <div class="card-container item-row" style="border-bottom: 1px solid #333; padding: 10px 0; margin-bottom: 5px;">
-                        <div style="display: flex; justify-content: space-between;">
-                            <strong style="color: #fff; flex-grow: 1;">
-                                <input type="text" class="input-transparent" name="nome" value="{{ mag.nome }}" placeholder="Nome do Feitiço" onblur="salvarLista('magias')">
-                            </strong>
-                            <span style="color: #b388ff; font-weight: bold; white-space: nowrap;">
-                                <input type="text" class="input-transparent" name="circulo" value="{{ mag.circulo }}" style="width: 20px; text-align: center; color: #b388ff;" onblur="salvarLista('magias')">º
-                            </span>
-                        </div>
-                        <div style="color: #ccc; font-size: 0.85em; margin-top: 5px;">
-                            <textarea class="input-transparent" name="efeito" rows="1" placeholder="Efeito..." onblur="salvarLista('magias')">{{ mag.efeito }}</textarea>
-                        </div>
-                        <button class="btn-delete-item" onclick="removerItem(this, 'magias')"><span class="material-icons">delete</span></button>
-                    </div>
-                    {% endfor %}
-                </div>
-                <button class="btn-add" onclick="adicionarMagia()">+ Adicionar Feitiço</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="Inventario" class="tabcontent">
-        <h3 class="section-title">Mochila</h3>
-        <div id="lista-inventario" style="background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #444;">
-            {% for item in ficha.inventario %}
-            <div class="card-container item-row" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333;">
-                <span style="flex-grow: 1;">
-                    <input type="text" class="input-transparent" name="nome" value="{{ item.nome }}" placeholder="Nome do Item" style="display:inline; width: auto;" onblur="salvarLista('inventario')"> 
-                    (x<input type="text" class="input-transparent" name="qtd" value="{{ item.qtd }}" style="display:inline; width: 25px; text-align: center;" onblur="salvarLista('inventario')">)
+        function adicionarItemInventario() {
+            const html = `<div class="card-container item-row inv-card">
+                <span class="flex-grow-1">
+                    <input type="text" class="input-transparent d-inline w-auto" name="nome" placeholder="Item" onblur="salvarLista('inventario')"> 
+                    (x<input type="text" class="input-transparent d-inline w-25 text-center" name="qtd" value="1" onblur="salvarLista('inventario')">)
                 </span>
-                <span style="color: var(--gold-dim);">Espaços: <input type="text" class="input-transparent" name="espacos" value="{{ item.espacos }}" style="display:inline; width: 25px; text-align: center;" onblur="salvarLista('inventario')"></span>
+                <span class="inv-slot-wrap">Espaços: <input type="text" class="input-transparent d-inline w-25 text-center" name="espacos" value="0" onblur="salvarLista('inventario')"></span>
                 <button class="btn-delete-item" onclick="removerItem(this, 'inventario')"><span class="material-icons">delete</span></button>
-            </div>
-            {% endfor %}
-        </div>
-        <button class="btn-add" onclick="adicionarItemInventario()">+ Adicionar Item</button>
-    </div>
+            </div>`;
+            document.getElementById('lista-inventario').insertAdjacentHTML('beforeend', html);
+        }
 
-    <div id="Anotacoes" class="tabcontent">
-        <h3 class="section-title">História</h3>
-        <textarea class="input-transparent" style="min-height: 300px; padding: 15px; background: rgba(0,0,0,0.2); border: 1px solid #333; line-height: 1.6; font-style: italic; color: #ccc;" onblur="salvar('notas', this.value)">{{ ficha.notas }}</textarea>
-    </div>
+        function marcar(campo, index, atual) {
+            const novoValor = (atual === index) ? index - 1 : index;
+            salvar(campo, novoValor).then(() => location.reload());
+        }
 
-</div>
+        function salvarCompetencia() {
+            const inputs = document.querySelectorAll('.comp-input');
+            let comps = {};
+            inputs.forEach(input => {
+                const skill = input.getAttribute('data-skill');
+                comps[skill] = parseInt(input.value) || 0;
+            });
+            salvar('competencias', comps);
+        }
 
-<script>
-// --- FUNÇÃO NOVA: ATUALIZAR COR EM TEMPO REAL ---
-function atualizarCor(input) {
-    const val = parseInt(input.value) || 0;
-    if (val > 0) input.style.color = '#4caf50'; // Verde
-    else if (val < 0) input.style.color = '#f44336'; // Vermelho
-    else input.style.color = '#fff'; // Branco
-}
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
 
-// --- MOTOR DE SALVAMENTO ---
-function salvar(campo, valor) {
-    fetch(`/api/atualizar_campo/{{ ficha.id }}`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ [campo]: valor })
-    }).then(r => { if(!r.ok) console.error("Erro ao salvar"); });
-}
-
-// --- SALVAR LISTAS ---
-function salvarLista(tipo) {
-    const container = document.getElementById(`lista-${tipo}`);
-    const rows = container.querySelectorAll('.item-row');
-    const data = [];
-    rows.forEach(row => {
-        let obj = {};
-        row.querySelectorAll('input, textarea').forEach(input => {
-            obj[input.name] = input.value;
-        });
-        if(obj.nome) data.push(obj);
-    });
-    salvar(tipo, data);
-}
-
-// --- REMOVER ITEM ---
-function removerItem(btn, tipo) {
-    if(confirm("Remover este item?")) {
-        btn.closest('.item-row').remove();
-        salvarLista(tipo);
-    }
-}
-
-// --- FUNÇÕES DE ADICIONAR (Javascript) ---
-function adicionarAtaque() {
-    const html = `<div class="card-container item-row" style="background: rgba(0,0,0,0.3); padding: 15px; border: 1px solid #444; border-radius: 4px; margin-bottom: 15px;">
-        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 10px;">
-            <strong style="color: var(--gold-main); font-family: 'Cinzel', serif; font-size: 1.1em; flex-grow: 1;">
-                <input type="text" class="input-transparent" name="nome" placeholder="Novo Ataque" onblur="salvarLista('ataques')">
-            </strong>
-            <span style="font-size: 0.8em; color: #888; display: flex; align-items: center; gap: 5px; white-space: nowrap;">
-                Alcance: <input type="text" class="input-transparent" name="alcance" placeholder="-" style="width: 60px; text-align: right;" onblur="salvarLista('ataques')">
-            </span>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9em;">
-            <div>Acerto: <strong style="color: #fff;"><input type="text" class="input-transparent" name="acerto" placeholder="+0" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></strong></div>
-            <div>Dano: <strong style="color: #fff;"><input type="text" class="input-transparent" name="dano" placeholder="1d6" style="display:inline; width: 60px;" onblur="salvarLista('ataques')"></strong></div>
-            <div>Margem: <input type="text" class="input-transparent" name="margem" placeholder="20" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></div>
-            <div>Explosivo: <input type="text" class="input-transparent" name="explosivo" placeholder="-" style="display:inline; width: 40px;" onblur="salvarLista('ataques')"></div>
-        </div>
-        <button class="btn-delete-item" onclick="removerItem(this, 'ataques')"><span class="material-icons">delete</span></button>
-    </div>`;
-    document.getElementById('lista-ataques').insertAdjacentHTML('beforeend', html);
-}
-
-function adicionarHabilidade() {
-    const html = `<div class="card-container item-row" style="background: rgba(255,255,255,0.03); padding: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-dim); margin-bottom: 15px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-            <strong style="color: #fff; font-family: 'Cinzel', serif; letter-spacing: 1px; flex-grow: 1;">
-                <input type="text" class="input-transparent" name="nome" placeholder="Nova Habilidade" onblur="salvarLista('habilidades')">
-            </strong>
-            <span style="background: #222; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; color: var(--gold-main); border: 1px solid #444; min-width: 30px;">
-                <input type="text" class="input-transparent" name="custo" placeholder="-" style="width: 100%; text-align: center;" onblur="salvarLista('habilidades')">
-            </span>
-        </div>
-        <div style="color: #ccc; font-size: 0.95em; line-height: 1.4;">
-            <textarea class="input-transparent" name="efeito" rows="2" placeholder="Descrição..." onblur="salvarLista('habilidades')"></textarea>
-        </div>
-        <button class="btn-delete-item" onclick="removerItem(this, 'habilidades')"><span class="material-icons">delete</span></button>
-    </div>`;
-    document.getElementById('lista-habilidades').insertAdjacentHTML('beforeend', html);
-}
-
-function adicionarMagia() {
-    const html = `<div class="card-container item-row" style="border-bottom: 1px solid #333; padding: 10px 0; margin-bottom: 5px;">
-        <div style="display: flex; justify-content: space-between;">
-            <strong style="color: #fff; flex-grow: 1;"><input type="text" class="input-transparent" name="nome" placeholder="Novo Feitiço" onblur="salvarLista('magias')"></strong>
-            <span style="color: #b388ff; white-space: nowrap;"><input type="text" class="input-transparent" name="circulo" placeholder="1" style="width: 20px; text-align: center; color: #b388ff;" onblur="salvarLista('magias')">º</span>
-        </div>
-        <div style="color: #ccc; font-size: 0.85em; margin-top: 5px;">
-            <textarea class="input-transparent" name="efeito" rows="1" placeholder="Efeito..." onblur="salvarLista('magias')"></textarea>
-        </div>
-        <button class="btn-delete-item" onclick="removerItem(this, 'magias')"><span class="material-icons">delete</span></button>
-    </div>`;
-    document.getElementById('lista-magias').insertAdjacentHTML('beforeend', html);
-}
-
-function adicionarItemInventario() {
-    const html = `<div class="card-container item-row" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #333;">
-        <span style="flex-grow: 1;">
-            <input type="text" class="input-transparent" name="nome" placeholder="Item" style="display:inline; width: auto;" onblur="salvarLista('inventario')"> 
-            (x<input type="text" class="input-transparent" name="qtd" value="1" style="display:inline; width: 25px; text-align: center;" onblur="salvarLista('inventario')">)
-        </span>
-        <span style="color: var(--gold-dim);">Espaços: <input type="text" class="input-transparent" name="espacos" value="0" style="display:inline; width: 25px; text-align: center;" onblur="salvarLista('inventario')"></span>
-        <button class="btn-delete-item" onclick="removerItem(this, 'inventario')"><span class="material-icons">delete</span></button>
-    </div>`;
-    document.getElementById('lista-inventario').insertAdjacentHTML('beforeend', html);
-}
-
-// FUNÇÕES DA ABA GERAL (Mantidas)
-function marcar(campo, index, atual) {
-    const novoValor = (atual === index) ? index - 1 : index;
-    salvar(campo, novoValor);
-    setTimeout(() => location.reload(), 50);
-}
-function salvarCompetencia(skill, valor) {
-    let comps = {{ ficha.competencias | tojson }};
-    comps[skill] = parseInt(valor) || 0;
-    salvar('competencias', comps);
-}
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) tablinks[i].className = tablinks[i].className.replace(" active", "");
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-</script>
+    
 
 </body>
+
 </html>
