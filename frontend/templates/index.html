@@ -55,10 +55,10 @@
             {% for p in personagens %}
             <div class="char-card" style="position: relative;">
 
-                <form action="/deletar/{{ p.id }}" method="post"
-                    onsubmit="return confirm('Tem certeza que deseja banir {{ p.nome }} dos registros?');"
+                <form action="/deletar/{{ p.id }}" method="post" id="form-delete-{{ p.id }}"
                     style="position: absolute; top: 10px; right: 10px; z-index: 50; margin: 0;">
-                    <button type="submit" class="btn-remove" title="Deletar Personagem">
+                    <button type="button" class="btn-remove" title="Deletar Personagem"
+                        onclick='confirmDelete(event, {{ p.nome|tojson|safe }}, "form-delete-{{ p.id }}")'>
                         <span class="material-icons">close</span>
                     </button>
                 </form>
@@ -120,6 +120,48 @@
         </div>
     </div>
 
+    <script>
+        function showConfirmModal(message, onConfirm) {
+            const overlay = document.createElement('div');
+            overlay.className = 'custom-modal-overlay';
+
+            const box = document.createElement('div');
+            box.className = 'custom-modal-box';
+
+            const text = document.createElement('p');
+            text.textContent = message;
+
+            const btnGroup = document.createElement('div');
+            btnGroup.className = 'custom-modal-buttons';
+
+            const btnCancel = document.createElement('button');
+            btnCancel.className = 'custom-modal-btn cancel';
+            btnCancel.textContent = 'Cancelar';
+            btnCancel.onclick = () => document.body.removeChild(overlay);
+
+            const btnConfirm = document.createElement('button');
+            btnConfirm.className = 'custom-modal-btn confirm';
+            btnConfirm.textContent = 'Confirmar';
+            btnConfirm.onclick = () => {
+                document.body.removeChild(overlay);
+                if (onConfirm) onConfirm();
+            };
+
+            btnGroup.appendChild(btnCancel);
+            btnGroup.appendChild(btnConfirm);
+            box.appendChild(text);
+            box.appendChild(btnGroup);
+            overlay.appendChild(box);
+            document.body.appendChild(overlay);
+        }
+
+        function confirmDelete(event, nomeStr, formId) {
+            event.preventDefault();
+            showConfirmModal('Tem certeza que deseja banir ' + nomeStr + ' dos registros?', () => {
+                document.getElementById(formId).submit();
+            });
+        }
+    </script>
 </body>
 
 </html>

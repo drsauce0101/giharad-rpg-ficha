@@ -65,14 +65,30 @@
                     <div class="ficha-subtitle-flex">
                         <input type="text" class="input-transparent w-auto" style="min-width: 100px;"
                             value="{{ ficha.raca }}" onblur="salvar('raca', this.value)">
-                        <input type="text" class="input-transparent w-auto" style="min-width: 100px;"
-                            value="{{ ficha.classe }}" onblur="salvar('classe', this.value)">
+                        <select class="input-transparent w-auto"
+                            style="min-width: 100px; -webkit-appearance: none; appearance: none; cursor: pointer;"
+                            onchange="salvar('classe', this.value)" id="select-classe">
+                            <option value="">(Sem Classe)</option>
+                            <option value="Combatente" {% if ficha.classe=='Combatente' %}selected{% endif %}>Combatente
+                            </option>
+                            <option value="Mentor" {% if ficha.classe=='Mentor' %}selected{% endif %}>Mentor</option>
+                            <option value="Conjurador" {% if ficha.classe=='Conjurador' %}selected{% endif %}>Conjurador
+                            </option>
+                            <option value="Zelote" {% if ficha.classe=='Zelote' %}selected{% endif %}>Zelote</option>
+                        </select>
                         | Nível
                         <input type="number" class="input-transparent w-40 text-center" value="{{ ficha.nivel }}"
                             onblur="salvar('nivel', this.value)">
                     </div>
                 </div>
-                <div>
+                <!-- BUTTONS -->
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button class="btn-novo bg-333" style="color: #4caf50 !important; border-color: #388e3c !important;"
+                        onclick="levelUpFicha()">EVOLUIR
+                    </button>
+                    <button class="btn-novo bg-333" style="color: #f57f17 !important; border-color: #fbc02d !important;"
+                        onclick="recalcularAtributos()">ATUALIZAR
+                    </button>
                     <a href="/" class="btn-novo bg-333">VOLTAR</a>
                 </div>
             </div>
@@ -100,26 +116,62 @@
 
                 <div class="grid-row grid-2">
                     <div class="bars-grid">
-                        <div class="bar-box pv"><span>Vida</span> <strong><input type="number"
-                                    class="input-transparent w-35 text-right" value="{{ ficha.pv_atual }}"
-                                    onblur="salvar('pv_atual', this.value)"> / <input type="number"
-                                    class="input-transparent w-35 text-left" value="{{ ficha.pv_max }}"
-                                    onblur="salvar('pv_max', this.value)"></strong></div>
-                        <div class="bar-box pa"><span>Ação</span> <strong><input type="number"
-                                    class="input-transparent w-35 text-right" value="{{ ficha.pa_atual }}"
-                                    onblur="salvar('pa_atual', this.value)"> / <input type="number"
-                                    class="input-transparent w-35 text-left" value="{{ ficha.pa_max }}"
-                                    onblur="salvar('pa_max', this.value)"></strong></div>
-                        <div class="bar-box ph"><span>Hafa</span> <strong><input type="number"
-                                    class="input-transparent w-35 text-right" value="{{ ficha.ph_atual }}"
-                                    onblur="salvar('ph_atual', this.value)"> / <input type="number"
-                                    class="input-transparent w-35 text-left" value="{{ ficha.ph_max }}"
-                                    onblur="salvar('ph_max', this.value)"></strong></div>
-                        <div class="bar-box pg"><span>Grima</span> <strong><input type="number"
-                                    class="input-transparent w-35 text-right" value="{{ ficha.pg_atual }}"
-                                    onblur="salvar('pg_atual', this.value)"> / <input type="number"
-                                    class="input-transparent w-35 text-left" value="{{ ficha.pg_max }}"
-                                    onblur="salvar('pg_max', this.value)"></strong></div>
+                        <div class="bar-box pv"
+                            style="display: flex; align-items: center; justify-content: space-between;">
+                            <span>Vida</span>
+                            <strong style="width: auto !important; gap: 8px;">
+                                <input type="number" class="input-transparent w-35 text-right"
+                                    value="{{ ficha.pv_atual }}" onblur="salvar('pv_atual', this.value)"> /
+                                <input type="number" class="input-transparent w-35 text-center editable-stat"
+                                    value="{{ ficha.pv_max }}" id="pv_max_input" onblur="salvar('pv_max', this.value)"
+                                    readonly> +
+                                <input type="number" class="input-transparent w-35 text-left" style="color: #4caf50;"
+                                    value="{{ ficha.pv_bonus }}" onblur="salvar('pv_bonus', this.value)"
+                                    title="Bônus Temporário">
+                            </strong>
+                        </div>
+                        <div class="bar-box pa"
+                            style="display: flex; align-items: center; justify-content: space-between;">
+                            <span>Ação</span>
+                            <strong style="width: auto !important; gap: 8px;">
+                                <input type="number" class="input-transparent w-35 text-right"
+                                    value="{{ ficha.pa_atual }}" onblur="salvar('pa_atual', this.value)"> /
+                                <input type="number" class="input-transparent w-35 text-center editable-stat"
+                                    value="{{ ficha.pa_max }}" id="pa_max_input" onblur="salvar('pa_max', this.value)"
+                                    readonly> +
+                                <input type="number" class="input-transparent w-35 text-left" style="color: #4caf50;"
+                                    value="{{ ficha.pa_bonus }}" onblur="salvar('pa_bonus', this.value)"
+                                    title="Bônus Temporário">
+                            </strong>
+                        </div>
+                        <div class="bar-box ph"
+                            style="display: flex; align-items: center; justify-content: space-between;">
+                            <span>Hafa</span>
+                            <strong style="width: auto !important; gap: 8px;">
+                                <input type="number" class="input-transparent w-35 text-right"
+                                    value="{{ ficha.ph_atual }}" onblur="salvar('ph_atual', this.value)"> /
+                                <input type="number" class="input-transparent w-35 text-center editable-stat"
+                                    value="{{ ficha.ph_max }}" id="ph_max_input" onblur="salvar('ph_max', this.value)"
+                                    readonly> +
+                                <input type="number" class="input-transparent w-35 text-left" style="color: #4caf50;"
+                                    value="{{ ficha.ph_bonus }}" onblur="salvar('ph_bonus', this.value)"
+                                    title="Bônus Temporário">
+                            </strong>
+                        </div>
+                        <div class="bar-box pg"
+                            style="display: flex; align-items: center; justify-content: space-between;">
+                            <span>Grima</span>
+                            <strong style="width: auto !important; gap: 8px;">
+                                <input type="number" class="input-transparent w-35 text-right"
+                                    value="{{ ficha.pg_atual }}" onblur="salvar('pg_atual', this.value)"> /
+                                <input type="number" class="input-transparent w-35 text-center editable-stat"
+                                    value="{{ ficha.pg_max }}" id="pg_max_input" onblur="salvar('pg_max', this.value)"
+                                    readonly> +
+                                <input type="number" class="input-transparent w-35 text-left" style="color: #4caf50;"
+                                    value="{{ ficha.pg_bonus }}" onblur="salvar('pg_bonus', this.value)"
+                                    title="Bônus Temporário">
+                            </strong>
+                        </div>
                         <div class="bar-box bar-box-defesa"><span class="defesa-label">DEFESA <input type="number"
                                     class="input-transparent w-50 text-center font-bold" value="{{ ficha.defesa }}"
                                     onblur="salvar('defesa', this.value)"></span></div>
@@ -429,7 +481,7 @@
                 </div>
 
                 <div>
-                    <h3 class="section-title">História</h3>
+                    <h3 class="section-title">Anotações</h3>
                     <textarea class="input-transparent notes-textarea" style="height: 400px;"
                         onblur="salvar('notas', this.value)">{{ ficha.notas }}</textarea>
                 </div>
@@ -448,10 +500,122 @@
         }
 
         function salvar(campo, valor) {
+            return salvarMultiplos({ [campo]: valor });
+        }
+
+        function salvarMultiplos(camposObj) {
             return fetch(`/api/atualizar_campo/{{ ficha.id }}`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ [campo]: valor })
+                body: JSON.stringify(camposObj)
             }).then(r => { if (!r.ok) console.error("Erro ao salvar"); return r; });
+        }
+
+        function toggleReadonly(inputId) {
+            const el = document.getElementById(inputId);
+            if (el.hasAttribute('readonly')) {
+                el.removeAttribute('readonly');
+                el.style.borderBottom = '1px dashed var(--gold-dim)';
+                el.focus();
+            } else {
+                el.setAttribute('readonly', 'true');
+                el.style.borderBottom = '1px dotted transparent';
+                salvar(el.id.replace('_input', ''), el.value);
+            }
+        }
+
+        function levelUpFicha() {
+            const selectClasse = document.getElementById('select-classe');
+            const classe = selectClasse.value;
+
+            if (!classe || classe === "Classe" || classe === "(Sem Classe)") {
+                showConfirmModal("Você precisa escolher uma Classe antes de subir de nível!", null);
+                // Oculta o botão de confirmar neste caso, pois é só um aviso
+                const btns = document.querySelectorAll('.custom-modal-btn.confirm');
+                if (btns.length > 0) btns[btns.length - 1].style.display = 'none';
+                return;
+            }
+
+            showConfirmModal(`Tem certeza que deseja subir o nível do seu ${classe}? Os atributos máximos serão aumentados automaticamente nas suas reservas.`, () => {
+                let pvGains = 0;
+                let paGains = 0;
+
+                if (classe === "Combatente") { pvGains = 6; paGains = 5; }
+                else if (classe === "Mentor") { pvGains = 4; paGains = 6; }
+                else if (classe === "Conjurador") { pvGains = 4; paGains = 3; }
+                else if (classe === "Zelote") { pvGains = 5; paGains = 4; }
+
+                // current values
+                const nivelAtual = parseInt(document.querySelector('input[onblur="salvar(\\\'nivel\\\', this.value)"]').value) || 1;
+                const novoNivel = nivelAtual + 1;
+
+                const pvMaxAtual = parseInt(document.getElementById('pv_max_input').value) || 0;
+                const paMaxAtual = parseInt(document.getElementById('pa_max_input').value) || 0;
+
+                const novoPvMax = pvMaxAtual + pvGains;
+                const novoPaMax = paMaxAtual + paGains;
+                const novoPgPhMax = novoNivel * 2;
+
+                const payload = {
+                    nivel: novoNivel,
+                    pv_max: novoPvMax,
+                    pv_atual: parseInt(document.querySelector('input[onblur="salvar(\\\'pv_atual\\\', this.value)"]').value) + pvGains, // opcional dar a vida ao upar
+                    pa_max: novoPaMax,
+                    pa_atual: parseInt(document.querySelector('input[onblur="salvar(\\\'pa_atual\\\', this.value)"]').value) + paGains,
+                    pg_max: novoPgPhMax,
+                    ph_max: novoPgPhMax
+                };
+
+                salvarMultiplos(payload).then(() => {
+                    location.reload();
+                });
+            });
+        }
+
+        function recalcularAtributos() {
+            const selectClasse = document.getElementById('select-classe');
+            const classe = selectClasse.value;
+            const nivelObj = document.querySelector('input[onblur="salvar(\\\'nivel\\\', this.value)"]');
+            const nivelAtual = parseInt(nivelObj ? nivelObj.value : 1) || 1;
+
+            if (!classe || classe === "Classe" || classe === "(Sem Classe)") {
+                showConfirmModal("Você precisa escolher uma Classe para recalcular os atributos!", null);
+                const btns = document.querySelectorAll('.custom-modal-btn.confirm');
+                if (btns.length > 0) btns[btns.length - 1].style.display = 'none';
+                return;
+            }
+
+            showConfirmModal(`Tem certeza que deseja atualizar os atributos do seu ${classe} baseados no nível ${nivelAtual}? Os limites máximos serão sobrescritos!`, () => {
+                let pvBase = 0;
+                let paBase = 0;
+                let pvGains = 0;
+                let paGains = 0;
+
+                // Valores base no nível 1 e ganhos por nível
+                if (classe === "Combatente") { pvBase = 6; paBase = 5; pvGains = 6; paGains = 5; }
+                else if (classe === "Mentor") { pvBase = 4; paBase = 6; pvGains = 4; paGains = 6; }
+                else if (classe === "Conjurador") { pvBase = 4; paBase = 3; pvGains = 4; paGains = 3; }
+                else if (classe === "Zelote") { pvBase = 5; paBase = 4; pvGains = 5; paGains = 4; }
+
+                // Fórmula: Base no lvl 1 + (Ganhos * Níveis Adicionais)
+                const totalPvMax = pvBase + (pvGains * (nivelAtual - 1));
+                const totalPaMax = paBase + (paGains * (nivelAtual - 1));
+                const totalPgPhMax = nivelAtual * 2;
+
+                const payload = {
+                    pv_max: totalPvMax,
+                    pv_atual: totalPvMax,
+                    pa_max: totalPaMax,
+                    pa_atual: totalPaMax,
+                    pg_max: totalPgPhMax,
+                    pg_atual: totalPgPhMax,
+                    ph_max: totalPgPhMax,
+                    ph_atual: totalPgPhMax
+                };
+
+                salvarMultiplos(payload).then(() => {
+                    location.reload();
+                });
+            });
         }
 
         function salvarLista(tipo) {
@@ -468,11 +632,45 @@
             salvar(tipo, data);
         }
 
+        function showConfirmModal(message, onConfirm) {
+            const overlay = document.createElement('div');
+            overlay.className = 'custom-modal-overlay';
+
+            const box = document.createElement('div');
+            box.className = 'custom-modal-box';
+
+            const text = document.createElement('p');
+            text.textContent = message;
+
+            const btnGroup = document.createElement('div');
+            btnGroup.className = 'custom-modal-buttons';
+
+            const btnCancel = document.createElement('button');
+            btnCancel.className = 'custom-modal-btn cancel';
+            btnCancel.textContent = 'Cancelar';
+            btnCancel.onclick = () => document.body.removeChild(overlay);
+
+            const btnConfirm = document.createElement('button');
+            btnConfirm.className = 'custom-modal-btn confirm';
+            btnConfirm.textContent = 'Confirmar';
+            btnConfirm.onclick = () => {
+                document.body.removeChild(overlay);
+                if (onConfirm) onConfirm();
+            };
+
+            btnGroup.appendChild(btnCancel);
+            btnGroup.appendChild(btnConfirm);
+            box.appendChild(text);
+            box.appendChild(btnGroup);
+            overlay.appendChild(box);
+            document.body.appendChild(overlay);
+        }
+
         function removerItem(btn, tipo) {
-            if (confirm("Remover este item?")) {
+            showConfirmModal("Deseja realmente remover este item?", () => {
                 btn.closest('.item-row').remove();
                 salvarLista(tipo);
-            }
+            });
         }
 
         function adicionarAtaque() {

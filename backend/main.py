@@ -186,10 +186,10 @@ def criar_personagem_direto(request: Request, session: Session = Depends(get_ses
         return RedirectResponse(url="/login", status_code=303)
         
     novo_char = Personagem(
-        nome="Personagem",
+        nome="Nome",
         jogador="Jogador",
-        raca="Nenhuma",
-        classe="Nenhuma",
+        raca="Espécie",
+        classe="Classe",
         nivel=1,
         fisico=4, presenca=4, carisma=4, astucia=4,
         bonus_fisico=0, bonus_presenca=0, bonus_carisma=0, bonus_astucia=0,
@@ -253,7 +253,8 @@ async def api_atualizar_campo(
         for campo, valor in data.items():
             # Converte números se necessário
             int_fields = [
-                'nivel', 'pv_max', 'pv_atual', 'pa_max', 'pa_atual', 'defesa', 
+                'nivel', 'pv_max', 'pv_atual', 'pv_bonus', 'pa_max', 'pa_atual', 'pa_bonus', 'defesa', 
+                'pg_max', 'pg_atual', 'pg_bonus', 'ph_max', 'ph_atual', 'ph_bonus',
                 'fisico', 'presenca', 'carisma', 'astucia', 
                 'bonus_fisico', 'bonus_presenca', 'bonus_carisma', 'bonus_astucia',
                 'fisico_exp', 'fisico_inc', 'presenca_exp', 'presenca_inc',

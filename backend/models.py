@@ -58,12 +58,16 @@ class Personagem(SQLModel, table=True):
 
     pv_max: int = Field(default=10)
     pv_atual: int = Field(default=10)
+    pv_bonus: int = Field(default=0)
     pa_max: int = Field(default=3)
     pa_atual: int = Field(default=3)
+    pa_bonus: int = Field(default=0)
     ph_max: int = Field(default=0)
     ph_atual: int = Field(default=0)
+    ph_bonus: int = Field(default=0)
     pg_max: int = Field(default=0)
     pg_atual: int = Field(default=0)
+    pg_bonus: int = Field(default=0)
 
     marcadores_morte: int = 0  
     marcadores_fadiga: int = 0 
