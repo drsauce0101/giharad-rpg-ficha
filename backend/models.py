@@ -74,6 +74,13 @@ class Personagem(SQLModel, table=True):
     inventario: List[Dict[str, Any]] = Field(default_factory=list, sa_column=Column(JSON))
     
     notas: Optional[str] = Field(default="", sa_column_kwargs={"nullable": True})
+    
+    # Marca do Hafa / Leque do Destino
+    marca_hafa: Optional[str] = Field(default="", sa_column_kwargs={"nullable": True})
+    leque_destino: List[Dict[str, Any]] = Field(default_factory=list, sa_column=Column(JSON))
+    
+    # Avatar / Foto de Perfil
+    avatar: Optional[str] = Field(default="", sa_column_kwargs={"nullable": True})
 
     # Feitiçaria (Mantemos o nome técnico 'magia' no banco para evitar migrations complexas, 
     # mas o HTML chamará de Feitiço)

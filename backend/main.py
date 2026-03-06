@@ -33,6 +33,9 @@ async def lifespan(app: FastAPI):
             session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_presenca INTEGER DEFAULT 0"))
             session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_carisma INTEGER DEFAULT 0"))
             session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_astucia INTEGER DEFAULT 0"))
+            session.exec(text("ALTER TABLE personagem ADD COLUMN marca_hafa VARCHAR DEFAULT ''"))
+            session.exec(text("ALTER TABLE personagem ADD COLUMN leque_destino JSON DEFAULT '[]'"))
+            session.exec(text("ALTER TABLE personagem ADD COLUMN avatar TEXT DEFAULT ''"))
             session.commit()
     except Exception:
         pass
@@ -104,6 +107,9 @@ def criar_personagem_direto(session: Session = Depends(get_session)):
         habilidades=[], 
         inventario=[], 
         magias=[], 
+        marca_hafa="",
+        leque_destino=[],
+        avatar="",
         notas=""
     )
     
