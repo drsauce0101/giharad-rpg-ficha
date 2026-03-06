@@ -8,10 +8,11 @@ from fastapi.staticfiles import StaticFiles
 from sqlmodel import Session, select, SQLModel
 from sqlalchemy import Column, JSON
 from sqlalchemy.orm.attributes import flag_modified
+import hashlib
 
 # Importações internas
 from .database import engine, get_session
-from .models import Personagem
+from .models import Personagem, Usuario
 
 # ==============================================================================
 # 1. LISTA MESTRA DE COMPETÊNCIAS (ATUALIZADA)
@@ -36,6 +37,7 @@ async def lifespan(app: FastAPI):
             session.exec(text("ALTER TABLE personagem ADD COLUMN marca_hafa VARCHAR DEFAULT ''"))
             session.exec(text("ALTER TABLE personagem ADD COLUMN leque_destino JSON DEFAULT '[]'"))
             session.exec(text("ALTER TABLE personagem ADD COLUMN avatar TEXT DEFAULT ''"))
+            session.exec(text("ALTER TABLE personagem ADD COLUMN usuario_id INTEGER DEFAULT NULL"))
             session.commit()
     except Exception:
         pass
@@ -62,22 +64,90 @@ def safe_int(value, default=0):
     except (ValueError, TypeError):
         return default
 
+def get_current_user(request: Request, session: Session) -> Optional[Usuario]:
+    user_id_str = request.cookies.get("giharad_user_id")
+    if not user_id_str:
+        return None
+    try:
+        user_id = int(user_id_str)
+        return session.get(Usuario, user_id)
+    except Exception:
+        return None
+
 # ==============================================================================
-# 3. ROTAS DE VISUALIZAÇÃO
+# 3. ROTAS DE VISUALIZAÇÃO E AUTH
 # ==============================================================================
+from fastapi import Form, Response
+
+@app.get("/login", response_class=HTMLResponse)
+def login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request, "error": None})
+
+@app.post("/login", response_class=HTMLResponse)
+def login_action(request: Request, response: Response, username: str = Form(...), password: str = Form(...), session: Session = Depends(get_session)):
+    stmt = select(Usuario).where(Usuario.username == username)
+    user = session.exec(stmt).first()
+    
+    password_hash = hashlib.sha256(password.encode()).hexdigest()
+    if not user or user.password_hash != password_hash:
+        return templates.TemplateResponse("login.html", {"request": request, "error": "Usuário ou senha inválidos."})
+    
+    resp = RedirectResponse(url="/", status_code=303)
+    resp.set_cookie(key="giharad_user_id", value=str(user.id), httponly=True)
+    return resp
+
+@app.get("/register", response_class=HTMLResponse)
+def register_page(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request, "error": None})
+
+@app.post("/register", response_class=HTMLResponse)
+def register_action(request: Request, response: Response, username: str = Form(...), password: str = Form(...), confirm_password: str = Form(...), session: Session = Depends(get_session)):
+    if password != confirm_password:
+        return templates.TemplateResponse("register.html", {"request": request, "error": "As senhas não coincidem."})
+    
+    stmt = select(Usuario).where(Usuario.username == username)
+    existing_user = session.exec(stmt).first()
+    if existing_user:
+        return templates.TemplateResponse("register.html", {"request": request, "error": "Nome de usuário já existe."})
+        
+    password_hash = hashlib.sha256(password.encode()).hexdigest()
+    new_user = Usuario(username=username, password_hash=password_hash)
+    session.add(new_user)
+    session.commit()
+    session.refresh(new_user)
+    
+    resp = RedirectResponse(url="/", status_code=303)
+    resp.set_cookie(key="giharad_user_id", value=str(new_user.id), httponly=True)
+    return resp
+
+@app.get("/logout")
+def logout(response: Response):
+    resp = RedirectResponse(url="/login", status_code=303)
+    resp.delete_cookie("giharad_user_id")
+    return resp
+
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request, session: Session = Depends(get_session)):
-    statement = select(Personagem)
+    user = get_current_user(request, session)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+        
+    statement = select(Personagem).where(Personagem.usuario_id == user.id)
     resultados = session.exec(statement).all()
     return templates.TemplateResponse(
         name="index.html", 
-        context={"request": request, "personagens": resultados}
+        context={"request": request, "personagens": resultados, "usuario": user}
     )
 
 @app.get("/ficha/{char_id}", response_class=HTMLResponse)
 def visualizar_ficha(request: Request, char_id: int, session: Session = Depends(get_session)):
     personagem = session.get(Personagem, char_id)
-    if not personagem: 
+    user = get_current_user(request, session)
+    
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+        
+    if not personagem or personagem.usuario_id != user.id: 
         return RedirectResponse(url="/", status_code=303)
     
     return templates.TemplateResponse(
@@ -90,7 +160,11 @@ def visualizar_ficha(request: Request, char_id: int, session: Session = Depends(
     )
 
 @app.get("/novo")
-def criar_personagem_direto(session: Session = Depends(get_session)):
+def criar_personagem_direto(request: Request, session: Session = Depends(get_session)):
+    user = get_current_user(request, session)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+        
     novo_char = Personagem(
         nome="Personagem",
         jogador="Jogador",
@@ -110,7 +184,8 @@ def criar_personagem_direto(session: Session = Depends(get_session)):
         marca_hafa="",
         leque_destino=[],
         avatar="",
-        notas=""
+        notas="",
+        usuario_id=user.id
     )
     
     try:
@@ -128,9 +203,13 @@ def criar_personagem_direto(session: Session = Depends(get_session)):
 # ==============================================================================
 
 @app.post("/deletar/{char_id}")
-def deletar_personagem(char_id: int, session: Session = Depends(get_session)):
+def deletar_personagem(request: Request, char_id: int, session: Session = Depends(get_session)):
+    user = get_current_user(request, session)
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
+        
     personagem = session.get(Personagem, char_id)
-    if personagem:
+    if personagem and personagem.usuario_id == user.id:
         session.delete(personagem)
         session.commit()
     return RedirectResponse(url="/", status_code=303)
@@ -141,8 +220,12 @@ async def api_atualizar_campo(
     data: dict = Body(...), 
     session: Session = Depends(get_session)
 ):
+    user = get_current_user(request, session)
+    if not user:
+        return {"status": "error", "message": "Não autenticado"}
+        
     personagem = session.get(Personagem, char_id)
-    if not personagem: 
+    if not personagem or personagem.usuario_id != user.id: 
         return {"status": "error"}
     
     try:

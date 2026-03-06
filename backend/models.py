@@ -11,8 +11,14 @@ def default_competencias():
         "Sobrevivência": 0, "Medicina": 0, "Profissão": 0, "Idioma": 0, "Atuação": 0
     }
 
+class Usuario(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    username: str = Field(unique=True, index=True)
+    password_hash: str
+
 class Personagem(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    usuario_id: Optional[int] = Field(default=None, foreign_key="usuario.id")
     
     nome: str
     jogador: str
