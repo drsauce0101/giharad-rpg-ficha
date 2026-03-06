@@ -44,9 +44,9 @@ body::before {
     background: url('/static/img/medieval-background.jpg') no-repeat center center;
     background-size: cover;
     filter: blur(5px) brightness(0.25) sepia(0.4);
-    /* Fundo escuro, rústico e focado */
     transform: scale(1.1);
     animation: bgSlideshow 240s infinite;
+    animation-delay: var(--bg-delay, 0s);
 }
 
 @keyframes bgSlideshow {
