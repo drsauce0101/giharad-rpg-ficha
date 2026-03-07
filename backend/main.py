@@ -28,19 +28,35 @@ LISTA_COMPETENCIAS = [
 async def lifespan(app: FastAPI):
     SQLModel.metadata.create_all(engine)
     try:
-        with Session(engine) as session:
-            from sqlalchemy import text
-            session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_fisico INTEGER DEFAULT 0"))
-            session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_presenca INTEGER DEFAULT 0"))
-            session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_carisma INTEGER DEFAULT 0"))
-            session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_astucia INTEGER DEFAULT 0"))
-            session.exec(text("ALTER TABLE personagem ADD COLUMN marca_hafa VARCHAR DEFAULT ''"))
-            session.exec(text("ALTER TABLE personagem ADD COLUMN leque_destino JSON DEFAULT '[]'"))
-            session.exec(text("ALTER TABLE personagem ADD COLUMN avatar TEXT DEFAULT ''"))
-            session.exec(text("ALTER TABLE personagem ADD COLUMN usuario_id INTEGER DEFAULT NULL"))
-            session.commit()
-    except Exception:
-        pass
+        from sqlalchemy import inspect, text
+        inspector = inspect(engine)
+        
+        # Só tenta pegar colunas se a tabela existir no banco
+        if inspect(engine).has_table("personagem"):
+            columns = [col['name'] for col in inspector.get_columns('personagem')]
+            
+            with Session(engine) as session:
+                if 'bonus_fisico' not in columns:
+                    session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_fisico INTEGER DEFAULT 0"))
+                if 'bonus_presenca' not in columns:
+                    session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_presenca INTEGER DEFAULT 0"))
+                if 'bonus_carisma' not in columns:
+                    session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_carisma INTEGER DEFAULT 0"))
+                if 'bonus_astucia' not in columns:
+                    session.exec(text("ALTER TABLE personagem ADD COLUMN bonus_astucia INTEGER DEFAULT 0"))
+                if 'marca_hafa' not in columns:
+                    session.exec(text("ALTER TABLE personagem ADD COLUMN marca_hafa VARCHAR DEFAULT ''"))
+                if 'leque_destino' not in columns:
+                    session.exec(text("ALTER TABLE personagem ADD COLUMN leque_destino JSON DEFAULT '[]'"))
+                if 'avatar' not in columns:
+                    session.exec(text("ALTER TABLE personagem ADD COLUMN avatar TEXT DEFAULT ''"))
+                if 'usuario_id' not in columns:
+                    session.exec(text("ALTER TABLE personagem ADD COLUMN usuario_id INTEGER DEFAULT NULL"))
+                if 'is_active' not in columns:
+                    session.exec(text("ALTER TABLE personagem ADD COLUMN is_active BOOLEAN DEFAULT false"))
+                session.commit()
+    except Exception as e:
+        print(f"Erro na migração de colunas: {e}")
     yield
 
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -167,15 +183,18 @@ def visualizar_ficha(request: Request, char_id: int, session: Session = Depends(
     if not user:
         return RedirectResponse(url="/login", status_code=303)
         
-    if not personagem or personagem.usuario_id != user.id: 
+    if not personagem: 
         return RedirectResponse(url="/", status_code=303)
+        
+    is_owner = (str(personagem.usuario_id) == str(user.id))
     
     return templates.TemplateResponse(
         name="ficha.html", 
         context={
             "request": request, 
             "ficha": personagem, 
-            "lista_skills": LISTA_COMPETENCIAS
+            "lista_skills": LISTA_COMPETENCIAS,
+            "is_owner": is_owner
         }
     )
 
@@ -234,6 +253,80 @@ def deletar_personagem(request: Request, char_id: int, session: Session = Depend
         session.commit()
     return RedirectResponse(url="/", status_code=303)
 
+@app.post("/api/personagem/{char_id}/active")
+def definir_ficha_ativa(request: Request, char_id: int, session: Session = Depends(get_session)):
+    user = get_current_user(request, session)
+    if not user:
+        return {"status": "error", "message": "Não autenticado"}
+        
+    personagem = session.get(Personagem, char_id)
+    if not personagem or personagem.usuario_id != user.id:
+        return {"status": "error", "message": "Personagem não encontrado ou sem permissão"}
+        
+    try:
+        # Desativa todos os outros personagens deste usuário
+        stmt = select(Personagem).where(Personagem.usuario_id == user.id)
+        meus_personagens = session.exec(stmt).all()
+        
+        for p in meus_personagens:
+            p.is_active = (p.id == char_id)
+            session.add(p)
+            
+        session.commit()
+        return {"status": "success"}
+    except Exception as e:
+        session.rollback()
+        print(f"ERRO AO DEFINIR ACTIVE: {e}")
+        return {"status": "error", "message": f"Erro interno: {str(e)}"}
+
+@app.post("/api/personagem/{char_id}/deactivate")
+def remover_ficha_ativa(request: Request, char_id: int, session: Session = Depends(get_session)):
+    user = get_current_user(request, session)
+    if not user:
+        return {"status": "error", "message": "Não autenticado"}
+        
+    personagem = session.get(Personagem, char_id)
+    if not personagem or personagem.usuario_id != user.id:
+        return {"status": "error", "message": "Personagem não encontrado ou sem permissão"}
+        
+    try:
+        personagem.is_active = False
+        session.add(personagem)
+        session.commit()
+        return {"status": "success"}
+    except Exception as e:
+        session.rollback()
+        print(f"ERRO AO REMOVER ACTIVE: {e}")
+        return {"status": "error", "message": f"Erro interno: {str(e)}"}
+
+@app.get("/api/active_characters")
+def listar_fichas_ativas(request: Request, session: Session = Depends(get_session)):
+    # Retorna todos os personagens de todos os usuários que estão ativos e faz join pra pegar o username
+    stmt = select(Personagem, Usuario).outerjoin(Usuario, Personagem.usuario_id == Usuario.id).where(Personagem.is_active == True)
+    ativos = session.exec(stmt).all()
+    
+    resultado = []
+    for p, u in ativos:
+        resultado.append({
+            "id": p.id,
+            "nome": p.nome,
+            "jogador": u.username if u else (p.jogador or "Sem Conta"),
+            "raca": p.raca,
+            "classe": p.classe,
+            "nivel": p.nivel,
+            "avatar": p.avatar,
+            "pv_atual": p.pv_atual,
+            "pv_max": p.pv_max,
+            "pa_atual": p.pa_atual,
+            "pa_max": p.pa_max,
+            "ph_atual": p.ph_atual,
+            "ph_max": p.ph_max,
+            "pg_atual": p.pg_atual,
+            "pg_max": p.pg_max,
+        })
+        
+    return {"status": "success", "data": resultado}
+
 @app.post("/api/atualizar_campo/{char_id}")
 async def api_atualizar_campo(
     request: Request,
@@ -264,6 +357,8 @@ async def api_atualizar_campo(
             ]
             if campo in int_fields:
                 valor = safe_int(valor)
+                if campo == 'nivel':
+                    valor = min(max(valor, 1), 20)
             
             if hasattr(personagem, campo):
                 setattr(personagem, campo, valor)

@@ -1252,6 +1252,9 @@ input[type="submit"]:active {
     padding: 15px;
     border: 1px solid var(--panel-border);
     border-radius: 2px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
 }
 
 .inv-card {

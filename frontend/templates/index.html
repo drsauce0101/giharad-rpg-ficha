@@ -65,7 +65,8 @@
                     </button>
                 </form>
 
-                <a href="/ficha/{{ p.id }}" class="char-card-link">
+                <a href="/ficha/{{ p.id }}" class="char-card-link"
+                    oncontextmenu="openContextMenu(event, {{ p.id }}, '{{ p.nome }}')">
 
                     <div
                         style="display: flex; align-items: center; gap: 10px; padding-right: 40px; margin-bottom: 5px;">
@@ -163,7 +164,87 @@
                 document.getElementById(formId).submit();
             });
         }
+
+        function openContextMenu(event, charId, charName) {
+            event.preventDefault(); // Impede o menu padrão
+
+            // Remove qualquer menu anterior
+            const existingMenu = document.getElementById('custom-context-menu');
+            if (existingMenu) existingMenu.remove();
+
+            const menu = document.createElement('div');
+            menu.id = 'custom-context-menu';
+            menu.style.position = 'absolute';
+            menu.style.top = event.pageY + 'px';
+            menu.style.left = event.pageX + 'px';
+            menu.style.background = 'rgba(20, 20, 20, 0.95)';
+            menu.style.border = '1px solid var(--gold-dim)';
+            menu.style.padding = '10px';
+            menu.style.borderRadius = '8px';
+            menu.style.boxShadow = '0 4px 12px rgba(0,0,0,0.8)';
+            menu.style.zIndex = '1000';
+            menu.style.fontFamily = "'Cinzel', serif";
+            menu.style.display = 'flex';
+            menu.style.flexDirection = 'column';
+            menu.style.gap = '5px';
+
+            const btnActive = document.createElement('button');
+            btnActive.textContent = 'Selecionar Ficha Ativa';
+            btnActive.className = 'btn-novo bg-333';
+            btnActive.style.width = '100%';
+            btnActive.style.color = 'var(--gold)';
+            btnActive.style.borderColor = 'var(--gold-dim)';
+
+            btnActive.onclick = () => {
+                fetch(`/api/personagem/${charId}/active`, { method: 'POST' })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.status === 'success') location.reload();
+                        else alert("Erro ao definir ficha ativa: " + (data.message || 'Erro desconhecido'));
+                    })
+                    .catch(e => {
+                        console.error(e);
+                        alert("Houve uma falha de conexão com o servidor ao definir ficha ativa.");
+                    });
+            };
+
+            const btnDeactive = document.createElement('button');
+            btnDeactive.textContent = 'Remover Ficha Ativa';
+            btnDeactive.className = 'btn-novo bg-333';
+            btnDeactive.style.width = '100%';
+            btnDeactive.style.color = '#ef9a9a';
+            btnDeactive.style.borderColor = 'var(--gold-dim)';
+
+            btnDeactive.onclick = () => {
+                fetch(`/api/personagem/${charId}/deactivate`, { method: 'POST' })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.status === 'success') location.reload();
+                        else alert("Erro ao remover ficha ativa: " + (data.message || 'Erro desconhecido'));
+                    })
+                    .catch(e => {
+                        console.error(e);
+                        alert("Houve uma falha de conexão com o servidor ao remover ficha ativa.");
+                    });
+            };
+
+            menu.appendChild(btnActive);
+            menu.appendChild(btnDeactive);
+            document.body.appendChild(menu);
+
+            // Clicar fora fecha o menu
+            setTimeout(() => {
+                const fecharMenu = (e) => {
+                    if (!menu.contains(e.target)) {
+                        menu.remove();
+                        document.removeEventListener('click', fecharMenu);
+                    }
+                };
+                document.addEventListener('click', fecharMenu);
+            }, 10);
+        }
     </script>
+    <script src="/static/js/active_char_ui.js"></script>
 </body>
 
 </html>

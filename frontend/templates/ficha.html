@@ -63,6 +63,14 @@
                 <!-- Center: Name, Subtitle and Buttons -->
                 <div class="flex-grow-1" style="display: flex; flex-direction: column; gap: 15px;">
                     <div>
+                        {% if not is_owner %}
+                        <div
+                            style="background: rgba(255, 60, 60, 0.2); border: 1px solid #ff5252; padding: 5px 10px; border-radius: 4px; color: #ff5252; font-size: 0.8rem; display: inline-block; margin-bottom: 10px;">
+                            <span class="material-icons"
+                                style="font-size: 1rem; vertical-align: bottom;">visibility</span>
+                            VOCÊ ESTÁ NO MODO VISUALIZADOR
+                        </div>
+                        {% endif %}
                         <h1 class="ficha-title" style="margin-bottom: 5px; text-align: left;">
                             <input type="text" class="input-transparent" value="{{ ficha.nome }}"
                                 onblur="salvar('nome', this.value)" style="text-align: left;">
@@ -76,7 +84,8 @@
                             </span>
                             <select class="input-transparent w-auto"
                                 style="min-width: 100px; -webkit-appearance: none; appearance: none; cursor: pointer; padding-bottom: 0px;"
-                                onchange="salvar('classe', this.value)" id="select-classe">
+                                onchange="salvar('classe', this.value)" id="select-classe" {% if not is_owner
+                                %}disabled{% endif %}>
                                 <option value="">(Sem Classe)</option>
                                 <option value="Combatente" {% if ficha.classe=='Combatente' %}selected{% endif %}>
                                     Combatente</option>
@@ -92,6 +101,7 @@
 
                     <!-- BUTTONS -->
                     <div style="display: flex; gap: 10px; align-items: center;">
+                        {% if is_owner %}
                         <button class="btn-novo bg-333"
                             style="color: #4caf50 !important; border-color: #388e3c !important;"
                             onclick="levelUpFicha()">EVOLUIR</button>
@@ -101,6 +111,7 @@
                         <button class="btn-novo bg-333"
                             style="color: #2196f3 !important; border-color: #1976d2 !important;"
                             onclick="abrirModalDescanso('{{ ficha.descansos_curtos | default(0) }}')">DESCANSO</button>
+                        {% endif %}
                         <a href="/" class="btn-novo bg-333">VOLTAR</a>
                     </div>
                 </div>
@@ -111,8 +122,10 @@
                     <span
                         style="font-size: 0.7rem; color: var(--gold); font-family: 'Cinzel', serif; letter-spacing: 2px; margin-top: 8px;">NÍVEL</span>
                     <input type="number" id="nivel_input" class="input-transparent text-center font-bold"
-                        value="{{ ficha.nivel }}" onblur="salvar('nivel', this.value)"
-                        style="font-size: 2.2rem; color: #fff; width: 70px; margin-top: -5px; padding: 0;">
+                        value="{{ ficha.nivel }}" min="1" max="20"
+                        onblur="let v = Math.min(Math.max(this.value, 1), 20); this.value = v; salvar('nivel', v)"
+                        style="font-size: 2.2rem; color: #fff; width: 70px; margin-top: -5px; padding: 0;" {% if not
+                        is_owner %}readonly{% endif %}>
                 </div>
             </div>
 
@@ -357,12 +370,16 @@
                         <div>Explosivo: <input type="text" class="input-transparent d-inline w-40" name="explosivo"
                                 value="{{ atk.explosivo }}" onblur="salvarLista('ataques')"></div>
                     </div>
+                    {% if is_owner %}
                     <button class="btn-delete-item" onclick="removerItem(this, 'ataques')"><span
                             class="material-icons">delete</span></button>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
+            {% if is_owner %}
             <button class="btn-add" onclick="adicionarAtaque()">+ Adicionar Ataque</button>
+            {% endif %}
 
             <h3 class="section-title mt-30">Habilidades</h3>
             <div id="lista-habilidades">
@@ -382,12 +399,16 @@
                         <textarea class="input-transparent" name="efeito" rows="2" placeholder="Descrição do efeito..."
                             onblur="salvarLista('habilidades')">{{ hab.efeito }}</textarea>
                     </div>
+                    {% if is_owner %}
                     <button class="btn-delete-item" onclick="removerItem(this, 'habilidades')"><span
                             class="material-icons">delete</span></button>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
+            {% if is_owner %}
             <button class="btn-add" onclick="adicionarHabilidade()">+ Adicionar Habilidade</button>
+            {% endif %}
         </div>
 
         <div id="Magia" class="tabcontent">
@@ -449,12 +470,16 @@
                                 <textarea class="input-transparent" name="efeito" rows="1" placeholder="Efeito..."
                                     onblur="salvarLista('magias')">{{ mag.efeito }}</textarea>
                             </div>
+                            {% if is_owner %}
                             <button class="btn-delete-item" onclick="removerItem(this, 'magias')"><span
                                     class="material-icons">delete</span></button>
+                            {% endif %}
                         </div>
                         {% endfor %}
                     </div>
+                    {% if is_owner %}
                     <button class="btn-add btn-add-magic" onclick="adicionarMagia()">+ Adicionar Magia</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -498,12 +523,16 @@
                                 name="espacos" value="{{ item.espacos }}"
                                 onblur="salvarLista('inventario'); calcularPeso()"></span>
                     </span>
+                    {% if is_owner %}
                     <button class="btn-delete-item" onclick="removerItem(this, 'inventario')"><span
                             class="material-icons">delete</span></button>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
+            {% if is_owner %}
             <button class="btn-add" onclick="adicionarItemInventario()">+ Adicionar Item</button>
+            {% endif %}
         </div>
 
         <div id="Anotacoes" class="tabcontent">
@@ -529,12 +558,16 @@
                             <textarea class="input-transparent" name="efeito" rows="2"
                                 placeholder="Descrição do efeito da ação..."
                                 onblur="salvarLista('leque_destino')">{{ leque.efeito }}</textarea>
+                            {% if is_owner %}
                             <button class="btn-delete-item" onclick="removerItem(this, 'leque_destino')"><span
                                     class="material-icons">delete</span></button>
+                            {% endif %}
                         </div>
                         {% endfor %}
                     </div>
+                    {% if is_owner %}
                     <button class="btn-add" onclick="adicionarLeque()">+ Adicionar Ação</button>
+                    {% endif %}
                 </div>
 
                 <div>
@@ -557,10 +590,12 @@
         }
 
         function salvar(campo, valor) {
+            {% if not is_owner %} return Promise.resolve(); {% endif %}
             return salvarMultiplos({ [campo]: valor });
         }
 
         function salvarMultiplos(camposObj) {
+            {% if not is_owner %} return Promise.resolve(); {% endif %}
             return fetch(`/api/atualizar_campo/{{ ficha.id }}`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(camposObj)
@@ -581,6 +616,14 @@
         }
 
         function levelUpFicha() {
+            const nivelAtualCheck = parseInt(document.getElementById('nivel_input').value) || 1;
+            if (nivelAtualCheck >= 20) {
+                showConfirmModal("A ficha já está no nível máximo (20)!", null);
+                const btns = document.querySelectorAll('.custom-modal-btn.confirm');
+                if (btns.length > 0) btns[btns.length - 1].style.display = 'none';
+                return;
+            }
+
             const selectClasse = document.getElementById('select-classe');
             const classe = selectClasse.value;
 
@@ -856,6 +899,7 @@
         }
 
         function salvarLista(tipo) {
+            {% if not is_owner %} return; {% endif %}
             const container = document.getElementById(`lista-${tipo}`);
             const rows = container.querySelectorAll('.item-row');
             const data = [];
@@ -1165,6 +1209,7 @@
             reader.readAsDataURL(file);
         }
     </script>
+    <script src="/static/js/active_char_ui.js"></script>
 
 
 

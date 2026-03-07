@@ -26,6 +26,8 @@ class Personagem(SQLModel, table=True):
     classe: str
     nivel: int = 1
     
+    is_active: bool = Field(default=False)
+    
     antecedente: Optional[str] = None
     guardiao: Optional[str] = None
     ascensao: Optional[str] = None

@@ -1,0 +1,6 @@
+venv/* linguist-vendored
+env/* linguist-vendored
+node_modules/* linguist-vendored
+
+*.html linguist-detectable=false
+*.css linguist-detectable=false
